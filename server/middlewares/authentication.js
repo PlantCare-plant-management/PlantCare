@@ -14,14 +14,14 @@ async function authentication(req) {
         
         const db = await getDB()
         const userCollection = db.collection('user')
-        const user = await userCollection.findOne({ _id: new ObjectId(payload.id) })
+        const user = await userCollection.findOne({ _id: new ObjectId(payload._id) })
 
         if(!user){
             throw new Error("UNAUTHORIZED");
         }
 
         return {
-            id: user._id,
+            _id: user._id,
             username: user.username,
             imgUrl: user.imgUrl
         }
