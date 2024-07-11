@@ -4,17 +4,7 @@ if (process.env.NODE_ENV !== "production") {
   
   const { ApolloServer } = require("@apollo/server");
   const { startStandaloneServer } = require("@apollo/server/standalone");
-  
-  const {
-    typeDefs: typeDefsFollow,
-    resolvers: resolversFollow,
-  } = require("./schemas/follow");
-  
-  const {
-    typeDefs: typeDefsPosts,
-    resolvers: resolversPosts,
-  } = require("./schemas/posts");
-  
+
   const {
     typeDefs: typeDefsUser,
     resolvers: resolversUser,
@@ -25,8 +15,8 @@ if (process.env.NODE_ENV !== "production") {
   const { connect, getDB } = require("./config/mongoDb");
   
   const server = new ApolloServer({
-    typeDefs: [typeDefsFollow, typeDefsPosts, typeDefsUser],
-    resolvers: [resolversFollow, resolversPosts, resolversUser],
+    typeDefs: [typeDefsUser],
+    resolvers: [resolversUser],
     introspection: true
   });
   

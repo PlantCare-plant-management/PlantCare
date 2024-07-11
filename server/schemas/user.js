@@ -4,19 +4,13 @@ const { signToken } = require("../helpers/jwt");
 
 const typeDefs = `#graphql
 
-type UserById {
-  _id: ID
-  name: String
-  username: String!
-  email: String!
-  imgUrl: String
-}
 
 type User {
   _id: ID
   name: String
   username: String!
   email: String!
+  imgUrl: String
 }
 
 input RegisterInput{
@@ -31,17 +25,22 @@ input LoginInput {
   password: String!
 }
 
-input EditUserInput {
-  name: String
-  username: String
-  email: String
-  bio: String
-  imgUrl: String
-}
+# input EditUserInput {
+#   name: String
+#   username: String
+#   email: String
+#   imgUrl: String
+#   lokasi: String
+# }
+
+# input EditPassword {
+
+# }
 
 type Login {
   access_token: String
   username: String
+  imgUrl: String
 }
 
 type Message {
@@ -49,47 +48,26 @@ type Message {
 }
 
 type Query {
-  getAllUser: [User]
-  getUserById(id: ID): UserById
-  getUserByNameOrUsername(identifier: String!): [Users]
+  getUserById(id: ID): User
 }
 
 type Mutation {
-  createAccount(input: CreateUserInput): Message
+  register(input: RegisterInput): Message
   login(input: LoginInput): Login
-  editUser(input: EditUserInput): Message
+  # editUser(input: EditUserInput): Message
 }
 `;
 
 const resolvers = {
   Query: {
-    getAllUser: async (_, __, contextValue) => {
-      await contextValue.authentication()
-
+    getUserById: async (_, __, contextValue) => {
       try {
         const { db } = contextValue;
-
+        const { id } = await contextValue.authentication();
         const userCollection = db.collection("user");
-        const users = await userCollection.find().toArray();
 
-        return users;
-      } catch (error) {
-        throw new Error(error.message);
-      }
-    },
-
-    getUserById: async (_, { id }, contextValue) => {
-      try {
-        const { db } = contextValue;
-        const { id: authId } = await contextValue.authentication();
-        const userCollection = db.collection("user");
-        const followCollection = db.collection("follow");
-        const postCollection = db.collection("posts");
-
-        if (!authId) {
-          if (!id) {
-            throw new Error("Id user required");
-          }
+        if (!id) {
+          throw new Error("Id user required");
         }
 
         const user = await userCollection.findOne({
@@ -100,103 +78,14 @@ const resolvers = {
           throw new Error("User not found");
         }
 
-        const followersCursor = followCollection.aggregate([
-          {
-            $match: { followingId: new ObjectId(id || authId) },
-          },
-          {
-            $lookup: {
-              from: "user",
-              localField: "followerId",
-              foreignField: "_id",
-              as: "follower",
-            },
-          },
-          {
-            $unwind: "$follower",
-          },
-          {
-            $project: {
-              _id: "$follower._id",
-              username: "$follower.username",
-              bio: "$follower.bio",
-              imgUrl: "$follower.imgUrl",
-            },
-          },
-        ]);
-
-        const followers = await followersCursor.toArray();
-
-        const followingCursor = followCollection.aggregate([
-          {
-            $match: { followerId: new ObjectId(id || authId) },
-          },
-          {
-            $lookup: {
-              from: "user",
-              localField: "followingId",
-              foreignField: "_id",
-              as: "following",
-            },
-          },
-          {
-            $unwind: "$following",
-          },
-          {
-            $project: {
-              _id: "$following._id",
-              username: "$following.username",
-              bio: "$following.bio",
-              imgUrl: "$following.imgUrl",
-            },
-          },
-        ]);
-
-        const following = await followingCursor.toArray();
-
-        const posts = await postCollection
-          .find({ authorId: new ObjectId(id || authId) })
-          .sort({ createdAt: -1 })
-          // .project({ _id: 1, imgUrl: 1, createdAt: 1 })
-          .toArray();
-
-        return {
-          ...user,
-          posts,
-          followers,
-          following,
-        };
-      } catch (error) {
-        throw new Error(error.message);
-      }
-    },
-    getUserByNameOrUsername: async (_, { identifier }, contextValue) => {
-      try {
-        await contextValue.authentication();
-        const { db } = contextValue;
-        const userCollection = db.collection("user");
-
-        const users = await userCollection
-          .find({
-            $or: [
-              { name: { $regex: identifier, $options: "i" } },
-              { username: { $regex: identifier, $options: "i" } },
-            ],
-          })
-          .toArray();
-
-        if (users.length == 0) {
-          throw new Error("No user found");
-        }
-
-        return users;
+        return { user };
       } catch (error) {
         throw new Error(error.message);
       }
     },
   },
   Mutation: {
-    createAccount: async (_, { input }, contextValue) => {
+    register: async (_, { input }, contextValue) => {
       try {
         const { db } = contextValue;
         const userCollection = db.collection("user");
@@ -255,7 +144,7 @@ const resolvers = {
         }
 
         const access_token = signToken({
-          id: user._id,
+          _id: user._id,
           username: user.username,
         });
         return { access_token, username: user.username, imgUrl: user.imgUrl };
@@ -264,29 +153,29 @@ const resolvers = {
       }
     },
 
-    editUser: async (_, { input }, contextValue) => {
-      try {
-        const { db } = contextValue;
-        const { id } = await contextValue.authentication();
+    // editUser: async (_, { input }, contextValue) => {
+    //   try {
+    //     const { db } = contextValue;
+    //     const { id } = await contextValue.authentication();
 
-        const userCollection = db.collection("user");
-        const updateData = { ...input };
+    //     const userCollection = db.collection("user");
+    //     const updateData = { ...input };
 
-        const updatedUser = await userCollection.findOneAndUpdate(
-          { _id: id },
-          { $set: updateData },
-          { returnDocument: "after" }
-        );
+    //     const updatedUser = await userCollection.findOneAndUpdate(
+    //       { _id: id },
+    //       { $set: updateData },
+    //       { returnDocument: "after" }
+    //     );
 
-        if (!updatedUser) {
-          throw new Error("User not found");
-        }
+    //     if (!updatedUser) {
+    //       throw new Error("User not found");
+    //     }
 
-        return { message: "Update profile success" };
-      } catch (error) {
-        throw new Error(error.message);
-      }
-    },
+    //     return { message: "Update profile success" };
+    //   } catch (error) {
+    //     throw new Error(error.message);
+    //   }
+    // },
   },
 };
 
