@@ -51,11 +51,11 @@ type Message {
 type Query {
   getAllUser: [User]
   getUserById(id: ID): UserById
-  getUserByNameOrUsername(identifier: String!): [Users]
+  getUserByNameOrUsername(identifier: String!): [User]
 }
 
 type Mutation {
-  createAccount(input: CreateUserInput): Message
+  createAccount(input: RegisterInput): Message
   login(input: LoginInput): Login
   editUser(input: EditUserInput): Message
 }
@@ -64,7 +64,7 @@ type Mutation {
 const resolvers = {
   Query: {
     getAllUser: async (_, __, contextValue) => {
-      await contextValue.authentication()
+      await contextValue.authentication();
 
       try {
         const { db } = contextValue;
