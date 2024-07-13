@@ -1,0 +1,29 @@
+const { ObjectId } = require("mongodb");
+const { getDB } = require("../config/mongoDb");
+
+const getUsers = async () => {
+  const db = getDB();
+  return await db.collection("user").find().toArray();
+};
+
+const getUserById = async (id) => {
+  const db = getDB();
+  return await db.collection("user").findOne({ _id: new ObjectId(id) });
+};
+
+const createUser = async (user) => {
+  const db = getDB();
+  return await db.collection("user").insertOne(user);
+};
+
+const getUserByUsername = async (username) => {
+  const db = getDB();
+  return await db.collection("user").findOne({ username });
+};
+
+const getUserByEmail = async (email) => {
+  const db = getDB();
+  return await db.collection("user").findOne({ email });
+};
+
+module.exports = { getUsers, getUserById, createUser, getUserByUsername, getUserByEmail };
