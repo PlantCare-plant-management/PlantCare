@@ -10,26 +10,27 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import { useQuery, gql } from "@apollo/client";
 
 const AddPlantScreen = () => {
   const navigation = useNavigation();
-  // const [searchText, setSearchText] = useState("");
+  const [searchText, setSearchText] = useState("");
   const [plants, setPlants] = useState([]);
+  const [error, setError] = useState("");
 
   async function fetchData() {
     try {
       const res = await fetch(
-        process.env.NEXT_PUBLIC_BASE_URL + "/api/wishlist",
-        {
-          cache: "no-store",
-          next: {
-            tags: ["fetch-plants"],
-          },
-        }
+        "https://ef0d-125-167-35-211.ngrok-free.app/plants"
       );
+      if (!res.ok) {
+        throw new Error("Gagal fetch");
+      }
+      const data = await res.json();
+      console.log(data, "ini data");
+      setPlants(data);
     } catch (error) {
-      throw new Error("Gagal fetch data");
+      console.log(error);
+      setError(error);
     }
   }
 
@@ -41,11 +42,36 @@ const AddPlantScreen = () => {
     (plant) => plant.name.toLowerCase().indexOf(searchText.toLowerCase()) !== -1
   );
 
+  const careIcons = {
+    Watering: "watering-can",
+    Lighting: "lightbulb-on-outline",
+    Fertilizing: "leaf",
+    "Monitor plant health": "note-check",
+    "Pruning dead leaves": "content-cut",
+    "Pruning dead flowers": "content-cut",
+    Pruning: "content-cut",
+    "Dusting leaves": "broom",
+    "Cleaning central cup": "cup-water",
+    "Cleaning pitchers": "bottle-wine-outline",
+    Shaping: "content-cut",
+    "Deadheading spent flowers": "flower-outline",
+    "Staking tall plants": "tree-outline",
+  };
+
   return (
     <View style={styles.container}>
+      {/* Header Section */}
       <View style={styles.header}>
-        <Text style={styles.title}>Add a New Plant</Text>
+        <Text style={styles.title}>Scan Your Plant</Text>
+        <TouchableOpacity style={styles.addButton}>
+          <Image
+            source={require("../../assets/scanning.png")}
+            style={styles.scanImage}
+          />
+        </TouchableOpacity>
       </View>
+
+      {/* Search Section */}
       <View style={styles.searchContainer}>
         <TextInput
           style={styles.searchInput}
@@ -57,44 +83,38 @@ const AddPlantScreen = () => {
           <Icon name="magnify" size={24} color="#fff" />
         </TouchableOpacity>
       </View>
+
+      {/* Plant List */}
       <FlatList
-        data={data?.getAllPlants}
+        data={filteredPlants}
         keyExtractor={(item) => item._id}
         renderItem={({ item }) => (
           <TouchableOpacity
             style={styles.plantItem}
             onPress={() => navigation.navigate("AddPlantForm", { plant: item })}
           >
-            <View style={styles.plantInfo}>
-              <Text style={styles.plantName}>{item.name}</Text>
-              <View style={styles.careContainer}>
-                <Icon
-                  name="watering-can"
-                  size={24}
-                  color="#AED581"
-                  style={styles.careIcon}
-                />
-                <Icon
-                  name="leaf"
-                  size={24}
-                  color="#8BC34A"
-                  style={styles.careIcon}
-                />
-                <Icon
-                  name="content-cut"
-                  size={24}
-                  color="#FFC107"
-                  style={styles.careIcon}
-                />
-                <Icon
-                  name="flower-tulip"
-                  size={24}
-                  color="#F48FB1"
-                  style={styles.careIcon}
-                />
+            <View style={styles.plantCard}>
+              <View style={styles.plantInfo}>
+                <Text style={styles.plantName}>{item.name}</Text>
+                <View style={styles.careContainer}>
+                  {item.main_care.map((care, index) => (
+                    <Icon
+                      key={`${item._id}-${care}-${index}`}
+                      name={careIcons[care] || "leaf"}
+                      size={24}
+                      color="#8BC34A"
+                      style={styles.careIcon}
+                    />
+                  ))}
+                </View>
               </View>
+              <Image
+                source={{
+                  uri: item.imgUrl || `https://via.placeholder.com/100`,
+                }}
+                style={styles.plantImage}
+              />
             </View>
-            <Image source={{ uri: item.image }} style={styles.plantImage} />
           </TouchableOpacity>
         )}
       />
@@ -113,29 +133,26 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     padding: 16,
     marginBottom: 16,
+    backgroundColor: "#4CAF50",
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20,
   },
   title: {
-    fontSize: 20,
+    fontSize: 22,
     fontWeight: "bold",
-    color: "#333",
+    color: "#fff",
+    marginLeft: 10,
   },
   addButton: {
-    alignSelf: "flex-end",
-    padding: 16,
-    backgroundColor: "#4caf50",
+    padding: 12,
+    backgroundColor: "#388E3C",
     borderRadius: 50,
     justifyContent: "center",
     alignItems: "center",
-    marginBottom: 16,
-    marginRight: 16,
-    elevation: 2,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 1,
-    },
-    shadowOpacity: 0.2,
-    shadowRadius: 1.41,
+  },
+  scanImage: {
+    width: 30,
+    height: 30,
   },
   searchContainer: {
     flexDirection: "row",
@@ -146,29 +163,26 @@ const styles = StyleSheet.create({
   searchInput: {
     flex: 1,
     height: 40,
-    borderColor: "#ddd",
+    borderColor: "#DDD",
     borderWidth: 1,
     borderTopLeftRadius: 10,
     borderBottomLeftRadius: 10,
     paddingHorizontal: 10,
-    backgroundColor: "#fff",
+    backgroundColor: "#FFF",
   },
   searchButton: {
     height: 40,
     width: 40,
-    backgroundColor: "#4caf50",
+    backgroundColor: "#388E3C",
     borderTopRightRadius: 10,
     borderBottomRightRadius: 10,
     justifyContent: "center",
     alignItems: "center",
   },
   plantItem: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
     padding: 16,
     marginBottom: 8,
-    backgroundColor: "#fff",
+    backgroundColor: "#FFF",
     borderRadius: 12,
     shadowColor: "#000",
     shadowOffset: {
@@ -180,25 +194,37 @@ const styles = StyleSheet.create({
     elevation: 2,
     marginHorizontal: 16,
   },
+  plantCard: {
+    flexDirection: "row",
+    backgroundColor: "white",
+    height: 130,
+    borderRadius: 15,
+    overflow: "hidden",
+  },
   plantInfo: {
-    flex: 1,
-    marginRight: 16,
+    flex: 3,
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 10,
   },
   plantName: {
-    fontSize: 18,
-    color: "#333",
-    marginBottom: 8,
+    fontWeight: "bold",
+    fontSize: 16,
+    marginBottom: 10,
+    color: "green",
   },
   careContainer: {
     flexDirection: "row",
+    marginTop: 8,
   },
   careIcon: {
     marginRight: 8,
   },
   plantImage: {
-    width: 80,
-    height: 80,
-    borderRadius: 12,
+    flex: 2,
+    height: "100%",
+    width: "100%",
+    resizeMode: "cover",
   },
 });
 

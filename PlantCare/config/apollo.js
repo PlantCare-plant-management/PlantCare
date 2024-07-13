@@ -1,7 +1,7 @@
 import { ApolloClient, InMemoryCache } from "@apollo/client";
 
 const client = new ApolloClient({
-  uri: "https://bd23-103-165-209-195.ngrok-free.app",
+  uri: "https://b71e-125-167-35-211.ngrok-free.app",
   cache: new InMemoryCache(),
 });
 
