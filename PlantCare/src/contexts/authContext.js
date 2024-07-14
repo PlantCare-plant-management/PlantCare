@@ -1,6 +1,7 @@
 import React, { createContext, useEffect, useState } from "react";
 import * as SecureStore from "expo-secure-store";
 
+
 export const authContext = createContext(null);
 
 export function AuthProvider({ children }) {
@@ -11,6 +12,7 @@ export function AuthProvider({ children }) {
   const checkLogin = async () => {
     try {
       const token = await SecureStore.getItemAsync("access_token");
+      console.log(token)
       const email = await SecureStore.getItemAsync("email");
       setIsSignedIn(!!token);
       setEmailLogin(email ? JSON.parse(email) : null);
@@ -24,7 +26,7 @@ export function AuthProvider({ children }) {
   const login = async (email, password) => {
     try {
       const response = await fetch(
-        "https://768a-125-163-218-199.ngrok-free.app/login",
+        "https://38f8-182-253-116-14.ngrok-free.app/login",
         {
           method: "POST",
           headers: {
@@ -33,7 +35,7 @@ export function AuthProvider({ children }) {
           body: JSON.stringify({ email, password }),
         }
       );
-
+      console.log(email, password)
       if (response.ok) {
         const { access_token, email, id } = await response.json();
         console.log(id, "<=== id di contexts");

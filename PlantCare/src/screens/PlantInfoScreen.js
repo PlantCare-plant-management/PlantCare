@@ -7,6 +7,7 @@ import CardRecom from "../components/CardRecom";
 const PlantInfoScreen = () => {
   const route = useRoute();
   const { plant } = route.params;
+  console.log(plant.recommendation)
 
   const renderIcon = (text) => {
     switch (text.toLowerCase()) {

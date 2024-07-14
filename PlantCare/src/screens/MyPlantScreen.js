@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import * as SecureStore from "expo-secure-store";
 import {
   View,
   Text,
@@ -14,10 +15,13 @@ const MyPlantScreen = () => {
 
   const fetchData = async () => {
     try {
-      const response = await fetch(process.env.EXPO_PUBLIC_API_URL + "/plants", {
+      const token = await SecureStore.getItemAsync("access_token");
+      console.log(token)
+      const response = await fetch(process.env.EXPO_PUBLIC_API_URL + "/myplants", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
+          Authorization : `Bearer ${token}`
         },
         cache: "no-store",
       });
@@ -27,8 +31,7 @@ const MyPlantScreen = () => {
       }
 
       const data = await response.json();
-
-      setMyPlant(data)
+      setMyPlants(data)
     } catch (error) {
       console.log(error)
     }
@@ -40,7 +43,7 @@ const MyPlantScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.date}>Wednesday, 10 July 2024</Text>
+      <Text style={styles.date}>{new Date().toLocaleString()}</Text>
       <View style={styles.filterContainer}>
         {/* <TouchableOpacity
           style={[
@@ -54,11 +57,11 @@ const MyPlantScreen = () => {
       </View>
       <FlatList
         data={myPlants}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item.plants._id}
         renderItem={({ item }) => (
           <TouchableOpacity
             style={styles.plantItem}
-            onPress={() => navigation.navigate("PlantInfo", { plant: item })}
+            onPress={() => navigation.navigate("PlantInfo", { plant: item.plants })}
           >
             <View style={styles.plantInfo}>
               <Text style={styles.plantName}>{item.name}</Text>

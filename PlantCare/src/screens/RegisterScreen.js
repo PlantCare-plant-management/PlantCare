@@ -6,11 +6,31 @@ export default function RegisterScreen() {
   const navigation = useNavigation();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-
-  const handleRegister = () => {
+  const [username, setUsername] = useState('')
+  const [name, setName] = useState('')
+  console.log(email)
+  console.log(password)
+  const handleRegister = async() => {
     // Implementasi registrasi user di sini
     // Setelah registrasi sukses, arahkan user ke halaman login atau halaman utama
-    navigation.navigate('Login');
+    try {
+      const response = await fetch("https://38f8-182-253-116-14.ngrok-free.app/register",
+        {
+          method: "POST",
+          headers : {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({email, password, username, name})
+        }
+      )
+      if(!response.ok) {
+        throw "FAILED REGISTER"
+      }
+      navigation.navigate('Login');
+    } catch (error) {
+        console.log(error)
+    }
+    
   };
 
   return (
@@ -21,6 +41,24 @@ export default function RegisterScreen() {
         placeholder="Email"
         value={email}
         onChangeText={setEmail}
+        keyboardType="email-address"
+        autoCapitalize="none"
+        placeholderTextColor="#888"
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Username"
+        value={username}
+        onChangeText={setUsername}
+        keyboardType="email-address"
+        autoCapitalize="none"
+        placeholderTextColor="#888"
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Name"
+        value={name}
+        onChangeText={setName}
         keyboardType="email-address"
         autoCapitalize="none"
         placeholderTextColor="#888"

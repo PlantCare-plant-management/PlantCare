@@ -9,13 +9,13 @@ import {
   SafeAreaView,
   Switch,
   Dimensions,
+  ActivityIndicator,
 } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { useNavigation } from "@react-navigation/native";
 import { authContext } from "../contexts/authContext";
-import * as SecureStore from "expo-secure-store"; // Import SecureStore to fetch token
+import * as SecureStore from "expo-secure-store";
 
-// mengambil lebar layar
 const { width } = Dimensions.get("window");
 
 const ProfileScreen = () => {
@@ -23,11 +23,10 @@ const ProfileScreen = () => {
   const { logout } = useContext(authContext);
   const [notificationsEnabled, setNotificationsEnabled] = useState(false);
   const [userData, setUserData] = useState(null);
-  console.log(userData, "<======");
 
   const handleLogout = () => {
     logout();
-    navigation.navigate("Login");
+    navigation.navigate("LoginScreen");
   };
 
   const fetchUserData = async () => {
@@ -35,10 +34,9 @@ const ProfileScreen = () => {
       const token = await SecureStore.getItemAsync("access_token");
       const userId = await SecureStore.getItemAsync("user_id");
 
-      console.log(userId, "<==== user id");
       if (token) {
         const response = await fetch(
-          `https://768a-125-163-218-199.ngrok-free.app/user/${userId}`,
+          `https://38f8-182-253-116-14.ngrok-free.app/user/${userId}`,
           {
             method: "GET",
             headers: {
@@ -66,7 +64,8 @@ const ProfileScreen = () => {
 
   if (!userData) {
     return (
-      <View style={styles.container}>
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#0000ff" />
         <Text>Loading...</Text>
       </View>
     );
@@ -79,7 +78,7 @@ const ProfileScreen = () => {
           <View style={styles.coverContainer}>
             <Image
               source={{
-                uri: "https://static.vecteezy.com/system/resources/thumbnails/006/224/670/small/go-green-concept-banner-with-lush-green-foliage-illustration-vector.jpg", // Ganti dengan URL gambar sampul yang diinginkan
+                uri: "https://static.vecteezy.com/system/resources/thumbnails/006/224/670/small/go-green-concept-banner-with-lush-green-foliage-illustration-vector.jpg",
               }}
               style={styles.coverImage}
             />
@@ -154,6 +153,7 @@ const ProfileScreen = () => {
             flexDirection: "row",
             justifyContent: "center",
             alignItems: "center",
+            marginVertical: 20,
           }}
         >
           <TouchableOpacity onPress={handleLogout}>
@@ -166,7 +166,7 @@ const ProfileScreen = () => {
             >
               <Ionicons name="log-out-outline" size={30} color="#ff0000" />
               <Text
-                style={{ fontSize: "20", fontWeight: "400", color: "black" }}
+                style={{ fontSize: 20, fontWeight: "400", color: "black" }}
               >
                 Logout
               </Text>
@@ -182,6 +182,11 @@ const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
     backgroundColor: "#FFF5F5",
+    alignItems: "center",
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
     alignItems: "center",
   },
   header: {

@@ -50,7 +50,20 @@ function TabNavigator() {
         },
       })}
     >
-      <Tab.Screen name="MyPlant" component={MyPlantScreen} />
+      <Tab.Screen
+          name="MyPlant"
+          component={MyPlantScreen}
+          options={({ navigation }) => ({
+            headerRight: () => (
+              <TouchableOpacity
+                onPress={() => console.log('Button pressed')} // You can replace this with navigation.navigate("YourTargetScreen")
+                style={{ marginRight: 16 }}
+              >
+                <Ionicons name="add-circle" size={30} color="black" />
+              </TouchableOpacity>
+            ),
+          })}
+        />
       <Tab.Screen name="AddPlant" component={AddPlantScreen} />
       <Tab.Screen
         name="Profile"
@@ -63,7 +76,8 @@ function TabNavigator() {
 
 export default function MainStack() {
   const { isSignedIn, loading } = useContext(authContext);
-
+  console.log(isSignedIn)
+  
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Splash">

@@ -65,6 +65,7 @@ class UserController {
   static async login(req, res, next) {
     try {
       const { email, password } = loginSchema.parse(req.body);
+      console.log(email, password)
 
       const user = await getUserByEmail(email);
       if (!user) {
