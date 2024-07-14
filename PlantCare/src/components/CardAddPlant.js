@@ -2,7 +2,8 @@ import React from "react";
 import { View, Text, Image, StyleSheet, ScrollView } from "react-native";
 import { useRoute } from "@react-navigation/native";
 import { Entypo } from "react-native-vector-icons";
-import CardRecom from "../components/CardRecom";
+import CardRecom from "../../components/CardRecom";
+import CardMainCare from "../../components/CardMainCare";
 
 const PlantInfoScreen = () => {
   const route = useRoute();
