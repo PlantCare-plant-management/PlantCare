@@ -108,6 +108,11 @@ export default function MainStack() {
               options={{ headerShown: true }}
             />
             <Stack.Screen
+              name="AddRoomPlant"
+              component={AddRoomPlantsScreen}
+              options={{ headerShown: true }}
+            />
+            <Stack.Screen
               name="Faq"
               component={FaqScreen}
               options={({ navigation }) => ({
