@@ -69,8 +69,8 @@ const AddPlantScreen = () => {
         </TouchableOpacity>
       </View>
 
-      {/* Search Section */}
-      <View style={styles.searchContainer}>
+     {/* Search Section */}
+     <View style={styles.searchContainer}>
         <TextInput
           style={styles.searchInput}
           placeholder="Search plant..."

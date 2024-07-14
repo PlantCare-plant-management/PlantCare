@@ -16,6 +16,8 @@ import SplashScreen from "../screens/SplashScreen";
 
 import { authContext } from "../contexts/authContext";
 import AddRoomPlantsScreen from "../screens/AddRoomPlantsScreen";
+import ShopScreen from "../screens/ShopScreen";
+import OptionScreen from "../screens/OptionScreen";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -31,6 +33,8 @@ function TabNavigator() {
             iconName = "leaf";
           } else if (route.name === "AddPlant") {
             iconName = "add-circle";
+          } else if (route.name === 'Shop') {
+            iconName = 'cart';
           } else if (route.name === "Profile") {
             iconName = "person";
           }
@@ -47,6 +51,7 @@ function TabNavigator() {
     >
       <Tab.Screen name="MyPlant" component={MyPlantScreen} />
       <Tab.Screen name="AddPlant" component={AddPlantScreen} />
+      <Tab.Screen name="Shop" component={ShopScreen} />
       <Tab.Screen name="Profile" component={ProfileScreen} />
     </Tab.Navigator>
   );
@@ -102,6 +107,21 @@ export default function MainStack() {
               name="AddRoomPlant"
               component={AddRoomPlantsScreen}
               options={{ headerShown: true }}
+            />
+            <Stack.Screen
+              name="OptionScreen"
+              component={OptionScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="ShopScreen"
+              component={ShopScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="AddPlantScreen"
+              component={AddPlantScreen}
+              options={{ headerShown: false }}
             />
           </>
         )}
