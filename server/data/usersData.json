@@ -1,0 +1,28 @@
+{
+  "users": [
+    {
+      "email": "suzumori@gmail.com",
+      "name": "remu suzumori",
+      "password": "12345",
+      "imgUrl": "https://cdn.idntimes.com/content-images/post/20240226/remu19971203-423414763-1419413852325257-8160633298947598858-n-a83f7868577039e47e2344a96107eea1.jpg",
+      "dateOfBirth": "1997-12-03",
+      "address": "Tokyo, Japan"
+    },
+    {
+      "email": "elfie@mail.com",
+      "name": "eva elfie",
+      "password": "12345",
+      "imgUrl": "https://img.okezone.com/okz/500/content/2023/09/27/612/2890735/biodata-dan-profil-eva-elfie-model-cantik-yang-sukses-di-industri-film-dewasa-hLSHAEM01F.jpg",
+      "dateOfBirth": "1995-05-15",
+      "address": "Moscow, Russia"
+    },
+    {
+      "email": "angie@mail.com",
+      "name": "Angie Marcheria Setiawan",
+      "password": "12345",
+      "imgUrl": "https://example.com/images/sari.jpg",
+      "dateOfBirth": "2003-03-04",
+      "address": "Jakarta, Indonesia"
+    }
+  ]
+}
