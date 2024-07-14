@@ -3,7 +3,7 @@ const router = express.Router();
 const PlantController = require("../controllers/plantController");
 const authentication = require("../middleware/authentication");
 
-router.get("/", authentication, PlantController.getAllPlants);
-router.get("/:id", authentication, PlantController.getPlantById);
+router.get("/", PlantController.getAllPlants);
+router.get("/:id", PlantController.getPlantById);
 
 module.exports = router;
