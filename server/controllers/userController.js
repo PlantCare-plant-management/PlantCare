@@ -78,7 +78,9 @@ class UserController {
 
       const access_token = signToken({ id: user._id, username: user.username });
 
-      res.status(200).json({ access_token, username: user.username, email });
+      res
+        .status(200)
+        .json({ access_token, username: user.username, email, id: user._id });
     } catch (error) {
       next(error);
     }
