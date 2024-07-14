@@ -22,13 +22,16 @@ const AddPlantFormScreen = () => {
   const navigation = useNavigation();
   const plant = route.params?.plant || {};
 
-  const [photo, setPhoto] = useState("");
+  const [photo, setPhoto] = useState(plant.photo || "");
   const [name, setName] = useState(plant.name || "");
   const [location, setLocation] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
   const [locations, setLocations] = useState([]);
   const [loading, setLoading] = useState(true);
-  const URL = "https://632e-125-167-35-211.ngrok-free.app";
+  const URL = "https://9073-110-139-51-213.ngrok-free.app";
+
+  // Hardcoded userId
+  const userId = "6692846d0654ff8ff684e6bc";
 
   const fetchLocations = async () => {
     try {
@@ -52,9 +55,41 @@ const AddPlantFormScreen = () => {
     }, [])
   );
 
-  const handleAddPlant = () => {
-    // Logic to add plant
-    navigation.navigate("MyPlant");
+  const handleAddPlant = async () => {
+    if (!location) {
+      alert("Please select a location for the plant.");
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const response = await fetch(`${URL}/plants`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userId,
+          name,
+          location,
+          photo,
+        }),
+      });
+
+      const result = await response.json();
+      console.log(result, "ini result handleAddPlant");
+      if (response.ok) {
+        navigation.navigate("MyPlant");
+      } else {
+        console.error("Failed to add plant:", result);
+        // Handle error (show message to user, etc.)
+      }
+    } catch (error) {
+      console.error("Error adding plant:", error);
+      // Handle error (show message to user, etc.)
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleLocationChange = (itemValue) => {
@@ -67,9 +102,19 @@ const AddPlantFormScreen = () => {
     }
   };
 
+  const handlePhotoUpload = () => {
+    // Implement photo upload logic here
+    // For example, use ImagePicker to allow users to select a photo from their device
+    // After selecting the photo, set the photo URI to the `photo` state
+    // setPhoto(selectedPhotoUri);
+  };
+
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.imageContainer} onPress={() => {}}>
+      <TouchableOpacity
+        style={styles.imageContainer}
+        onPress={handlePhotoUpload}
+      >
         <Image
           source={{ uri: photo || "https://via.placeholder.com/300" }}
           style={styles.image}
@@ -93,7 +138,7 @@ const AddPlantFormScreen = () => {
           placeholder="Plant Name"
           value={name}
           onChangeText={setName}
-          editable={false}
+          editable={!name} // Allow editing only if name is empty
         />
         <TouchableOpacity
           style={styles.input}

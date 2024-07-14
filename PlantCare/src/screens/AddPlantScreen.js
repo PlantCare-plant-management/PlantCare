@@ -16,7 +16,7 @@ const AddPlantScreen = () => {
   const [searchText, setSearchText] = useState("");
   const [plants, setPlants] = useState([]);
   const [error, setError] = useState("");
-  const URL = "https://9aec-125-167-35-211.ngrok-free.app";
+  const URL = "https://9073-110-139-51-213.ngrok-free.app";
 
   async function fetchData() {
     try {
@@ -25,7 +25,7 @@ const AddPlantScreen = () => {
         throw new Error("Gagal fetch");
       }
       const data = await res.json();
-      console.log(data, "ini data");
+      // console.log(data, "ini data");
       setPlants(data);
     } catch (error) {
       console.log(error);

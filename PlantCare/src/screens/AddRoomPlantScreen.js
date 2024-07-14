@@ -15,11 +15,10 @@ const AddRoomPlantsScreen = () => {
   const [newRoom, setNewRoom] = useState("");
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [editId, setEditId] = useState(null); // State untuk menyimpan ID ruangan yang sedang diedit
+  const [editId, setEditId] = useState(null);
   const navigation = useNavigation();
-  const URL = "https://632e-125-167-35-211.ngrok-free.app";
+  const URL = "https://f3ba-125-167-35-211.ngrok-free.app";
 
-  // Fungsi untuk mengambil daftar ruangan dari server saat komponen dimount
   useEffect(() => {
     const fetchRooms = async () => {
       try {
@@ -39,7 +38,6 @@ const AddRoomPlantsScreen = () => {
     fetchRooms();
   }, []);
 
-  // Fungsi untuk menambahkan ruangan baru
   const addRoom = async () => {
     if (newRoom.trim()) {
       try {
@@ -66,7 +64,6 @@ const AddRoomPlantsScreen = () => {
     }
   };
 
-  // Fungsi untuk mengedit ruangan
   const editRoom = async (id) => {
     console.log(id, "ini id");
     try {

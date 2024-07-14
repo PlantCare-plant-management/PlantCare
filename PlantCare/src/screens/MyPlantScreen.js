@@ -1,40 +1,102 @@
-// MyPlantScreen.js
-import React, { useState } from 'react';
-import { View, Text, FlatList, TouchableOpacity, StyleSheet, Button } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import React, { useState, useEffect } from "react";
+import {
+  View,
+  Text,
+  FlatList,
+  TouchableOpacity,
+  StyleSheet,
+  ActivityIndicator,
+} from "react-native";
+import { useNavigation, useFocusEffect } from "@react-navigation/native";
 
 const MyPlantScreen = () => {
   const navigation = useNavigation();
+  const [plants, setPlants] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const plants = [
-    { id: '1', name: 'Lavender', date: '01/07/24', location: 'Bedroom' },
-    { id: '2', name: 'Rose', date: '15/06/24', location: 'Kitchen' },
-    { id: '3', name: 'Tulip', date: '20/06/24', location: 'Living Room' },
-  ];
+  const userId = "6692846d0654ff8ff684e6bc"; // Hardcoded userId
+  const URL = "https://9073-110-139-51-213.ngrok-free.app";
 
-  const [filter, setFilter] = useState('All plants');
+  const fetchMyPlants = async () => {
+    try {
+      const response = await fetch(`${URL}/myplants/${userId}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const result = await response.json();
+      setPlants(result);
+    } catch (error) {
+      console.error("Error fetching my plants:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-  const filteredPlants = filter === 'All plants' ? plants : plants.filter(plant => plant.location === filter);
+  useEffect(() => {
+    fetchMyPlants();
+  }, []);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      fetchMyPlants();
+    }, [])
+  );
+
+  const [filter, setFilter] = useState("All plants");
+
+  const filteredPlants =
+    filter === "All plants"
+      ? plants
+      : plants.filter((plant) => plant.location === filter);
+
+  if (loading) {
+    return <ActivityIndicator size="large" color="#4CAF50" />;
+  }
 
   return (
     <View style={styles.container}>
       <Text style={styles.date}>Wednesday, 10 July 2024</Text>
       <View style={styles.filterContainer}>
-        <TouchableOpacity style={[styles.filterButton, filter === 'All plants' && styles.selectedFilter]} onPress={() => setFilter('All plants')}>
+        <TouchableOpacity
+          style={[
+            styles.filterButton,
+            filter === "All plants" && styles.selectedFilter,
+          ]}
+          onPress={() => setFilter("All plants")}
+        >
           <Text style={styles.filterText}>All plants</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={[styles.filterButton, filter === 'Bedroom' && styles.selectedFilter]} onPress={() => setFilter('Bedroom')}>
+        <TouchableOpacity
+          style={[
+            styles.filterButton,
+            filter === "Bedroom" && styles.selectedFilter,
+          ]}
+          onPress={() => setFilter("Bedroom")}
+        >
           <Text style={styles.filterText}>Bedroom</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={[styles.filterButton, filter === 'Kitchen' && styles.selectedFilter]} onPress={() => setFilter('Kitchen')}>
+        <TouchableOpacity
+          style={[
+            styles.filterButton,
+            filter === "Kitchen" && styles.selectedFilter,
+          ]}
+          onPress={() => setFilter("Kitchen")}
+        >
           <Text style={styles.filterText}>Kitchen</Text>
         </TouchableOpacity>
       </View>
       <FlatList
         data={filteredPlants}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item._id}
         renderItem={({ item }) => (
-          <TouchableOpacity style={styles.plantItem} onPress={() => navigation.navigate('PlantInfo', { plantId: item.id })}>
+          <TouchableOpacity
+            style={styles.plantItem}
+            onPress={() =>
+              navigation.navigate("PlantInfo", { plantId: item._id })
+            }
+          >
             <View style={styles.plantInfo}>
               <Text style={styles.plantName}>{item.name}</Text>
               <Text style={styles.plantDate}>Date planted: {item.date}</Text>
@@ -45,7 +107,10 @@ const MyPlantScreen = () => {
           </TouchableOpacity>
         )}
       />
-      <TouchableOpacity style={styles.addButton} onPress={() => navigation.navigate('AddPlant')}>
+      <TouchableOpacity
+        style={styles.addButton}
+        onPress={() => navigation.navigate("AddPlant")}
+      >
         <Text style={styles.addButtonText}>Add a new plant</Text>
       </TouchableOpacity>
     </View>
@@ -56,37 +121,37 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
   },
   date: {
     fontSize: 16,
-    color: '#888',
+    color: "#888",
     marginBottom: 16,
   },
   filterContainer: {
-    flexDirection: 'row',
+    flexDirection: "row",
     marginBottom: 16,
   },
   filterButton: {
     padding: 8,
     marginRight: 8,
-    backgroundColor: '#e0e0e0',
+    backgroundColor: "#e0e0e0",
     borderRadius: 8,
   },
   selectedFilter: {
-    backgroundColor: '#a0e0a0',
+    backgroundColor: "#a0e0a0",
   },
   filterText: {
     fontSize: 16,
-    color: '#333',
+    color: "#333",
   },
   plantItem: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     padding: 16,
     marginBottom: 16,
-    backgroundColor: '#f9f9f9',
+    backgroundColor: "#f9f9f9",
     borderRadius: 8,
   },
   plantInfo: {
@@ -94,37 +159,37 @@ const styles = StyleSheet.create({
   },
   plantName: {
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   plantDate: {
     fontSize: 14,
-    color: '#666',
+    color: "#666",
   },
   plantPhotoContainer: {
     width: 80,
     height: 80,
-    backgroundColor: '#d0d0d0',
-    justifyContent: 'center',
-    alignItems: 'center',
+    backgroundColor: "#d0d0d0",
+    justifyContent: "center",
+    alignItems: "center",
     borderRadius: 8,
   },
   plantPhotoText: {
-    color: '#fff',
-    fontWeight: 'bold',
+    color: "#fff",
+    fontWeight: "bold",
   },
   addButton: {
-    position: 'absolute',
+    position: "absolute",
     bottom: 16,
     right: 16,
     padding: 16,
-    backgroundColor: '#4caf50',
+    backgroundColor: "#4caf50",
     borderRadius: 50,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   addButtonText: {
-    color: '#fff',
-    fontWeight: 'bold',
+    color: "#fff",
+    fontWeight: "bold",
   },
 });
 
