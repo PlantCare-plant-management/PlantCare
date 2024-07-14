@@ -1,3 +1,4 @@
+const { ObjectId } = require("mongodb");
 const {
   getPlants,
   getPlantById,
@@ -29,9 +30,10 @@ class PlantController {
 
   static async addToMyPlant(req, res, next) {
     try {
-      const { userId, name, location, photo } = req.body;
-
-      const addMyPlant = { userId, name, location, photo };
+      const userId = req.user.id.toString()
+      const { name, location, photo, plantId } = req.body;
+      console.log(plantId)
+      const addMyPlant = { userId, name, location, photo, plantId : new ObjectId(plantId) };
 
       const result = await addToMyPlant(addMyPlant);
       console.log(result, "ini result addToMyPlant");

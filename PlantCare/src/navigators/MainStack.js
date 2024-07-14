@@ -18,6 +18,7 @@ import { authContext } from "../contexts/authContext";
 import AddRoomPlantsScreen from "../screens/AddRoomPlantsScreen";
 import ShopScreen from "../screens/ShopScreen";
 import OptionScreen from "../screens/OptionScreen";
+import { TouchableOpacity } from "react-native";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -49,7 +50,20 @@ function TabNavigator() {
         },
       })}
     >
-      <Tab.Screen name="MyPlant" component={MyPlantScreen} />
+      <Tab.Screen
+          name="MyPlant"
+          component={MyPlantScreen}
+          options={({ navigation }) => ({
+            headerRight: () => (
+              <TouchableOpacity
+                onPress={() => navigation.navigate("AddPlant")} // You can replace this with navigation.navigate("YourTargetScreen")
+                style={{ marginRight: 16 }}
+              >
+                <Ionicons name="add-circle" size={30} color="black" />
+              </TouchableOpacity>
+            ),
+          })}
+        />
       <Tab.Screen name="AddPlant" component={AddPlantScreen} />
       <Tab.Screen name="Shop" component={ShopScreen} />
       <Tab.Screen name="Profile" component={ProfileScreen} />

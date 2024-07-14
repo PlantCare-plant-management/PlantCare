@@ -8,6 +8,7 @@ import {
   ActivityIndicator,
 } from "react-native";
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
+import * as SecureStore from 'expo-secure-store';
 
 const MyPlantScreen = () => {
   const navigation = useNavigation();
@@ -19,10 +20,12 @@ const MyPlantScreen = () => {
 
   const fetchMyPlants = async () => {
     try {
-      const response = await fetch(`${URL}/myplants/${userId}`, {
+      const token = await SecureStore.getItemAsync('access_token');
+      const response = await fetch(`${URL}/myplants`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
+          Authorization : `Bearer ${token}`
         },
       });
       const result = await response.json();
@@ -107,12 +110,7 @@ const MyPlantScreen = () => {
           </TouchableOpacity>
         )}
       />
-      <TouchableOpacity
-        style={styles.addButton}
-        onPress={() => navigation.navigate("AddPlant")}
-      >
-        <Text style={styles.addButtonText}>Add a new plant</Text>
-      </TouchableOpacity>
+      
     </View>
   );
 };

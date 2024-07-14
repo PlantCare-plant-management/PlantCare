@@ -16,6 +16,7 @@ import {
 } from "@react-navigation/native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { Picker } from "@react-native-picker/picker";
+import * as SecureStore from 'expo-secure-store';
 
 const AddPlantFormScreen = () => {
   const route = useRoute();
@@ -31,7 +32,8 @@ const AddPlantFormScreen = () => {
   const URL = process.env.EXPO_PUBLIC_API_URL
 
   // Hardcoded userId
-  const userId = "6692846d0654ff8ff684e6bc";
+  
+  const plantId = plant._id
 
   const fetchLocations = async () => {
     try {
@@ -54,8 +56,11 @@ const AddPlantFormScreen = () => {
       fetchLocations();
     }, [])
   );
-
+  
   const handleAddPlant = async () => {
+    const token = await SecureStore.getItemAsync('access_token');
+    const plantId = plant._id
+    
     if (!location) {
       alert("Please select a location for the plant.");
       return;
@@ -67,17 +72,17 @@ const AddPlantFormScreen = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`
         },
         body: JSON.stringify({
-          userId,
           name,
           location,
           photo,
+          plantId
         }),
       });
 
       const result = await response.json();
-      console.log(result, "ini result handleAddPlant");
       if (response.ok) {
         navigation.navigate("MyPlant");
       } else {

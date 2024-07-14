@@ -41,7 +41,7 @@ const AddPlantScreen = () => {
   const filteredPlants = plants.filter(
     (plant) => plant.name.toLowerCase().indexOf(searchText.toLowerCase()) !== -1
   );
-
+  console.log(filteredPlants)
   const careIcons = {
     Watering: "watering-can",
     Lighting: "lightbulb-on-outline",
