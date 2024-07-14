@@ -1,48 +1,65 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
   FlatList,
   TouchableOpacity,
   StyleSheet,
+  ActivityIndicator,
 } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useFocusEffect } from "@react-navigation/native";
 
 const MyPlantScreen = () => {
   const navigation = useNavigation();
-  const [myPlants, setMyPlants] = useState([]);
+  const [plants, setPlants] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const fetchData = async () => {
+  const userId = "6692846d0654ff8ff684e6bc"; // Hardcoded userId
+  const URL = process.env.EXPO_PUBLIC_API_URL
+
+  const fetchMyPlants = async () => {
     try {
-      const response = await fetch(process.env.EXPO_PUBLIC_API_URL + "/plants", {
+      const response = await fetch(`${URL}/myplants/${userId}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
         },
-        cache: "no-store",
       });
-
-      if (!response.ok) {
-        throw new Error(data.message);
-      }
-
-      const data = await response.json();
-
-      setMyPlant(data)
+      const result = await response.json();
+      setPlants(result);
     } catch (error) {
-      console.log(error)
+      console.error("Error fetching my plants:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchData();
+    fetchMyPlants();
   }, []);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      fetchMyPlants();
+    }, [])
+  );
+
+  const [filter, setFilter] = useState("All plants");
+
+  const filteredPlants =
+    filter === "All plants"
+      ? plants
+      : plants.filter((plant) => plant.location === filter);
+
+  if (loading) {
+    return <ActivityIndicator size="large" color="#4CAF50" />;
+  }
 
   return (
     <View style={styles.container}>
       <Text style={styles.date}>Wednesday, 10 July 2024</Text>
       <View style={styles.filterContainer}>
-        {/* <TouchableOpacity
+        <TouchableOpacity
           style={[
             styles.filterButton,
             filter === "All plants" && styles.selectedFilter,
@@ -50,21 +67,39 @@ const MyPlantScreen = () => {
           onPress={() => setFilter("All plants")}
         >
           <Text style={styles.filterText}>All plants</Text>
-        </TouchableOpacity> */}
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[
+            styles.filterButton,
+            filter === "Bedroom" && styles.selectedFilter,
+          ]}
+          onPress={() => setFilter("Bedroom")}
+        >
+          <Text style={styles.filterText}>Bedroom</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[
+            styles.filterButton,
+            filter === "Kitchen" && styles.selectedFilter,
+          ]}
+          onPress={() => setFilter("Kitchen")}
+        >
+          <Text style={styles.filterText}>Kitchen</Text>
+        </TouchableOpacity>
       </View>
       <FlatList
-        data={myPlants}
-        keyExtractor={(item) => item.id}
+        data={filteredPlants}
+        keyExtractor={(item) => item._id}
         renderItem={({ item }) => (
           <TouchableOpacity
             style={styles.plantItem}
-            onPress={() => navigation.navigate("PlantInfo", { plant: item })}
+            onPress={() =>
+              navigation.navigate("PlantInfo", { plantId: item._id })
+            }
           >
             <View style={styles.plantInfo}>
               <Text style={styles.plantName}>{item.name}</Text>
-              <Text style={styles.plantDate}>
-                Latin name: {item.latin_name}
-              </Text>
+              <Text style={styles.plantDate}>Date planted: {item.date}</Text>
             </View>
             <View style={styles.plantPhotoContainer}>
               <Text style={styles.plantPhotoText}>Foto Tanaman</Text>

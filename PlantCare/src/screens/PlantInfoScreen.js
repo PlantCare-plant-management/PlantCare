@@ -1,89 +1,69 @@
-import React from "react";
-import { View, Text, Image, StyleSheet, ScrollView } from "react-native";
-import { useRoute } from "@react-navigation/native";
-import { Entypo } from "react-native-vector-icons";
-import CardRecom from "../components/CardRecom";
+import React from 'react';
+import { View, Text, Image, StyleSheet, ScrollView } from 'react-native';
+import { useRoute } from '@react-navigation/native';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const PlantInfoScreen = () => {
   const route = useRoute();
   const { plant } = route.params;
 
-  const renderIcon = (text) => {
-    switch (text.toLowerCase()) {
-      case "watering":
-        return <Entypo name="water" size={24} color="black" />;
-      case "lighting":
-        return <Entypo name="light-up" size={24} color="black" />;
-      case "light":
-        return <Entypo name="light-up" size={24} color="black" />;
-      case "fertilizing":
-        return <Entypo name="leaf" size={24} color="black" />;
-      case "monitor plant health":
-        return <Entypo name="eye" size={24} color="black" />;
-      case "soil":
-        return <Entypo name="tree" size={24} color="black" />;
-      case "pruning":
-        return <Entypo name="scissors" size={24} color="black" />;
-      default:
-        return null;
-    }
-  };
-
-  const parseRecommendation = (recommendation) => {
-    const [title, subtitle] = recommendation.split(": ");
-    return { title, subtitle };
-  };
-
   return (
-    <ScrollView style={styles.container}>
-      <View style={styles.container2}>
-        <View style={styles.judulDanImage}>
-          <View style={styles.textContainer}>
-            <Text style={styles.title}>{plant.name}</Text>
-            <Text style={styles.latinName}>{plant.latin_name}</Text>
-          </View>
-          <Image source={{ uri: plant.imageUrl }} style={styles.image} />
+    <ScrollView contentContainerStyle={styles.container}>
+      <View style={styles.header}>
+        <View style={styles.textContainer}>
+          <Text style={styles.title}>Oregano</Text>
+          <Text style={styles.description}>
+            Oregano is a familiar herb that many people know from dishes such as pizza and...
+            <Text style={styles.readMore}> Read more</Text>
+          </Text>
         </View>
-        <Text style={styles.deskripsiTanaman}>{plant.description}</Text>
-
-        <View style={styles.containerDiffHarv}>
-          <View style={styles.containerDiffHarv2}>
-            <Text style={styles.difficulty}>Difficulty</Text>
-            <Text style={styles.difficultyIsi}>{plant.difficulty}</Text>
-          </View>
-
-          <View>
-            <Text style={styles.harvest}>Ready To Harvest</Text>
-            <Text style={styles.harvestIsi}>
-              {plant.harvest === "True" ? "Yes" : "No"}
-            </Text>
-          </View>
+        <Image source={{ uri: "https://via.placeholder.com/100" }} style={styles.image} />
+      </View>
+      <View style={styles.infoContainer}>
+        <View style={styles.infoBox}>
+          <Text style={styles.infoLabel}>Difficulty</Text>
+          <Text style={styles.infoValue}>Easy</Text>
         </View>
-
-        <View style={styles.containerRecom}>
-          <Text style={styles.recom}>Recommendations</Text>
-          <ScrollView horizontal={true} style={styles.recomList}>
-            {plant.recommendation.map((recom, index) => {
-              const parsedRecom = parseRecommendation(recom);
-              return (
-                <CardRecom
-                  key={index}
-                  data={parsedRecom}
-                  renderIcon={renderIcon}
-                />
-              );
-            })}
-          </ScrollView>
+        <View style={styles.infoBox}>
+          <Text style={styles.infoLabel}>Ready to harvest</Text>
+          <Text style={styles.infoValue}>In 60 - 90 days</Text>
         </View>
-
-        <View style={styles.containerMainCare}>
-          <Text style={styles.mainCare}>Main Care</Text>
-          {plant.main_care.map((item, index) => (
-            <View key={index} style={styles.mainCareItemContainer}>
-              {renderIcon(item)}
-              <Text style={styles.mainCareItem}>{item}</Text>
-            </View>
-          ))}
+      </View>
+      <Text style={styles.sectionTitle}>Recommendations</Text>
+      <View style={styles.recommendationsContainer}>
+        <View style={styles.recommendationBox}>
+          <Icon name="water" size={40} color="#AED581" style={styles.recommendationIcon} />
+          <Text style={styles.recommendationText}>Watering</Text>
+          <Text style={styles.recommendationSubText}>Once per day</Text>
+        </View>
+        <View style={styles.recommendationBox}>
+          <Icon name="weather-sunny" size={40} color="#FFEE58" style={styles.recommendationIcon} />
+          <Text style={styles.recommendationText}>Light</Text>
+          <Text style={styles.recommendationSubText}>4h per day</Text>
+        </View>
+        <View style={styles.recommendationBox}>
+          <Icon name="sprout" size={40} color="#8D6E63" style={styles.recommendationIcon} />
+          <Text style={styles.recommendationText}>Soil</Text>
+          <Text style={styles.recommendationSubText}>Draining</Text>
+        </View>
+      </View>
+      <Text style={styles.sectionTitle}>Main care</Text>
+      <View style={styles.careContainer}>
+        <View style={styles.careBox}>
+          <Icon name="watering-can" size={40} color="#AED581" style={styles.careIcon} />
+          <Text style={styles.careText}>Watering</Text>
+        </View>
+        <View style={styles.careBox}>
+          <Icon name="leaf" size={40} color="#8BC34A" style={styles.careIcon} />
+          <Text style={styles.careText}>Fertilizing</Text>
+        </View>
+        <View style={styles.careBox}>
+          <Icon name="content-cut" size={40} color="#FFC107" style={styles.careIcon} />
+          <Text style={styles.careText}>Pruning</Text>
+        </View>
+        <View style={styles.careBox}>
+          <Icon name="flower-tulip" size={40} color="#F48FB1" style={styles.careIcon} />
+          <Text style={styles.careText}>Repotting</Text>
         </View>
       </View>
     </ScrollView>
@@ -93,97 +73,109 @@ const PlantInfoScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "green",
+    padding: 16,
+    backgroundColor: '#E8F5E9',
   },
-  container2: {
-    backgroundColor: "white",
-    flex: 3,
-    borderTopLeftRadius: 30,
-    borderTopRightRadius: 30,
-    marginTop: 150,
-    minHeight: "100%",
-  },
-  judulDanImage: {
-    flexDirection: "row",
-    justifyContent: "space-evenly",
-    alignItems: "center",
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 16,
   },
   textContainer: {
     flex: 1,
-    marginLeft: 30,
-  },
-  title: {
-    fontWeight: "bold",
-    fontSize: 25,
-  },
-  latinName: {
-    fontStyle: "italic",
-    marginTop: 5,
-    fontSize: 18,
-    color: "#888",
-  },
-  deskripsiTanaman: {
-    marginLeft: 30,
-    marginTop: 10,
-    marginRight: 30,
-    fontSize: 16,
-  },
-  containerDiffHarv: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginRight: 30,
-    marginLeft: 30,
-    marginTop: 20,
-  },
-  containerDiffHarv2: {
-    marginTop: 30,
-  },
-  difficulty: { fontWeight: "bold", fontSize: 20 },
-  difficultyIsi: { marginTop: 5 },
-  harvest: {
-    marginTop: 30,
-    fontWeight: "bold",
-    fontSize: 20,
-  },
-  harvestIsi: {
-    marginTop: 5,
-  },
-  containerRecom: {
-    marginLeft: 30,
-    marginRight: 30,
-    marginTop: 20,
-  },
-  recom: {
-    fontWeight: "bold",
-    fontSize: 20,
-  },
-  recomList: {
-    flexDirection: "row",
-    marginTop: 10,
-  },
-  containerMainCare: {
-    marginLeft: 30,
-    marginRight: 30,
-    marginTop: 20,
-  },
-  mainCare: {
-    fontWeight: "bold",
-    fontSize: 20,
-  },
-  mainCareItem: {
-    marginLeft: 10,
-    fontSize: 16,
-    color: "#555",
-  },
-  mainCareItemContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginTop: 10,
+    marginRight: 16,
   },
   image: {
     width: 100,
     height: 100,
+    borderRadius: 16,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 8,
+  },
+  description: {
+    fontSize: 16,
+    color: '#555',
+  },
+  readMore: {
+    color: '#4CAF50',
+  },
+  infoContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 16,
+  },
+  infoBox: {
+    flex: 1,
+    padding: 16,
     borderRadius: 8,
+    backgroundColor: '#fff',
+    marginHorizontal: 4,
+    alignItems: 'center',
+  },
+  infoLabel: {
+    fontSize: 14,
+    color: '#888',
+    marginBottom: 4,
+  },
+  infoValue: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#333',
+  },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 8,
+    color: '#333',
+  },
+  recommendationsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 16,
+  },
+  recommendationBox: {
+    flex: 1,
+    padding: 16,
+    borderRadius: 8,
+    backgroundColor: '#fff',
+    marginHorizontal: 4,
+    alignItems: 'center',
+  },
+  recommendationIcon: {
+    marginBottom: 8,
+  },
+  recommendationText: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    color: '#333',
+  },
+  recommendationSubText: {
+    fontSize: 12,
+    color: '#888',
+  },
+  careContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  careBox: {
+    flex: 1,
+    padding: 16,
+    borderRadius: 8,
+    backgroundColor: '#fff',
+    marginHorizontal: 4,
+    alignItems: 'center',
+  },
+  careIcon: {
+    marginBottom: 8,
+  },
+  careText: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    color: '#333',
   },
 });
 
