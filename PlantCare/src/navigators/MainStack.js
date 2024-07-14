@@ -1,5 +1,6 @@
+// mainstack
 import React, { useContext } from "react";
-import { NavigationContainer, useNavigation } from "@react-navigation/native";
+import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Ionicons } from "@expo/vector-icons";
@@ -17,9 +18,8 @@ import SplashScreen from "../screens/SplashScreen";
 import { authContext } from "../contexts/authContext";
 import AddRoomPlantsScreen from "../screens/AddRoomPlantsScreen";
 import FaqScreen from "../screens/FaqScreen";
-import { Text, TouchableOpacity } from "react-native";
+import { Text, TouchableOpacity, View } from "react-native";
 import NotificationSetting from "../screens/NotificationSetting";
-import { View } from "react-native";
 import EditProfileScreen from "../screens/EditProfileScreen";
 
 const Tab = createBottomTabNavigator();

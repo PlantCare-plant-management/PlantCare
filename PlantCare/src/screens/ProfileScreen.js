@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -10,10 +10,10 @@ import {
   Switch,
   Dimensions,
 } from "react-native";
-
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { useNavigation } from "@react-navigation/native";
 import { authContext } from "../contexts/authContext";
+import * as SecureStore from "expo-secure-store"; // Import SecureStore to fetch token
 
 // mengambil lebar layar
 const { width } = Dimensions.get("window");
@@ -22,10 +22,55 @@ const ProfileScreen = () => {
   const navigation = useNavigation();
   const { logout } = useContext(authContext);
   const [notificationsEnabled, setNotificationsEnabled] = useState(false);
+  const [userData, setUserData] = useState(null);
+  console.log(userData, "<======");
+
   const handleLogout = () => {
     logout();
     navigation.navigate("Login");
   };
+
+  const fetchUserData = async () => {
+    try {
+      const token = await SecureStore.getItemAsync("access_token");
+      const userId = await SecureStore.getItemAsync("user_id");
+
+      console.log(userId, "<==== user id");
+      if (token) {
+        const response = await fetch(
+          `https://768a-125-163-218-199.ngrok-free.app/user/${userId}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        if (response.ok) {
+          const data = await response.json();
+          setUserData(data);
+        } else {
+          console.error("Failed to fetch user data");
+        }
+      }
+    } catch (error) {
+      console.error("Error fetching user data", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchUserData();
+  }, []);
+
+  if (!userData) {
+    return (
+      <View style={styles.container}>
+        <Text>Loading...</Text>
+      </View>
+    );
+  }
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -40,13 +85,13 @@ const ProfileScreen = () => {
             />
             <Image
               source={{
-                uri: "https://cdn.idntimes.com/content-images/post/20240226/remu19971203-423414763-1419413852325257-8160633298947598858-n-a83f7868577039e47e2344a96107eea1.jpg",
+                uri: userData.imgUrl,
               }}
               style={styles.imageProfile}
             />
           </View>
-          <Text style={styles.profileName}>remu suzumori</Text>
-          <Text style={styles.profileSubText}>suzumori@gmail.com</Text>
+          <Text style={styles.profileName}>{userData.name}</Text>
+          <Text style={styles.profileSubText}>{userData.email}</Text>
         </View>
 
         <View style={styles.WrapMenu}>
@@ -114,7 +159,6 @@ const ProfileScreen = () => {
           <TouchableOpacity onPress={handleLogout}>
             <View
               style={{
-                // backgroundColor: "red",
                 flexDirection: "row",
                 alignItems: "center",
                 gap: 5,
@@ -150,7 +194,6 @@ const styles = StyleSheet.create({
     position: "relative",
   },
   coverImage: {
-    // backgroundColor: "pink",
     width: width,
     height: 150,
     position: "absolute",
@@ -174,11 +217,9 @@ const styles = StyleSheet.create({
     color: "#666",
   },
   userInfo: {
-    // backgroundColor: "blue",
     flexDirection: "row",
   },
   userItem: {
-    // flexDirection: 'row',
     marginBottom: 10,
     borderRadius: 10,
     width: "45%",
@@ -219,7 +260,6 @@ const styles = StyleSheet.create({
     color: "#333",
   },
   wrapText: {
-    // backgroundColor: "pink",
     flexDirection: "row",
     gap: 10,
   },
