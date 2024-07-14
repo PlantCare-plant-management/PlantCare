@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { NavigationContainer } from "@react-navigation/native";
+import { NavigationContainer, useNavigation } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Ionicons } from "@expo/vector-icons";
@@ -16,6 +16,11 @@ import SplashScreen from "../screens/SplashScreen";
 
 import { authContext } from "../contexts/authContext";
 import AddRoomPlantsScreen from "../screens/AddRoomPlantsScreen";
+import FaqScreen from "../screens/FaqScreen";
+import { Text, TouchableOpacity } from "react-native";
+import NotificationSetting from "../screens/NotificationSetting";
+import { View } from "react-native";
+import EditProfileScreen from "../screens/EditProfileScreen";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -47,7 +52,11 @@ function TabNavigator() {
     >
       <Tab.Screen name="MyPlant" component={MyPlantScreen} />
       <Tab.Screen name="AddPlant" component={AddPlantScreen} />
-      <Tab.Screen name="Profile" component={ProfileScreen} />
+      <Tab.Screen
+        name="Profile"
+        component={ProfileScreen}
+        options={{ headerShown: false }}
+      />
     </Tab.Navigator>
   );
 }
@@ -99,9 +108,65 @@ export default function MainStack() {
               options={{ headerShown: true }}
             />
             <Stack.Screen
-              name="AddRoomPlant"
-              component={AddRoomPlantsScreen}
-              options={{ headerShown: true }}
+              name="Faq"
+              component={FaqScreen}
+              options={({ navigation }) => ({
+                headerShown: true,
+                title: "",
+                headerLeft: () => (
+                  <TouchableOpacity onPress={() => navigation.goBack()}>
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        alignItems: "center",
+                        gap: 4,
+                      }}
+                    >
+                      <Ionicons name="arrow-back" size={24} color="black" />
+                      <Text style={{ fontSize: 18, fontWeight: "bold" }}>
+                        Profile
+                      </Text>
+                    </View>
+                  </TouchableOpacity>
+                ),
+              })}
+            />
+            <Stack.Screen
+              name="EditProfile"
+              component={EditProfileScreen}
+              options={({ navigation }) => ({
+                headerShown: true,
+                title: "",
+                headerLeft: () => (
+                  <TouchableOpacity onPress={() => navigation.goBack()}>
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        alignItems: "center",
+                        gap: 4,
+                      }}
+                    >
+                      <Ionicons name="arrow-back" size={24} color="black" />
+                      <Text style={{ fontSize: 18, fontWeight: "bold" }}>
+                        Profile
+                      </Text>
+                    </View>
+                  </TouchableOpacity>
+                ),
+              })}
+            />
+            <Stack.Screen
+              name="notification"
+              component={NotificationSetting}
+              options={({ navigation }) => ({
+                headerShown: true,
+                title: "Notification Setting",
+                headerLeft: () => (
+                  <TouchableOpacity onPress={() => navigation.goBack()}>
+                    <Ionicons name="arrow-back" size={24} color="black" />
+                  </TouchableOpacity>
+                ),
+              })}
             />
           </>
         )}
