@@ -9,7 +9,7 @@ const ProfileScreen = () => {
 
   const handleLogout = () => {
     logout();
-    navigation.navigate('Login');
+    navigation.navigate('LoginScreen');
   };
 
   return (

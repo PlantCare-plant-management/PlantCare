@@ -13,7 +13,7 @@ export function AuthProvider({ children }) {
       const token = await SecureStore.getItemAsync('access_token');
       const email = await SecureStore.getItemAsync('email');
       setIsSignedIn(!!token);
-      setemailLogin(email || null);
+      setEmailLogin(email || null);
     } catch (error) {
       console.error('Error checking login status', error);
     } finally {

@@ -6,7 +6,6 @@ class MyPlantController {
       const id = req.user.id.toString()
       console.log(id)
       const myPlants = await getMyPlants(id);
-      console.log(myPlants)
       res.status(200).json(myPlants);
     } catch (error) {
       next(error);

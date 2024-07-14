@@ -113,7 +113,7 @@ const AddPlantFormScreen = () => {
     // After selecting the photo, set the photo URI to the `photo` state
     // setPhoto(selectedPhotoUri);
   };
-
+  console.log(plant)
   return (
     <View style={styles.container}>
       <TouchableOpacity
