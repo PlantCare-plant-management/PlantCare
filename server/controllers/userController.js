@@ -6,6 +6,7 @@ const {
   createUser,
   getUserByUsername,
   getUserByEmail,
+  saveAddress
 } = require("../models/userModel");
 const { registerSchema, loginSchema } = require("../schemas/userSchema");
 
@@ -27,6 +28,17 @@ class UserController {
       if (!user) {
         throw { name: "ITEM_NOT_FOUND" };
       }
+      res.status(200).json(user);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async saveAddress(req, res, next) {
+    try {
+      const { address } = req.body;
+      const userId = req.user.id.toString()
+      const user = await saveAddress(userId, address);
       res.status(200).json(user);
     } catch (error) {
       next(error);
