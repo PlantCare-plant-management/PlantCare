@@ -1,29 +1,51 @@
 // ShopScreen.js
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList, StyleSheet, TouchableOpacity, Image, TextInput } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import * as SecureStore from 'expo-secure-store';
+import FormatRupiah from '../helper/FormatRupiah';
 
-const products = [
-    { id: '1', name: 'Starter Pack 1', price: 17000, image: 'https://www.ruparupa.com/blog/wp-content/uploads/2020/09/Screen-Shot-2020-09-01-at-12.40.38.png' },
-    { id: '2', name: 'Starter Pack 2', price: 17000, image: 'https://www.ruparupa.com/blog/wp-content/uploads/2020/09/Screen-Shot-2020-09-01-at-13.04.28.png' },
-    { id: '3', name: 'Starter Pack 3', price: 17000, image: 'https://www.ruparupa.com/blog/wp-content/uploads/2020/09/Screen-Shot-2020-09-01-at-13.20.41.png' },
-    { id: '4', name: 'Starter Pack 4', price: 17000, image: 'https://www.ruparupa.com/blog/wp-content/uploads/2020/09/Screen-Shot-2020-09-01-at-15.43.22.png' },
-    { id: '5', name: 'Starter Pack 5', price: 17000, image: 'https://www.99.co/id/panduan/wp-content/uploads/2023/09/16200808/Monstera-adansonii.jpg' },
-    { id: '6', name: 'Starter Pack 6', price: 17000, image: 'https://www.ruparupa.com/blog/wp-content/uploads/2020/09/Screen-Shot-2020-09-01-at-15.53.14.png' },
-    { id: '7', name: 'Starter Pack 7', price: 17000, image: 'https://www.ruparupa.com/blog/wp-content/uploads/2020/09/Screen-Shot-2020-09-01-at-16.03.01.png' },
-    { id: '8', name: 'Starter Pack 8', price: 17000, image: 'https://www.ruparupa.com/blog/wp-content/uploads/2020/09/Screen-Shot-2020-09-01-at-12.40.38.png' },
-    { id: '9', name: 'Starter Pack 9', price: 17000, image: 'https://www.ruparupa.com/blog/wp-content/uploads/2020/09/Screen-Shot-2020-09-01-at-12.40.38.png' },
-    { id: '10', name: 'Starter Pack 10', price: 17000, image: 'https://www.ruparupa.com/blog/wp-content/uploads/2020/09/Screen-Shot-2020-09-01-at-12.40.38.png' },
-    { id: '11', name: 'Starter Pack 11', price: 17000, image: 'https://www.ruparupa.com/blog/wp-content/uploads/2020/09/Screen-Shot-2020-09-01-at-12.40.38.png' },
-    { id: '12', name: 'Starter Pack 12', price: 17000, image: 'https://www.ruparupa.com/blog/wp-content/uploads/2020/09/Screen-Shot-2020-09-01-at-12.40.38.png' },
-    // Add more products as needed
-];
 
 const ShopScreen = () => {
     const [searchQuery, setSearchQuery] = useState('');
+    const [plants, setPlants] = useState([]);
+    const [loading, setLoading] = useState(true);
     const navigation = useNavigation();
+    const URL = process.env.EXPO_PUBLIC_API_URL
 
-    const filteredProducts = products.filter(product =>
+    const fetchMyPlants = async () => {
+        try {
+            const token = await SecureStore.getItemAsync('access_token');
+            const userId = await SecureStore.getItemAsync('user_id');
+            console.log(userId, "<<<< USER ID");
+            const response = await fetch(`${URL}/plantMarket`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                },
+            });
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+
+            const result = await response.json();
+            // console.log(result, "<<<< ");
+            setPlants(result);
+        } catch (error) {
+            console.error("Error fetching my plants:", error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        fetchMyPlants();
+    }, []);
+
+
+    const filteredProducts = plants.filter(product =>
         product.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
@@ -31,9 +53,9 @@ const ShopScreen = () => {
         <View style={styles.productContainer}>
             <Image source={{ uri: item.image }} style={styles.productImage} />
             <Text style={styles.productName}>{item.name}</Text>
-            <Text style={styles.productPrice}>Rp. {item.price}</Text>
-            <TouchableOpacity 
-                style={styles.shopButton} 
+            <Text style={styles.productPrice}>{FormatRupiah(item.price)}</Text>
+            <TouchableOpacity
+                style={styles.shopButton}
                 onPress={() => navigation.navigate('ShopInfoScreen', { product: item })}
             >
                 <Text style={styles.shopButtonText}>Buy</Text>
@@ -72,7 +94,7 @@ const styles = StyleSheet.create({
         padding: 16,
         paddingTop: 50, // Menambahkan padding top untuk menggeser header ke bawah
         backgroundColor: '#fff',
-        
+
     },
     header: {
         flexDirection: 'row',

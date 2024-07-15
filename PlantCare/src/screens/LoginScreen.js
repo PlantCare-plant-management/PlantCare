@@ -30,7 +30,6 @@ export default function LoginScreen() {
       if (response.ok) {
         const { access_token, email } = await response.json();
         await SecureStore.setItemAsync("access_token", access_token);
-        console.log(email)
         await SecureStore.setItemAsync("email", JSON.stringify(email));
         setIsSignedIn(true);
         setEmailLogin(email);

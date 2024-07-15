@@ -48,7 +48,7 @@ function TabNavigator() {
 
           return <Ionicons name={iconName} size={size} color={color} />;
         },
-        tabBarActiveTintColor: "tomato",
+        tabBarActiveTintColor: "green",
         tabBarInactiveTintColor: "gray",
         tabBarShowLabel: false,
         tabBarStyle: {
@@ -68,11 +68,12 @@ function TabNavigator() {
               <Ionicons name="add-circle" size={30} color="black" />
             </TouchableOpacity>
           ),
+          
         })}
       />
       {/* <Tab.Screen name="AddPlant" component={AddPlantScreen} /> */}
-      <Tab.Screen name="Shop" component={ShopScreen} />
-      <Tab.Screen name="Profile" component={ProfileScreen} />
+      <Tab.Screen name="Shop" component={ShopScreen} options={{ headerShown: false }} />
+      <Tab.Screen name="Profile" component={ProfileScreen} options={{ headerShown: false }} />
     </Tab.Navigator>
   );
 }

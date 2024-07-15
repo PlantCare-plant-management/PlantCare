@@ -16,18 +16,21 @@ const MyPlantScreen = () => {
   const [loading, setLoading] = useState(true);
   const URL = process.env.EXPO_PUBLIC_API_URL
 
-
   const fetchMyPlants = async () => {
     try {
       const token = await SecureStore.getItemAsync('access_token');
-      const response = await fetch(`${URL}/myplants`, {
+      const userId = await SecureStore.getItemAsync('user_id');
+      console.log(userId);
+      const response = await fetch(`${URL}/myplants/${userId}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          Authorization : `Bearer ${token}`
+          Authorization: `Bearer ${token}`
         },
       });
+
       const result = await response.json();
+      console.log(result);
       setPlants(result);
     } catch (error) {
       console.error("Error fetching my plants:", error);
@@ -109,7 +112,7 @@ const MyPlantScreen = () => {
           </TouchableOpacity>
         )}
       />
-      
+
     </View>
   );
 };

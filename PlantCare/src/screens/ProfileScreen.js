@@ -183,8 +183,8 @@ const styles = StyleSheet.create({
   },
   header: {
     alignItems: "center",
-    marginVertical: 20,
-    marginTop: 10,
+    marginVertical: 50, // Mengubah marginVertical dari 20 menjadi 30
+    marginTop: 60, // Mengubah marginTop dari 10 menjadi 20
   },
   coverContainer: {
     alignItems: "center",
