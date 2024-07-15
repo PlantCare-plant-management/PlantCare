@@ -56,7 +56,10 @@ const MyPlantScreen = () => {
   if (loading) {
     return <ActivityIndicator size="large" color="#4CAF50" />;
   }
-
+  console.log(plants[0].actions)
+  plants[0].actions.map(el => {
+    console.log(el)
+  })
   return (
     <View style={styles.container}>
       <Text style={styles.date}>Wednesday, 10 July 2024</Text>

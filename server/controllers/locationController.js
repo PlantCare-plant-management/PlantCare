@@ -7,7 +7,8 @@ const {
   class LocationController {
     static async getAllLocations(req, res, next) {
       try {
-        const locations = await getLocation();
+        const userId = req.user.id
+        const locations = await getLocation(userId);
         res.status(200).json(locations);
       } catch (error) {
         next(error);
@@ -17,10 +18,11 @@ const {
     static async createLocation(req, res, next) {
       try {
         const { name } = req.body;
+        const userId = req.user.id
         if (!name) {
           return res.status(400).json({ message: "Name is required" });
         }
-        const newLocation = await addLocation(name);
+        const newLocation = await addLocation(name, userId);
         res.status(201).json(newLocation);
       } catch (error) {
         next(error);

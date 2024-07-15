@@ -1,14 +1,24 @@
 const { getDB } = require("../config/mongoDb");
 const { ObjectId } = require("mongodb");
 
-const getLocation = async () => {
+const getLocation = async (id) => {
   const db = getDB();
-  return await db.collection("locations").find().toArray();
+  return await db.collection("locations").aggregate([
+    {
+      $match:
+        /**
+         * query: The query in MQL.
+         */
+        {
+          userId: id
+        }
+    }
+  ]).toArray();
 };
 
-const addLocation = async (name) => {
+const addLocation = async (name, userId) => {
   const db = getDB();
-  return await db.collection("locations").insertOne({ name });
+  return await db.collection("locations").insertOne({ name, userId });
 };
 
 const updateLocation = async (id, newName) => {
