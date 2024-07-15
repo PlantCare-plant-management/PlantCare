@@ -9,6 +9,7 @@ import {
   TextInput,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import * as SecureStore from "expo-secure-store";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { Ionicons } from "@expo/vector-icons";
 
@@ -20,13 +21,18 @@ const AddPlantScreen = () => {
 
 
   async function fetchData() {
+    const token = await SecureStore.getItemAsync('access_token');
     try {
-      const res = await fetch(process.env.EXPO_PUBLIC_API_URL + "/plants");
+      const res = await fetch(process.env.EXPO_PUBLIC_API_URL + "/plants", {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`
+        },
+      });
       if (!res.ok) {
         throw new Error("Gagal fetch");
       }
       const data = await res.json();
-      console.log(data, "ini data");
       setPlants(data);
     } catch (error) {
       console.log(error);
@@ -63,7 +69,7 @@ const AddPlantScreen = () => {
       {/* Header Section */}
       <View style={styles.header}>
         <Text style={styles.title}>Scan Your Plant</Text>
-        <TouchableOpacity style={styles.addButton}>
+        <TouchableOpacity style={styles.addButton} onPress={() => navigation.navigate("CameraScreen")}>
           {/* <TouchableOpacity style={styles.circleButton} onPress={takePicture}> */}
           <Ionicons name="camera" size={32} color="white" />
         </TouchableOpacity>

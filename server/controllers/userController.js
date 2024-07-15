@@ -21,7 +21,9 @@ class UserController {
 
   static async getUserById(req, res, next) {
     try {
-      const user = await getUserById(req.params.id);
+      const userId = req.user.id.toString()
+
+      const user = await getUserById(userId);
       if (!user) {
         throw { name: "ITEM_NOT_FOUND" };
       }

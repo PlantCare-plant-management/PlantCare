@@ -1,4 +1,5 @@
 import React, { useContext } from "react";
+import { Text, TouchableOpacity, View } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -8,7 +9,6 @@ import MyPlantScreen from "../screens/MyPlantScreen";
 import PlantInfoScreen from "../screens/PlantInfoScreen";
 import AddPlantScreen from "../screens/AddPlantScreen";
 import AddPlantFormScreen from "../screens/AddPlantFormScreen";
-import ProfileScreen from "../screens/ProfileScreen";
 import RegisterScreen from "../screens/RegisterScreen";
 import LoginScreen from "../screens/LoginScreen";
 import PreferenceScreen from "../screens/PreferenceScreen";
@@ -18,6 +18,13 @@ import { authContext } from "../contexts/authContext";
 import AddRoomPlantsScreen from "../screens/AddRoomPlantsScreen";
 import ShopScreen from "../screens/ShopScreen";
 import OptionScreen from "../screens/OptionScreen";
+import CameraScreen from "../screens/CameraScreen";
+import ShopInfoScreen from "../screens/ShopInfoScreen";
+import ShippingAddressScreen from "../screens/ShippingAddress";
+import ProfileScreen from "../screens/ProfileScreen";
+import EditProfileScreen from "../screens/EditProfileScreen";
+import NotificationSetting from "../screens/NotificationSetting";
+import FaqScreen from "../screens/FaqScreen";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -33,8 +40,8 @@ function TabNavigator() {
             iconName = "leaf";
           } else if (route.name === "AddPlant") {
             iconName = "add-circle";
-          } else if (route.name === 'Shop') {
-            iconName = 'cart';
+          } else if (route.name === "Shop") {
+            iconName = "cart";
           } else if (route.name === "Profile") {
             iconName = "person";
           }
@@ -49,8 +56,21 @@ function TabNavigator() {
         },
       })}
     >
-      <Tab.Screen name="MyPlant" component={MyPlantScreen} />
-      <Tab.Screen name="AddPlant" component={AddPlantScreen} />
+      <Tab.Screen
+        name="MyPlant"
+        component={MyPlantScreen}
+        options={({ navigation }) => ({
+          headerRight: () => (
+            <TouchableOpacity
+              onPress={() => navigation.navigate("OptionScreen")}
+              style={{ marginRight: 16 }}
+            >
+              <Ionicons name="add-circle" size={30} color="black" />
+            </TouchableOpacity>
+          ),
+        })}
+      />
+      {/* <Tab.Screen name="AddPlant" component={AddPlantScreen} /> */}
       <Tab.Screen name="Shop" component={ShopScreen} />
       <Tab.Screen name="Profile" component={ProfileScreen} />
     </Tab.Navigator>
@@ -71,7 +91,7 @@ export default function MainStack() {
         {!loading && !isSignedIn ? (
           <>
             <Stack.Screen
-              name="Login"
+              name="LoginScreen"
               component={LoginScreen}
               options={{ headerShown: false }}
             />
@@ -122,6 +142,82 @@ export default function MainStack() {
               name="AddPlantScreen"
               component={AddPlantScreen}
               options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="CameraScreen"
+              component={CameraScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="ShippingAddress"
+              component={ShippingAddressScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="ShopInfoScreen"
+              component={ShopInfoScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="notification"
+              component={NotificationSetting}
+              options={({ navigation }) => ({
+                headerShown: true,
+                title: "Notification Setting",
+                headerLeft: () => (
+                  <TouchableOpacity onPress={() => navigation.goBack()}>
+                    <Ionicons name="arrow-back" size={24} color="black" />
+                  </TouchableOpacity>
+                ),
+              })}
+            />
+            <Stack.Screen
+              name="EditProfile"
+              component={EditProfileScreen}
+              options={({ navigation }) => ({
+                headerShown: true,
+                title: "",
+                headerLeft: () => (
+                  <TouchableOpacity onPress={() => navigation.goBack()}>
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        alignItems: "center",
+                        gap: 4,
+                      }}
+                    >
+                      <Ionicons name="arrow-back" size={24} color="black" />
+                      <Text style={{ fontSize: 18, fontWeight: "bold" }}>
+                        Profile
+                      </Text>
+                    </View>
+                  </TouchableOpacity>
+                ),
+              })}
+            />
+               <Stack.Screen
+              name="Faq"
+              component={FaqScreen}
+              options={({ navigation }) => ({
+                headerShown: true,
+                title: "",
+                headerLeft: () => (
+                  <TouchableOpacity onPress={() => navigation.goBack()}>
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        alignItems: "center",
+                        gap: 4,
+                      }}
+                    >
+                      <Ionicons name="arrow-back" size={24} color="black" />
+                      <Text style={{ fontSize: 18, fontWeight: "bold" }}>
+                        Profile
+                      </Text>
+                    </View>
+                  </TouchableOpacity>
+                ),
+              })}
             />
           </>
         )}

@@ -11,7 +11,7 @@ const OptionScreen = () => {
       <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
         <Text style={styles.backButtonText}>{"<"}</Text>
       </TouchableOpacity>
-      <Text style={styles.header}>Buy Pack or Add Existing Plant ?</Text>
+      <Text style={styles.header}>Buy Plant or Add Existing Plant ?</Text>
       <TouchableOpacity style={styles.optionButton} onPress={() => navigation.navigate('ShopScreen')}>
         <Text style={styles.optionButtonText}>Buy new plant</Text>
       </TouchableOpacity>
@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-    backgroundColor: '#508d4e',
+    backgroundColor: '#4caf50',
     justifyContent: 'center',
     alignItems: 'center',
   },

@@ -6,11 +6,31 @@ export default function RegisterScreen() {
   const navigation = useNavigation();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-
-  const handleRegister = () => {
+  const [username, setUsername] = useState('')
+  const [name, setName] = useState('')
+  console.log(email)
+  console.log(password)
+  const handleRegister = async() => {
     // Implementasi registrasi user di sini
     // Setelah registrasi sukses, arahkan user ke halaman login atau halaman utama
-    navigation.navigate('Login');
+    try {
+      const response = await fetch(process.env.PUBLIC_PUBLIC_API_URL+"/register",
+        {
+          method: "POST",
+          headers : {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({email, password, username, name})
+        }
+      )
+      if(!response.ok) {
+        throw "FAILED REGISTER"
+      }
+      navigation.navigate('Login');
+    } catch (error) {
+        console.log(error)
+    }
+    
   };
 
   return (
@@ -27,6 +47,24 @@ export default function RegisterScreen() {
       />
       <TextInput
         style={styles.input}
+        placeholder="Username"
+        value={username}
+        onChangeText={setUsername}
+        keyboardType="email-address"
+        autoCapitalize="none"
+        placeholderTextColor="#888"
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Name"
+        value={name}
+        onChangeText={setName}
+        keyboardType="email-address"
+        autoCapitalize="none"
+        placeholderTextColor="#888"
+      />
+      <TextInput
+        style={styles.input}
         placeholder="Password"
         value={password}
         onChangeText={setPassword}
@@ -36,7 +74,7 @@ export default function RegisterScreen() {
       <TouchableOpacity style={styles.button} onPress={handleRegister}>
         <Text style={styles.buttonText}>Register</Text>
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+      <TouchableOpacity onPress={() => navigation.navigate('LoginScreen')}>
         <Text style={styles.loginText}>Already have an account? Login</Text>
       </TouchableOpacity>
     </View>
@@ -81,7 +119,7 @@ const styles = StyleSheet.create({
   },
   loginText: {
     fontSize: 16,
-    color: '#007BFF',
+    color: '#4caf50',
     textAlign: 'center',
   },
 });

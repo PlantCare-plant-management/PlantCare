@@ -9,6 +9,7 @@ import {
   ScrollView,
   ActivityIndicator,
 } from "react-native";
+import * as SecureStore from "expo-secure-store";
 import { useNavigation } from "@react-navigation/native";
 
 const AddRoomPlantsScreen = () => {
@@ -21,9 +22,16 @@ const AddRoomPlantsScreen = () => {
   useEffect(() => {
     // Fetch rooms data from server
     const fetchRooms = async () => {
+      const token = await SecureStore.getItemAsync("access_token");
       try {
         const response = await fetch(
-          "https://8909-110-139-51-213.ngrok-free.app/locations"
+          process.env.EXPO_PUBLIC_API_URL + "/locations",
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
         );
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
@@ -42,15 +50,18 @@ const AddRoomPlantsScreen = () => {
 
   const addRoom = async () => {
     if (newRoom.trim()) {
+      const token = await SecureStore.getItemAsync("access_token");
       try {
         setSaving(true);
         const response = await fetch(
-          "https://8909-110-139-51-213.ngrok-free.app/locations",
+          process.env.EXPO_PUBLIC_API_URL + "/locations",
           {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
             },
+
             body: JSON.stringify({ name: newRoom }),
           }
         );

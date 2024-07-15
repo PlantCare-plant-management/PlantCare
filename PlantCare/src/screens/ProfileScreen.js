@@ -1,44 +1,171 @@
-import React, { useContext } from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { authContext } from '../contexts/authContext';
+import React, { useContext, useEffect, useState } from "react";
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+  ScrollView,
+  SafeAreaView,
+  Switch,
+  Dimensions,
+  ActivityIndicator,
+} from "react-native";
+import Ionicons from "react-native-vector-icons/Ionicons";
+import { useNavigation } from "@react-navigation/native";
+import { authContext } from "../contexts/authContext";
+import * as SecureStore from "expo-secure-store";
+
+const { width } = Dimensions.get("window");
 
 const ProfileScreen = () => {
   const navigation = useNavigation();
   const { logout } = useContext(authContext);
+  const [notificationsEnabled, setNotificationsEnabled] = useState(false);
+  const [userData, setUserData] = useState(null);
 
-  const handleLogout = () => {
-    logout();
-    navigation.navigate('Login');
+  const fetchUserData = async () => {
+    try {
+      const token = await SecureStore.getItemAsync("access_token");
+
+      if (token) {
+        const response = await fetch(
+          process.env.EXPO_PUBLIC_API_URL + `/user`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        if (response.ok) {
+          const data = await response.json();
+          setUserData(data);
+        } else {
+          console.error("Failed to fetch user data");
+        }
+      }
+    } catch (error) {
+      console.error("Error fetching user data", error);
+    }
   };
+
+  useEffect(() => {
+    fetchUserData();
+  }, []);
+
+  if (!userData) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#0000ff" />
+        <Text>Loading...</Text>
+      </View>
+    );
+  }
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Image
-        source={{ uri: 'https://via.placeholder.com/100' }}
-        style={styles.profileImage}
-      />
-      <Text style={styles.name}>User Name</Text>
-      <Text style={styles.email}>user@mail.com</Text>
-      <View style={styles.infoContainer}>
-        <View style={styles.infoBox}>
-          <Text style={styles.label}>Level</Text>
-          <Text style={styles.value}>Beginner</Text>
+      <SafeAreaView>
+        <View style={styles.header}>
+          <View style={styles.coverContainer}>
+            <Image
+              source={{
+                uri: "https://static.vecteezy.com/system/resources/thumbnails/006/224/670/small/go-green-concept-banner-with-lush-green-foliage-illustration-vector.jpg",
+              }}
+              style={styles.coverImage}
+            />
+            <Image
+              source={{
+                uri: userData.imgUrl,
+              }}
+              style={styles.imageProfile}
+            />
+          </View>
+          <Text style={styles.profileName}>{userData.name}</Text>
+          <Text style={styles.profileSubText}>{userData.email}</Text>
         </View>
-        <View style={styles.infoBox}>
-          <Text style={styles.label}>Plants</Text>
-          <Text style={styles.value}>7</Text>
+
+        <View style={styles.WrapMenu}>
+          <View style={styles.userInfo}>
+            <View style={styles.userItem}>
+              <Text style={styles.itemLabel}>Level</Text>
+              <Text style={styles.itemValue}>Beginner</Text>
+            </View>
+
+            <View style={styles.userItem}>
+              <Text style={styles.itemLabel}>Plant</Text>
+              <Text style={styles.itemValue}>10</Text>
+            </View>
+          </View>
+          <View style={styles.menuItem}>
+            <View style={styles.wrapText}>
+              <Ionicons
+                name="information-circle-outline"
+                size={20}
+                color="#333"
+              />
+              <Text style={styles.menuItemText}>Account Information</Text>
+            </View>
+            <Ionicons name="chevron-forward-outline" size={20} color="#333" />
+          </View>
+          <TouchableOpacity onPress={() => navigation.navigate("EditProfile")}>
+            <View style={styles.menuItem}>
+              <View style={styles.wrapText}>
+                <Ionicons name="create-outline" size={20} color="#333" />
+                <Text style={styles.menuItemText}>Edit Profile</Text>
+              </View>
+              <Ionicons name="chevron-forward-outline" size={20} color="#333" />
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate("notification")}>
+            <View style={styles.menuItem}>
+              <View style={styles.wrapText}>
+                <Ionicons name="notifications-outline" size={20} color="#333" />
+                <Text style={styles.menuItemText}>Notifications</Text>
+              </View>
+              <Switch
+                value={notificationsEnabled}
+                onValueChange={setNotificationsEnabled}
+              />
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate("Faq")}>
+            <View style={styles.menuItem}>
+              <View style={styles.wrapText}>
+                <Ionicons name="help-circle-outline" size={20} color="#333" />
+                <Text style={styles.menuItemText}>FAQ</Text>
+              </View>
+              <Ionicons name="chevron-forward-outline" size={20} color="#333" />
+            </View>
+          </TouchableOpacity>
         </View>
-      </View>
-      <TouchableOpacity style={styles.button} onPress={() => {}}>
-        <Text style={styles.buttonText}>Notifications</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.button} onPress={() => {}}>
-        <Text style={styles.buttonText}>FAQ</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
-        <Text style={styles.logoutButtonText}>Logout</Text>
-      </TouchableOpacity>
+        <View
+          style={{
+            flex: 1,
+            flexDirection: "row",
+            justifyContent: "center",
+            alignItems: "center",
+            marginVertical: 20,
+          }}
+        >
+          <TouchableOpacity onPress={logout}>
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                gap: 5,
+              }}
+            >
+              <Ionicons name="log-out-outline" size={30} color="#ff0000" />
+              <Text style={{ fontSize: 20, fontWeight: "400", color: "black" }}>
+                Logout
+              </Text>
+            </View>
+          </TouchableOpacity>
+        </View>
+      </SafeAreaView>
     </ScrollView>
   );
 };
@@ -46,99 +173,92 @@ const ProfileScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
-    padding: 16,
-    backgroundColor: '#f8f8f8',
-    alignItems: 'center',
+    backgroundColor: "#FFF5F5",
+    alignItems: "center",
   },
-  profileImage: {
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  header: {
+    alignItems: "center",
+    marginVertical: 20,
+    marginTop: 10,
+  },
+  coverContainer: {
+    alignItems: "center",
+    position: "relative",
+  },
+  coverImage: {
+    width: width,
+    height: 150,
+    position: "absolute",
+    top: 0,
+    zIndex: -1,
+  },
+  imageProfile: {
     width: 100,
     height: 100,
     borderRadius: 50,
-    marginBottom: 16,
+    marginBottom: 10,
+    marginTop: 75,
   },
-  name: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#333',
-    marginBottom: 4,
-  },
-  email: {
-    fontSize: 18,
-    color: '#666',
-    marginBottom: 16,
-  },
-  infoContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    width: '100%',
-    marginBottom: 24,
-  },
-  infoBox: {
-    alignItems: 'center',
-    padding: 16,
-    backgroundColor: '#fff',
-    borderRadius: 8,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 1,
-    },
-    shadowOpacity: 0.2,
-    shadowRadius: 1.41,
-    elevation: 2,
-    width: '45%',
-  },
-  label: {
-    fontSize: 16,
-    color: '#888',
-    marginBottom: 4,
-  },
-  value: {
+  profileName: {
     fontSize: 20,
-    fontWeight: 'bold',
-    color: '#333',
+    fontWeight: "bold",
+    color: "#333",
   },
-  button: {
-    width: '100%',
-    padding: 16,
-    backgroundColor: '#4caf50',
-    borderRadius: 8,
-    alignItems: 'center',
-    marginBottom: 16,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 1,
-    },
+  profileSubText: {
+    fontSize: 14,
+    color: "#666",
+  },
+  userInfo: {
+    flexDirection: "row",
+  },
+  userItem: {
+    marginBottom: 10,
+    borderRadius: 10,
+    width: "45%",
+    margin: "auto",
+    backgroundColor: "white",
+    padding: 20,
+    shadowColor: "#171717",
+    shadowOffset: { width: -1, height: 4 },
     shadowOpacity: 0.2,
-    shadowRadius: 1.41,
-    elevation: 2,
+    shadowRadius: 3,
   },
-  buttonText: {
+  itemLabel: {
+    fontSize: 20,
+    fontWeight: "bold",
+  },
+  WrapMenu: {
+    flex: 1,
+    gap: 3,
+  },
+  menuItem: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    width: "95%",
+    margin: "auto",
+    padding: 15,
+    marginVertical: 5,
+    backgroundColor: "#fff",
+    borderRadius: 10,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 5,
+    elevation: 3,
+  },
+  menuItemText: {
     fontSize: 16,
-    fontWeight: 'bold',
-    color: '#fff',
+    color: "#333",
   },
-  logoutButton: {
-    width: '100%',
-    padding: 16,
-    backgroundColor: '#F44336',
-    borderRadius: 8,
-    alignItems: 'center',
-    marginBottom: 16,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 1,
-    },
-    shadowOpacity: 0.2,
-    shadowRadius: 1.41,
-    elevation: 2,
-  },
-  logoutButtonText: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#fff',
+  wrapText: {
+    flexDirection: "row",
+    gap: 10,
   },
 });
 
