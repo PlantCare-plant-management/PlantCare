@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   View,
   Text,
@@ -8,6 +8,7 @@ import {
   TextInput,
   Modal,
   ActivityIndicator,
+  Alert,
 } from "react-native";
 import {
   useRoute,
@@ -16,12 +17,14 @@ import {
 } from "@react-navigation/native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { Picker } from "@react-native-picker/picker";
-import * as SecureStore from 'expo-secure-store';
+import * as SecureStore from "expo-secure-store";
+import * as ImagePicker from "expo-image-picker";
 
 const AddPlantFormScreen = () => {
   const route = useRoute();
   const navigation = useNavigation();
   const plant = route.params?.plant || {};
+  console.log(plant, "<==== ini plant dek");
 
   const [photo, setPhoto] = useState(plant.photo || "");
   const [name, setName] = useState(plant.name || "");
@@ -29,20 +32,16 @@ const AddPlantFormScreen = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [locations, setLocations] = useState([]);
   const [loading, setLoading] = useState(true);
-  const URL = process.env.EXPO_PUBLIC_API_URL
-
-  // Hardcoded userId
-  
-  const plantId = plant._id
+  const URL = process.env.EXPO_PUBLIC_API_URL;
 
   const fetchLocations = async () => {
     try {
       const response = await fetch(`${URL}/locations`);
       const data = await response.json();
       setLocations(data);
-      setLoading(false);
     } catch (error) {
-      console.error(error);
+      console.error("Error fetching locations:", error);
+    } finally {
       setLoading(false);
     }
   };
@@ -52,46 +51,78 @@ const AddPlantFormScreen = () => {
   }, []);
 
   useFocusEffect(
-    React.useCallback(() => {
+    useCallback(() => {
       fetchLocations();
     }, [])
   );
-  
+
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      setPhoto(result.assets[0].uri);
+    }
+  };
+
   const handleAddPlant = async () => {
-    const token = await SecureStore.getItemAsync('access_token');
-    const plantId = plant._id
-    
+    const token = await SecureStore.getItemAsync("access_token");
+
     if (!location) {
-      alert("Please select a location for the plant.");
+      Alert.alert("Error", "Please select a location for the plant.");
       return;
     }
 
     setLoading(true);
     try {
+      const formData = new FormData();
+      formData.append("imgUrl", {
+        uri: photo,
+        name: "plant_photo.jpg",
+        type: "image/jpeg",
+      });
+      formData.append("name", name);
+      formData.append("location", location);
+      formData.append("plantId", plant._id);
+
       const response = await fetch(`${URL}/plants`, {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`
+          Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({
-          name,
-          location,
-          photo,
-          plantId
-        }),
+        body: formData,
       });
 
-      const result = await response.json();
+      const responseBody = await response.text();
+      console.log("Response Status:", response.status);
+      console.log("Response Headers:", response.headers);
+      console.log("Response Body:", responseBody);
+
+      let result;
+      try {
+        result = JSON.parse(responseBody);
+      } catch (jsonError) {
+        console.error("Error parsing JSON response:", jsonError);
+        Alert.alert(
+          "Error",
+          "Unexpected response from server. Please try again."
+        );
+        return;
+      }
+
       if (response.ok) {
         navigation.navigate("MyPlant");
       } else {
-        console.error("Failed to add plant:", result);
-        // Handle error (show message to user, etc.)
+        console.error("Failed to add plant:", result.message);
+        Alert.alert("Error", result.message || "Failed to add plant.");
       }
     } catch (error) {
       console.error("Error adding plant:", error);
-      // Handle error (show message to user, etc.)
+      Alert.alert("Error", "Something went wrong. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -107,19 +138,9 @@ const AddPlantFormScreen = () => {
     }
   };
 
-  const handlePhotoUpload = () => {
-    // Implement photo upload logic here
-    // For example, use ImagePicker to allow users to select a photo from their device
-    // After selecting the photo, set the photo URI to the `photo` state
-    // setPhoto(selectedPhotoUri);
-  };
-  console.log(plant)
   return (
     <View style={styles.container}>
-      <TouchableOpacity
-        style={styles.imageContainer}
-        onPress={handlePhotoUpload}
-      >
+      <TouchableOpacity style={styles.imageContainer} onPress={pickImage}>
         <Image
           source={{ uri: photo || "https://via.placeholder.com/300" }}
           style={styles.image}
@@ -129,21 +150,13 @@ const AddPlantFormScreen = () => {
         </View>
       </TouchableOpacity>
 
-      <View
-        style={{
-          backgroundColor: "white",
-          height: "100%",
-          padding: 30,
-          borderTopRightRadius: 50,
-          borderTopLeftRadius: 50,
-        }}
-      >
+      <View style={styles.formContainer}>
         <TextInput
           style={styles.input}
           placeholder="Plant Name"
           value={name}
           onChangeText={setName}
-          editable={!name} // Allow editing only if name is empty
+          editable={!plant.name}
         />
         <TouchableOpacity
           style={styles.input}
@@ -216,6 +229,13 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(0,0,0,0.6)",
     borderRadius: 50,
     padding: 8,
+  },
+  formContainer: {
+    backgroundColor: "white",
+    height: "100%",
+    padding: 30,
+    borderTopRightRadius: 50,
+    borderTopLeftRadius: 50,
   },
   input: {
     height: 50,

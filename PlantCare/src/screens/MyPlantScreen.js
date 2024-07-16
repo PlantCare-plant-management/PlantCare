@@ -6,25 +6,26 @@ import {
   TouchableOpacity,
   StyleSheet,
   ActivityIndicator,
+  Image,
 } from "react-native";
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
-import * as SecureStore from 'expo-secure-store';
+import * as SecureStore from "expo-secure-store";
 
 const MyPlantScreen = () => {
   const navigation = useNavigation();
   const [plants, setPlants] = useState([]);
   const [loading, setLoading] = useState(true);
-  const URL = process.env.EXPO_PUBLIC_API_URL
-
+  const URL = process.env.EXPO_PUBLIC_API_URL;
 
   const fetchMyPlants = async () => {
     try {
-      const token = await SecureStore.getItemAsync('access_token');
+      const token = await SecureStore.getItemAsync("access_token");
       const response = await fetch(`${URL}/myplants`, {
         method: "GET",
+        cache: "no-cache",
         headers: {
           "Content-Type": "application/json",
-          Authorization : `Bearer ${token}`
+          Authorization: `Bearer ${token}`,
         },
       });
       const result = await response.json();
@@ -104,12 +105,14 @@ const MyPlantScreen = () => {
               <Text style={styles.plantDate}>Date planted: {item.date}</Text>
             </View>
             <View style={styles.plantPhotoContainer}>
-              <Text style={styles.plantPhotoText}>Foto Tanaman</Text>
+              <Image
+                style={{ width: 80, height: 80, borderRadius: 10 }}
+                source={{ uri: `${item.imgUrl}` }}
+              />
             </View>
           </TouchableOpacity>
         )}
       />
-      
     </View>
   );
 };

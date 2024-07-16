@@ -18,14 +18,21 @@ import * as SecureStore from "expo-secure-store";
 
 const { width } = Dimensions.get("window");
 
+const defaultUserData = {
+  name: "user",
+  email: "user@mail.com",
+  imgUrl:
+    "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
+};
+
 const ProfileScreen = () => {
   const navigation = useNavigation();
   const { logout } = useContext(authContext);
   const [notificationsEnabled, setNotificationsEnabled] = useState(false);
   const [userData, setUserData] = useState(null);
-  const [profileImage, setProfileImage] = useState(
-    "https://your-default-image-url.com/default-profile.png"
-  );
+  const [profileImage, setProfileImage] = useState(defaultUserData.imgUrl);
+  const [isFetch, setisFetch] = useState(true);
+  console.log(isFetch, "<=== fetch?");
 
   const fetchUserData = async () => {
     try {
@@ -46,16 +53,17 @@ const ProfileScreen = () => {
         if (response.ok) {
           const data = await response.json();
           setUserData(data);
-          setProfileImage(
-            data.imgUrl ||
-              "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
-          );
+          setProfileImage(data.imgUrl || defaultUserData.imgUrl);
+          setisFetch(false);
         } else {
           console.error("Failed to fetch user data");
+          setUserData(defaultUserData);
+          setisFetch(true);
         }
       }
     } catch (error) {
       console.error("Error fetching user data", error);
+      setUserData(defaultUserData);
     }
   };
 
@@ -94,11 +102,7 @@ const ProfileScreen = () => {
                 uri: profileImage,
               }}
               style={styles.imageProfile}
-              onError={() =>
-                setProfileImage(
-                  "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
-                )
-              }
+              onError={() => setProfileImage(defaultUserData.imgUrl)}
             />
           </View>
           <Text style={styles.profileName}>{userData.name}</Text>
@@ -132,11 +136,23 @@ const ProfileScreen = () => {
               <Ionicons name="chevron-forward-outline" size={20} color="#333" />
             </View>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => navigation.navigate("EditProfile")}>
+          <TouchableOpacity
+            onPress={() => navigation.navigate("EditProfile")}
+            disabled={isFetch}
+          >
             <View style={styles.menuItem}>
               <View style={styles.wrapText}>
                 <Ionicons name="create-outline" size={20} color="#333" />
-                <Text style={styles.menuItemText}>Edit Profile</Text>
+                <Text
+                  style={[
+                    styles.menuItemText,
+                    {
+                      textDecorationLine: setisFetch ? "none" : "line-through",
+                    },
+                  ]}
+                >
+                  Edit Profile
+                </Text>
               </View>
               <Ionicons name="chevron-forward-outline" size={20} color="#333" />
             </View>
