@@ -190,9 +190,9 @@ const AddPlantFormScreen = () => {
                   style={styles.picker}
                 >
                   <Picker.Item label="Select Location" value="" />
-                  {locations.map((loc) => (
+                  {locations.map((loc, i) => (
                     <Picker.Item
-                      
+                      key={i}
                       label={loc}
                       value={loc}
                     />

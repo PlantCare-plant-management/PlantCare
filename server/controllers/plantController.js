@@ -30,9 +30,16 @@ class PlantController {
 
   static async addToMyPlant(req, res, next) {
     try {
-      const userId = req.user.id.toString()
-      const { name, location, photo, plantId } = req.body;
-      const addMyPlant = { userId, name, location, photo, plantId : new ObjectId(plantId) };
+      const userId = req.user.id.toString();
+      const { name, location, photo, plantId, actions } = req.body;
+      const addMyPlant = {
+        userId,
+        name,
+        location,
+        photo,
+        plantId: new ObjectId(plantId),
+        actions,
+      };
 
       const result = await addToMyPlant(addMyPlant);
       console.log(result, "ini result addToMyPlant");

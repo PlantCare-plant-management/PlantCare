@@ -22,7 +22,7 @@ const PlantInfoScreen = () => {
       )
     );
   };
-  console.log(plant)
+
   return (
     <ScrollView contentContainerStyle={styles.scrollViewContainer}>
       <View style={styles.container}>
