@@ -6,7 +6,16 @@ import {
   Text,
   View,
   TouchableOpacity,
+  LayoutAnimation,
+  UIManager,
+  Platform,
 } from "react-native";
+
+if (Platform.OS === "android") {
+  if (UIManager.setLayoutAnimationEnabledExperimental) {
+    UIManager.setLayoutAnimationEnabledExperimental(true);
+  }
+}
 
 export default function FaqScreen() {
   const [expanded, setExpanded] = useState(null);
@@ -30,10 +39,11 @@ export default function FaqScreen() {
     "Bagaimana cara edit profile?":
       "Untuk mengedit profil Anda, masuk ke bagian profil dan pilih 'Edit' ...",
     "Bagaimana cara edit profile?":
-      "lLorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum",
+      "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum",
   };
 
   const handlePress = (faqText) => {
+    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     setExpanded(expanded === faqText ? null : faqText);
   };
 
@@ -48,7 +58,7 @@ export default function FaqScreen() {
         <View style={{ alignItems: "center", gap: 2 }}>
           <Text style={{ fontSize: 30, fontWeight: "bold" }}>FAQs</Text>
           <Text style={{ fontSize: 16, fontWeight: "100" }}>
-            Your Question answered here
+            Your Questions Answered Here
           </Text>
         </View>
         {faqItems.map((item, index) => (

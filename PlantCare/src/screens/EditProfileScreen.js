@@ -8,46 +8,70 @@ import {
   Pressable,
   TouchableOpacity,
   View,
+  ScrollView,
+  StyleSheet,
 } from "react-native";
-import { ScrollView, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Ionicons from "react-native-vector-icons/Ionicons";
-
-// date time picker
+import * as ImagePicker from "expo-image-picker";
 import DateTimePicker from "@react-native-community/datetimepicker";
+import * as SecureStore from "expo-secure-store";
+import { useNavigation } from "@react-navigation/native";
+import { fetchUserData } from "../func/fetchUser";
 
 // mengambil lebar layar
 const { width } = Dimensions.get("window");
 
 export default function EditProfileScreen() {
+  const navigation = useNavigation();
   const inputAccessoryViewID = "uniqueID";
-  const initialText = "";
-  const [text, setText] = useState(initialText);
-
-  // *  set tanggal
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [address, setAddress] = useState("");
   const [dateOfBirth, setDateOfBirth] = useState("");
   const [date, setDate] = useState(new Date());
   const [showPicker, setShowPicer] = useState(false);
+  const [image, setImage] = useState(null);
+
+  // state data user buat image
+  const [userData, setUserData] = useState(null);
+  console.log(userData, "<==== data user");
+
+  const fetchUser = async () => {
+    try {
+      const result = await fetchUserData();
+      if (result) {
+        setUserData(result);
+        setName(result.name);
+        setEmail(result.email);
+        setAddress(result.address);
+        setDateOfBirth(result.dateOfBirth);
+        setImage(result.imgUrl);
+      }
+    } catch (error) {
+      console.log("error di fetch edit profile", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchUser();
+  }, []);
 
   const toggleDatePicker = () => {
     setShowPicer(!showPicker);
   };
 
-  //   format date
   const formatDate = (rawDate) => {
     let date = new Date(rawDate);
-
     let year = date.getFullYear();
     let month = date.getMonth() + 1;
     let day = date.getDate();
-
     month = month < 10 ? `0${month}` : month;
-
     return `${day} - ${month} -  ${year}`;
   };
 
-  //   confirm ios platform
   const confirmIosDate = () => {
     setDateOfBirth(formatDate(date));
     toggleDatePicker();
@@ -66,6 +90,69 @@ export default function EditProfileScreen() {
     }
   };
 
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    console.log(result);
+
+    if (!result.canceled) {
+      setImage(result.assets[0].uri);
+    }
+  };
+
+  const handleSubmit = async () => {
+    try {
+      const formData = new FormData();
+      formData.append("name", name);
+      formData.append("email", email);
+      formData.append("password", password);
+      formData.append("address", address);
+      formData.append("dateOfBirth", dateOfBirth);
+
+      if (image) {
+        const response = await fetch(image);
+        const blob = await response.blob();
+        formData.append("imgUrl", {
+          uri: image,
+          type: blob.type,
+          name: "profile.jpg",
+        });
+      }
+
+      const token = await SecureStore.getItemAsync("access_token");
+
+      const response = await fetch(
+        process.env.EXPO_PUBLIC_API_URL + `/user/edit`,
+        {
+          method: "PUT",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          body: formData,
+        }
+      );
+
+      const text = await response.text();
+      console.log("Response text:", text);
+
+      if (response.ok) {
+        const result = JSON.parse(text);
+        console.log(result);
+
+        navigation.goBack();
+      } else {
+        console.error("Error:", text);
+      }
+    } catch (error) {
+      console.error("Error submitting form:", error);
+    }
+  };
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <SafeAreaView>
@@ -73,15 +160,27 @@ export default function EditProfileScreen() {
           <Image
             style={styles.imageProfile}
             source={{
-              uri: "https://cdn.idntimes.com/content-images/post/20240226/remu19971203-423414763-1419413852325257-8160633298947598858-n-a83f7868577039e47e2344a96107eea1.jpg",
+              uri: image || "https://your-default-image-url.com/default.jpg",
             }}
           />
-          <TouchableOpacity>
-            <Text style={{ fontSize: 20 }}>Change Photo</Text>
+          <TouchableOpacity
+            onPress={pickImage}
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              gap: 2,
+            }}
+          >
+            <Text style={{ fontSize: 20, paddingLeft: 20 }}>Change Photo</Text>
+            <Ionicons
+              style={styles.searchIcon}
+              name="create-outline"
+              size={20}
+              color="#333"
+            />
           </TouchableOpacity>
         </View>
 
-        {/* input */}
         <ScrollView keyboardDismissMode="interactive">
           <View style={styles.wrapInput}>
             <Ionicons
@@ -93,13 +192,12 @@ export default function EditProfileScreen() {
             <TextInput
               style={styles.input}
               inputAccessoryViewID={inputAccessoryViewID}
-              onChangeText={setText}
-              value={text}
+              onChangeText={setName}
+              value={name}
               placeholder={"Name"}
             />
           </View>
 
-          {/* Email */}
           <View style={styles.wrapInput}>
             <Ionicons
               style={styles.searchIcon}
@@ -110,13 +208,12 @@ export default function EditProfileScreen() {
             <TextInput
               style={styles.input}
               inputAccessoryViewID={inputAccessoryViewID}
-              onChangeText={setText}
-              value={text}
+              onChangeText={setEmail}
+              value={email}
               placeholder={"Email"}
             />
           </View>
 
-          {/* Password */}
           <View style={styles.wrapInput}>
             <Ionicons
               style={styles.searchIcon}
@@ -127,14 +224,13 @@ export default function EditProfileScreen() {
             <TextInput
               style={styles.input}
               inputAccessoryViewID={inputAccessoryViewID}
-              onChangeText={setText}
+              onChangeText={setPassword}
               secureTextEntry={true}
-              value={text}
+              value={password}
               placeholder={"Password"}
             />
           </View>
 
-          {/* Address */}
           <View style={styles.wrapInput}>
             <Ionicons
               style={styles.searchIcon}
@@ -145,13 +241,12 @@ export default function EditProfileScreen() {
             <TextInput
               style={styles.input}
               inputAccessoryViewID={inputAccessoryViewID}
-              onChangeText={setText}
-              value={text}
+              onChangeText={setAddress}
+              value={address}
               placeholder={"Address"}
             />
           </View>
 
-          {/* Date/tanggal */}
           <View style={styles.wrapInputDate}>
             <View
               style={{
@@ -200,15 +295,12 @@ export default function EditProfileScreen() {
                   gap: 20,
                 }}
               >
-                {/* cancel input */}
                 <TouchableOpacity
                   style={[styles.button]}
                   onPress={toggleDatePicker}
                 >
                   <Text style={styles.buttonText}>Cancel</Text>
                 </TouchableOpacity>
-
-                {/* confirm */}
 
                 <TouchableOpacity
                   style={[styles.button, { backgroundColor: "green" }]}
@@ -219,17 +311,11 @@ export default function EditProfileScreen() {
               </View>
             )}
           </View>
-          <TouchableOpacity
-            style={styles.buttonSubmit}
-            onPress={() => {
-              console.log("hello world");
-            }}
-          >
+          <TouchableOpacity style={styles.buttonSubmit} onPress={handleSubmit}>
             <Text style={{ color: "#494a49", fontWeight: "bold" }}>Submit</Text>
           </TouchableOpacity>
         </ScrollView>
       </SafeAreaView>
-      {/* end input */}
     </ScrollView>
   );
 }
@@ -237,7 +323,6 @@ export default function EditProfileScreen() {
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
-    // backgroundColor: "green",
     alignItems: "center",
     paddingHorizontal: 10,
   },

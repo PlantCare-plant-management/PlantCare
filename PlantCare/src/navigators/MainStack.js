@@ -25,6 +25,7 @@ import ProfileScreen from "../screens/ProfileScreen";
 import EditProfileScreen from "../screens/EditProfileScreen";
 import NotificationSetting from "../screens/NotificationSetting";
 import FaqScreen from "../screens/FaqScreen";
+import AccountInformation from "../screens/AccountInformation";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -195,7 +196,7 @@ export default function MainStack() {
                 ),
               })}
             />
-               <Stack.Screen
+            <Stack.Screen
               name="Faq"
               component={FaqScreen}
               options={({ navigation }) => ({
@@ -215,6 +216,19 @@ export default function MainStack() {
                         Profile
                       </Text>
                     </View>
+                  </TouchableOpacity>
+                ),
+              })}
+            />
+            <Stack.Screen
+              name="AccountInformation"
+              component={AccountInformation}
+              options={({ navigation }) => ({
+                headerShown: true,
+                title: "Account Information",
+                headerLeft: () => (
+                  <TouchableOpacity onPress={() => navigation.goBack()}>
+                    <Ionicons name="arrow-back" size={24} color="black" />
                   </TouchableOpacity>
                 ),
               })}
