@@ -1,6 +1,5 @@
 const { comparePass, hashPass } = require("../helpers/bcrypt");
 const { signToken } = require("../helpers/jwt");
-const crypto = require("crypto");
 
 // firebase config
 const storage = require("../config/firebase-config");
@@ -17,7 +16,6 @@ const {
 } = require("../models/userModel");
 const { registerSchema, loginSchema } = require("../schemas/userSchema");
 const { ObjectId } = require("mongodb");
-const Token = require("../models/token");
 class UserController {
   static async editUser(req, res, next) {
     try {
@@ -40,10 +38,8 @@ class UserController {
       console.log(imgUrl, "<==== imgUrl dicontoler");
       const rawData = {
         name: body.name,
-        email: body.email,
-        password: hashPass(body.password),
+        username: body.username,
         address: body.address,
-        dateOfBirth: body.dateOfBirth,
         imgUrl: imgUrl,
       };
 
@@ -105,14 +101,6 @@ class UserController {
         password: hashedPassword,
       });
 
-      const token = new Token({
-        userId: user.insertedId,
-        token: crypto.randomBytes(16).toString("hex"),
-      });
-
-      await token.save();
-      console.log(token);
-
       res
         .status(201)
         .json({ message: "Success add user with username " + username });
@@ -125,7 +113,6 @@ class UserController {
   static async login(req, res, next) {
     try {
       const { email, password } = loginSchema.parse(req.body);
-
       const user = await getUserByEmail(email);
       if (!user) {
         throw { name: "AUTH_NOT_VALID" };
