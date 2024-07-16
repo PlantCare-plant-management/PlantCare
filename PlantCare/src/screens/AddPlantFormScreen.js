@@ -45,10 +45,8 @@ const AddPlantFormScreen = () => {
       }
       );
       const data = await response.json();
-      console.log(data, "<<<<Data")
       const list = ["Living Room", "Bedroom", "Kitchen", "Garden"]
       data.forEach(element => {
-        console.log(element.name)
         list.push(element.name)
       });
       setLocations(list)
@@ -141,8 +139,6 @@ const AddPlantFormScreen = () => {
     // setPhoto(selectedPhotoUri);
   };
   
-  console.log(actions)
-  console.log(locations.length, "<<<<<<")
   return (
     <View style={styles.container}>
       <TouchableOpacity

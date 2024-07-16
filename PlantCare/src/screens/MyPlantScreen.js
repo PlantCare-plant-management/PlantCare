@@ -9,13 +9,13 @@ import {
 } from "react-native";
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import * as SecureStore from 'expo-secure-store';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 const MyPlantScreen = () => {
   const navigation = useNavigation();
   const [plants, setPlants] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const URL = process.env.EXPO_PUBLIC_API_URL
-
+  const [loading, setLoading] = useState(true); 
+  const URL = process.env.EXPO_PUBLIC_API_URL;
 
   const fetchMyPlants = async () => {
     try {
@@ -24,7 +24,7 @@ const MyPlantScreen = () => {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          Authorization : `Bearer ${token}`
+          Authorization: `Bearer ${token}`
         },
       });
       const result = await response.json();
@@ -56,10 +56,23 @@ const MyPlantScreen = () => {
   if (loading) {
     return <ActivityIndicator size="large" color="#4CAF50" />;
   }
-  console.log(plants[0].actions)
-  plants[0].actions.map(el => {
-    console.log(el)
-  })
+
+  const getActionIcon = (actionName) => {
+    switch (actionName) {
+      case 'Watering':
+        return 'tint';
+      case 'Lighting':
+        return 'sun-o';
+      case 'Fertilizing':
+        return 'leaf';
+      case 'Pruning dead leaves':
+      case 'Monitor plant health':
+        return 'heartbeat';
+      default:
+        return 'circle';
+    }
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.date}>Wednesday, 10 July 2024</Text>
@@ -105,6 +118,22 @@ const MyPlantScreen = () => {
             <View style={styles.plantInfo}>
               <Text style={styles.plantName}>{item.name}</Text>
               <Text style={styles.plantDate}>Date planted: {item.date}</Text>
+              <View style={styles.actionsContainer}>
+                {item.actions
+                  .filter(action => action.show)
+                  .map(action => (
+                    <View
+                      key={action.id}
+                      style={[
+                        styles.action,
+                        action.status ? styles.actionDone : styles.actionPending,
+                      ]}
+                    >
+                      <Icon name={getActionIcon(action.name)} size={20} color="#000" />
+                      <Text style={styles.actionText}></Text>
+                    </View>
+                  ))}
+              </View>
             </View>
             <View style={styles.plantPhotoContainer}>
               <Text style={styles.plantPhotoText}>Foto Tanaman</Text>
@@ -112,7 +141,6 @@ const MyPlantScreen = () => {
           </TouchableOpacity>
         )}
       />
-      
     </View>
   );
 };
@@ -164,6 +192,27 @@ const styles = StyleSheet.create({
   plantDate: {
     fontSize: 14,
     color: "#666",
+  },
+  actionsContainer: {
+    flexDirection: "row",
+    marginTop: 8,
+  },
+  action: {
+    flexDirection: "row",
+    alignItems: "center",
+    padding: 8,
+    marginRight: 4,
+    borderRadius: 4,
+  },
+  actionDone: {
+    backgroundColor: "#a0e0a0",
+  },
+  actionPending: {
+    backgroundColor: "#e0e0e0",
+  },
+  actionText: {
+    marginLeft: 4,
+    fontSize: 14,
   },
   plantPhotoContainer: {
     width: 80,
