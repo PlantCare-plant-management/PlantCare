@@ -10,6 +10,7 @@ import {
   UIManager,
   Platform,
 } from "react-native";
+import Ionicons from "react-native-vector-icons/Ionicons";
 
 if (Platform.OS === "android") {
   if (UIManager.setLayoutAnimationEnabledExperimental) {
@@ -55,19 +56,41 @@ export default function FaqScreen() {
         style={styles.scrollView}
         contentContainerStyle={styles.scrollContent}
       >
-        <View style={{ alignItems: "center", gap: 2 }}>
-          <Text style={{ fontSize: 30, fontWeight: "bold" }}>FAQs</Text>
-          <Text style={{ fontSize: 16, fontWeight: "100" }}>
-            Your Questions Answered Here
+        <View style={styles.header}>
+          <Text
+            style={{
+              fontSize: 32,
+              fontWeight: "bold",
+              color: "#000",
+            }}
+          >
+            Faq
           </Text>
+          <Ionicons
+            style={styles.searchIcon}
+            name="help-circle-outline"
+            size={30}
+            color="#333"
+          />
         </View>
         {faqItems.map((item, index) => (
-          <View key={index} style={styles.itemContainer}>
+          <View
+            key={index}
+            style={[
+              styles.itemContainer,
+              expanded === item && styles.expandedItemContainer,
+            ]}
+          >
             <TouchableOpacity
               style={styles.button}
               onPress={() => handlePress(item)}
             >
               <Text style={styles.buttonText}>{item}</Text>
+              <Ionicons
+                name={expanded === item ? "chevron-up" : "chevron-down"}
+                size={20}
+                color="black"
+              />
             </TouchableOpacity>
             {expanded === item && (
               <View style={styles.answerContainer}>
@@ -84,39 +107,56 @@ export default function FaqScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "#ffffff",
   },
   scrollView: {
-    backgroundColor: "white",
-    height: "100%",
+    backgroundColor: "#fff",
   },
   scrollContent: {
     alignItems: "center",
     paddingVertical: 20,
   },
+  header: {
+    width: "100%",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    paddingHorizontal: 20,
+    paddingBottom: 20,
+  },
+  headerText: {
+    fontSize: 24,
+    fontWeight: "bold",
+    marginLeft: 20,
+  },
   itemContainer: {
     width: "90%",
     marginVertical: 10,
-  },
-  button: {
-    backgroundColor: "#4caf50",
-    padding: 15,
-    alignItems: "center",
-    justifyContent: "center",
+    backgroundColor: "#fff",
     borderRadius: 10,
     shadowColor: "#171717",
-    shadowOffset: { width: -2, height: 4 },
+    shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
     shadowRadius: 3,
   },
-  buttonText: {
-    fontSize: 16,
-    color: "white",
+  expandedItemContainer: {
+    backgroundColor: "#F0FFF5",
   },
-  answerContainer: {
-    backgroundColor: "#e0e0e0",
+  button: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
     padding: 15,
     borderRadius: 10,
-    marginTop: 10,
+  },
+  buttonText: {
+    fontSize: 16,
+    color: "black",
+  },
+  answerContainer: {
+    padding: 15,
+    borderTopWidth: 1,
+    borderTopColor: "#ccc",
   },
   answerText: {
     fontSize: 16,

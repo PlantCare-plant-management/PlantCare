@@ -7,6 +7,7 @@ import {
   View,
   Image,
   ActivityIndicator,
+  TouchableOpacity,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Ionicons from "react-native-vector-icons/Ionicons";
@@ -14,7 +15,7 @@ import * as SecureStore from "expo-secure-store";
 
 const { width } = Dimensions.get("window");
 
-export default function AccountInformation() {
+export default function AccountInformation({ navigation }) {
   const [userData, setUserData] = useState(null);
 
   const fetchUserData = async () => {
@@ -26,6 +27,7 @@ export default function AccountInformation() {
           process.env.EXPO_PUBLIC_API_URL + `/user`,
           {
             method: "GET",
+            cache: "no-cache",
             headers: {
               "Content-Type": "application/json",
               Authorization: `Bearer ${token}`,
@@ -64,7 +66,9 @@ export default function AccountInformation() {
         <View style={styles.header}>
           <Image
             source={{
-              uri: userData.imgUrl,
+              uri:
+                userData.imgUrl ||
+                "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
             }}
             style={styles.imageProfile}
           />
@@ -85,20 +89,42 @@ export default function AccountInformation() {
           <View style={styles.separator} />
           <View style={styles.infoItem}>
             <View style={styles.infoItemTextContainer}>
-              <Ionicons name="calendar-outline" size={20} color="#333" />
-              <Text style={styles.menuItemText}>Birthday</Text>
+              <Ionicons name="person-outline" size={20} color="#333" />
+              <Text style={styles.menuItemText}>Username</Text>
             </View>
-            <Text style={styles.infoText}>{userData.dateOfBirth}</Text>
+            <Text style={styles.infoText}>{userData.username}</Text>
           </View>
           <View style={styles.separator} />
           <View style={styles.infoItem}>
-            <View style={styles.infoItemTextContainer}>
+            <View style={[styles.infoItemTextContainer, { marginBottom: 5 }]}>
               <Ionicons name="location-outline" size={20} color="#333" />
               <Text style={styles.menuItemText}>Address</Text>
             </View>
-            <Text style={styles.infoText}>{userData.address}</Text>
+            <Text style={styles.infoText}>
+              {!userData.address && (
+                <TouchableOpacity
+                  style={{
+                    paddingBottom: 10,
+                  }}
+                  onPress={() => navigation.navigate("EditProfile")}
+                >
+                  <Text
+                    style={{
+                      lineHeight: 50,
+                      fontSize: 16,
+                      color: "#949494",
+                      textDecorationLine: "underline",
+                    }}
+                  >
+                    Add Addres
+                  </Text>
+                </TouchableOpacity>
+              )}
+
+              {userData && userData.address}
+            </Text>
           </View>
-          <View style={styles.separator} />
+          {/* <View style={styles.separator} /> */}
         </View>
       </SafeAreaView>
     </ScrollView>

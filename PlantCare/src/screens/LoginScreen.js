@@ -10,27 +10,28 @@ import { useNavigation } from "@react-navigation/native";
 import { authContext } from "../contexts/authContext";
 import * as SecureStore from "expo-secure-store";
 
-
 export default function LoginScreen() {
   const navigation = useNavigation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const {setIsSignedIn, setEmailLogin} = useContext(authContext)
+  const { setIsSignedIn, setEmailLogin } = useContext(authContext);
 
   const handleLogin = async () => {
     try {
-      const response = await fetch(process.env.EXPO_PUBLIC_API_URL + "/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
-      });
+      const response = await fetch(
+        `process.env.EXPO_PUBLIC_API_URL` + "/login",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email, password }),
+        }
+      );
 
       if (response.ok) {
         const { access_token, email } = await response.json();
         await SecureStore.setItemAsync("access_token", access_token);
-        console.log(email)
         await SecureStore.setItemAsync("email", JSON.stringify(email));
         setIsSignedIn(true);
         setEmailLogin(email);
