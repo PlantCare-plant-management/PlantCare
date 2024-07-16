@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+ import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -63,7 +63,7 @@ const AddPlantScreen = () => {
     "Deadheading spent flowers": "flower-outline",
     "Staking tall plants": "tree-outline",
   };
-
+  
   return (
     <View style={styles.container}>
       {/* Header Section */}

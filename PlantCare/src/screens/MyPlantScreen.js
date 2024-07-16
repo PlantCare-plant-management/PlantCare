@@ -112,7 +112,7 @@ const MyPlantScreen = () => {
           <TouchableOpacity
             style={styles.plantItem}
             onPress={() =>
-              navigation.navigate("PlantInfo", { plantId: item._id })
+              navigation.navigate("PlantInfo", { plant : item })
             }
           >
             <View style={styles.plantInfo}>

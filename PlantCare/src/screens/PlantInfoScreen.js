@@ -7,98 +7,102 @@ import { CheckBox } from 'react-native-elements';
 const PlantInfoScreen = () => {
   const route = useRoute();
   const { plant } = route.params;
+  const [actions, setActions] = useState(plant.actions.filter(action => action.show));
 
-  const [tasks, setTasks] = useState([
-    { id: 1, task: 'Watering', icon: 'water', completed: false },
-    { id: 2, task: 'Light', icon: 'weather-sunny', completed: false },
-    { id: 3, task: 'Pruning', icon: 'content-cut', completed: false },
-    { id: 4, task: 'Fertilizing', icon: 'leaf', completed: false },
-  ]);
+  const toggleTask = async(taskId) =>{
+    try {
+      const updatedActions = actions.map((action) =>
+        action.id === taskId ? { ...action, status: !action.status, update:new Date().toLocaleString() } : action
+      );
+      setActions(updatedActions);
 
-  const toggleTask = (taskId) => {
-    setTasks((prevTasks) =>
-      prevTasks.map((task) =>
-        task.id === taskId ? { ...task, completed: !task.completed } : task
-      )
-    );
+      const plantId = plant._id;
+      const response = await fetch(process.env.EXPO_PUBLIC_API_URL + "/myplants/update", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          plantId,
+          actions: updatedActions 
+        }),
+      });
+      const result = await response.json();
+      console.log(result);
+    } catch (error) {
+      console.log(error);
+    }
   };
-  console.log(plant)
+  console.log(new Date(actions[1].update)- new Date())
   return (
     <ScrollView contentContainerStyle={styles.scrollViewContainer}>
       <View style={styles.container}>
         <View style={styles.header}>
           <View style={styles.textContainer}>
-            <Text style={styles.title}>Oregano</Text>
+            <Text style={styles.title}>{plant.name}</Text>
             <Text style={styles.description}>
-              Oregano is a familiar herb that many people know from dishes such as pizza and...
+              {plant.plants.description}
               <Text style={styles.readMore}> Read more</Text>
             </Text>
           </View>
-          <Image source={{ uri: "https://via.placeholder.com/100" }} style={styles.image} />
+          <Image source={{ uri: `${plant.plants.imgUrl}` }} style={styles.image} />
         </View>
         <View style={styles.infoContainer}>
           <View style={styles.infoBox}>
             <Text style={styles.infoLabel}>Difficulty</Text>
-            <Text style={styles.infoValue}>Easy</Text>
+            <Text style={styles.infoValue}>Intermediate</Text>
           </View>
           <View style={styles.infoBox}>
             <Text style={styles.infoLabel}>Ready to harvest</Text>
-            <Text style={styles.infoValue}>In 60 - 90 days</Text>
+            <Text style={styles.infoValue}>False</Text>
           </View>
         </View>
         <Text style={styles.sectionTitle}>Recommendations</Text>
-        <View style={styles.recommendationsContainer}>
-          <View style={styles.recommendationBox}>
-            <Icon name="water" size={40} color="#AED581" style={styles.recommendationIcon} />
-            <Text style={styles.recommendationText}>Watering</Text>
-            <Text style={styles.recommendationSubText}>Once per day</Text>
+        {plant.plants.recommendation.map((rec, index) => (
+          <View key={index} style={styles.recommendationBox}>
+            <Text style={styles.recommendationText}>{rec}</Text>
           </View>
-          <View style={styles.recommendationBox}>
-            <Icon name="weather-sunny" size={40} color="#FFEE58" style={styles.recommendationIcon} />
-            <Text style={styles.recommendationText}>Light</Text>
-            <Text style={styles.recommendationSubText}>4h per day</Text>
-          </View>
-          <View style={styles.recommendationBox}>
-            <Icon name="sprout" size={40} color="#8D6E63" style={styles.recommendationIcon} />
-            <Text style={styles.recommendationText}>Soil</Text>
-            <Text style={styles.recommendationSubText}>Draining</Text>
-          </View>
-        </View>
+        ))}
         <Text style={styles.sectionTitle}>Main care</Text>
-        <View style={styles.careContainer}>
-          <View style={styles.careBox}>
-            <Icon name="watering-can" size={40} color="#AED581" style={styles.careIcon} />
-            <Text style={styles.careText}>Watering</Text>
+        {plant.plants.main_care.map((care, index) => (
+          <View key={index} style={styles.careBox}>
+            <Icon name={getActionIcon(care)} size={40} color="#333" style={styles.careIcon} />
+            <Text style={styles.careText}>{care}</Text>
           </View>
-          <View style={styles.careBox}>
-            <Icon name="leaf" size={40} color="#8BC34A" style={styles.careIcon} />
-            <Text style={styles.careText}>Fertilizing</Text>
-          </View>
-          <View style={styles.careBox}>
-            <Icon name="content-cut" size={40} color="#FFC107" style={styles.careIcon} />
-            <Text style={styles.careText}>Pruning</Text>
-          </View>
-          <View style={styles.careBox}>
-            <Icon name="flower-tulip" size={40} color="#F48FB1" style={styles.careIcon} />
-            <Text style={styles.careText}>Repotting</Text>
-          </View>
-        </View>
+        ))}
         <Text style={styles.sectionTitle}>Task Today</Text>
         <View style={styles.taskTodayContainer}>
-          {tasks.map((task) => (
+          {actions.map((task) => (
             <View key={task.id} style={styles.taskBox}>
               <CheckBox
-                checked={task.completed}
+                checked={task.status}
                 onPress={() => toggleTask(task.id)}
+                disabled={task.status}
                 containerStyle={styles.taskCheckbox}
               />
-              <Icon name={task.icon} size={30} color={task.completed ? '#AED581' : '#333'} />
+              <Icon name={getActionIcon(task.name)} size={30} color={task.status ? '#AED581' : '#333'} />
+              <Text>{task.name}</Text>
             </View>
           ))}
         </View>
       </View>
     </ScrollView>
   );
+};
+
+const getActionIcon = (actionName) => {
+  switch (actionName.toLowerCase()) {
+    case 'watering':
+      return 'watering-can';
+    case 'lighting':
+      return 'weather-sunny';
+    case 'fertilizing':
+      return 'sprout';
+    case 'monitor plant health':
+      return 'leaf';
+    default:
+      return 'help-circle-outline';
+  }
 };
 
 const styles = StyleSheet.create({
@@ -178,17 +182,9 @@ const styles = StyleSheet.create({
     marginHorizontal: 4,
     alignItems: 'center',
   },
-  recommendationIcon: {
-    marginBottom: 8,
-  },
   recommendationText: {
     fontSize: 14,
-    fontWeight: 'bold',
     color: '#333',
-  },
-  recommendationSubText: {
-    fontSize: 12,
-    color: '#888',
   },
   careContainer: {
     flexDirection: 'row',

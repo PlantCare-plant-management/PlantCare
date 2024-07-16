@@ -64,4 +64,20 @@ const getMyPlants = async (id) => {
   ]).toArray()
 };
 
-module.exports = { getPlants, getPlantById, addToMyPlant, getMyPlants };
+const updateMyPlant = async(plantId, action) => {
+  const db = getDB()
+  const collection = db.collection("myPlants")
+  console.log(action, plantId)
+  const result = await collection.updateOne({_id: new ObjectId(plantId)},
+    {
+      $set: {actions: action}
+    }
+  )
+  console.log(result.modifiedCount)
+  if (result.matchedCount === 0) {
+    console.log("No document found with the provided plantId");
+  }
+  return result.modifiedCount
+}
+
+module.exports = { getPlants, getPlantById, addToMyPlant, getMyPlants, updateMyPlant };
