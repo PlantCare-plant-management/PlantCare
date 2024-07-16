@@ -12,7 +12,7 @@ import {
   ActivityIndicator,
 } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import { useNavigation } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { authContext } from "../contexts/authContext";
 import * as SecureStore from "expo-secure-store";
 
@@ -23,16 +23,19 @@ const ProfileScreen = () => {
   const { logout } = useContext(authContext);
   const [notificationsEnabled, setNotificationsEnabled] = useState(false);
   const [userData, setUserData] = useState(null);
+  const [profileImage, setProfileImage] = useState(
+    "https://your-default-image-url.com/default-profile.png"
+  );
 
   const fetchUserData = async () => {
     try {
       const token = await SecureStore.getItemAsync("access_token");
-
       if (token) {
         const response = await fetch(
           process.env.EXPO_PUBLIC_API_URL + `/user`,
           {
             method: "GET",
+            cache: "no-store",
             headers: {
               "Content-Type": "application/json",
               Authorization: `Bearer ${token}`,
@@ -43,6 +46,10 @@ const ProfileScreen = () => {
         if (response.ok) {
           const data = await response.json();
           setUserData(data);
+          setProfileImage(
+            data.imgUrl ||
+              "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
+          );
         } else {
           console.error("Failed to fetch user data");
         }
@@ -55,6 +62,12 @@ const ProfileScreen = () => {
   useEffect(() => {
     fetchUserData();
   }, []);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      fetchUserData();
+    }, [])
+  );
 
   if (!userData) {
     return (
@@ -78,9 +91,14 @@ const ProfileScreen = () => {
             />
             <Image
               source={{
-                uri: userData.imgUrl,
+                uri: profileImage,
               }}
               style={styles.imageProfile}
+              onError={() =>
+                setProfileImage(
+                  "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
+                )
+              }
             />
           </View>
           <Text style={styles.profileName}>{userData.name}</Text>
@@ -99,17 +117,21 @@ const ProfileScreen = () => {
               <Text style={styles.itemValue}>10</Text>
             </View>
           </View>
-          <View style={styles.menuItem}>
-            <View style={styles.wrapText}>
-              <Ionicons
-                name="information-circle-outline"
-                size={20}
-                color="#333"
-              />
-              <Text style={styles.menuItemText}>Account Information</Text>
+          <TouchableOpacity
+            onPress={() => navigation.navigate("AccountInformation")}
+          >
+            <View style={styles.menuItem}>
+              <View style={styles.wrapText}>
+                <Ionicons
+                  name="information-circle-outline"
+                  size={20}
+                  color="#333"
+                />
+                <Text style={styles.menuItemText}>Account Information</Text>
+              </View>
+              <Ionicons name="chevron-forward-outline" size={20} color="#333" />
             </View>
-            <Ionicons name="chevron-forward-outline" size={20} color="#333" />
-          </View>
+          </TouchableOpacity>
           <TouchableOpacity onPress={() => navigation.navigate("EditProfile")}>
             <View style={styles.menuItem}>
               <View style={styles.wrapText}>

@@ -28,18 +28,28 @@ const AddPlantFormScreen = () => {
   const [location, setLocation] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
   const [locations, setLocations] = useState([]);
+  const [actions, setActions] = useState([])
   const [loading, setLoading] = useState(true);
   const URL = process.env.EXPO_PUBLIC_API_URL
 
   // Hardcoded userId
   
-  const plantId = plant._id
 
   const fetchLocations = async () => {
     try {
-      const response = await fetch(`${URL}/locations`);
+      const token = await SecureStore.getItemAsync('access_token'); 
+      const response = await fetch(`${URL}/locations`, {
+        headers : {
+          Authorization : `Bearer ${token}`
+        }
+      }
+      );
       const data = await response.json();
-      setLocations(data);
+      const list = ["Living Room", "Bedroom", "Kitchen", "Garden"]
+      data.forEach(element => {
+        list.push(element.name)
+      });
+      setLocations(list)
       setLoading(false);
     } catch (error) {
       console.error(error);
@@ -47,13 +57,25 @@ const AddPlantFormScreen = () => {
     }
   };
 
+  const addCare = () => {
+    const array = []
+    plant.main_care.forEach((element, i) => {
+      element = {id : i+1, name : element, update: new Date().toLocaleString(), status: false, show : true}
+      array.push(element)
+     });
+    setActions(array)
+  }
+
   useEffect(() => {
     fetchLocations();
+    addCare()
+    
   }, []);
 
   useFocusEffect(
     React.useCallback(() => {
       fetchLocations();
+      addCare();
     }, [])
   );
   
@@ -66,8 +88,10 @@ const AddPlantFormScreen = () => {
       return;
     }
 
+
     setLoading(true);
     try {
+      
       const response = await fetch(`${URL}/plants`, {
         method: "POST",
         headers: {
@@ -78,7 +102,8 @@ const AddPlantFormScreen = () => {
           name,
           location,
           photo,
-          plantId
+          plantId,
+          actions
         }),
       });
 
@@ -113,7 +138,7 @@ const AddPlantFormScreen = () => {
     // After selecting the photo, set the photo URI to the `photo` state
     // setPhoto(selectedPhotoUri);
   };
-  console.log(plant)
+  
   return (
     <View style={styles.container}>
       <TouchableOpacity
@@ -167,9 +192,9 @@ const AddPlantFormScreen = () => {
                   <Picker.Item label="Select Location" value="" />
                   {locations.map((loc) => (
                     <Picker.Item
-                      key={loc._id}
-                      label={loc.name}
-                      value={loc.name}
+                      
+                      label={loc}
+                      value={loc}
                     />
                   ))}
                   <Picker.Item label="Add Room ..." value="addRoom" />

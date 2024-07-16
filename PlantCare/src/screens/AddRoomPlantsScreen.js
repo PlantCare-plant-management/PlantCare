@@ -17,6 +17,7 @@ const AddRoomPlantsScreen = () => {
   const [newRoom, setNewRoom] = useState("");
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [locations, setLocations] = useState([]);
   const navigation = useNavigation();
 
   useEffect(() => {
@@ -37,7 +38,13 @@ const AddRoomPlantsScreen = () => {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         const data = await response.json();
-        setRooms(data.map((item) => item.name));
+        const list = ["Living Room", "Bedroom", "Kitchen", "Garden"];
+
+        data.forEach((element) => {
+          console.log(element.name);
+          list.push(element.name);
+        });
+        setRooms(list);
         setLoading(false);
       } catch (error) {
         console.error("Failed to fetch rooms:", error);

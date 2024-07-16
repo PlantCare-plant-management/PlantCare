@@ -1,6 +1,18 @@
 const { ObjectId } = require("mongodb");
 const { getDB } = require("../config/mongoDb");
 
+const editUser = async (userId, user) => {
+  const db = getDB();
+  return await db
+    .collection("user")
+    .findOneAndUpdate(
+      { _id: userId },
+      { $set: user },
+      { ReturnDocument: "after" }
+    );
+};
+
+
 const getUsers = async () => {
   const db = getDB();
   return await db.collection("user").find().toArray();
@@ -26,4 +38,4 @@ const getUserByEmail = async (email) => {
   return await db.collection("user").findOne({ email });
 };
 
-module.exports = { getUsers, getUserById, createUser, getUserByUsername, getUserByEmail };
+module.exports = { getUsers, getUserById, createUser, getUserByUsername, getUserByEmail, editUser };

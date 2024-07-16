@@ -1,23 +1,29 @@
-import React, { useContext, useState } from "react";
+import { useContext, useState } from "react";
 import {
   View,
   Text,
   TextInput,
   TouchableOpacity,
   StyleSheet,
+  ActivityIndicator,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { authContext } from "../contexts/authContext";
 import * as SecureStore from "expo-secure-store";
-
+import CustomModal from "../components/CustomModal";
 
 export default function LoginScreen() {
   const navigation = useNavigation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const {setIsSignedIn, setEmailLogin} = useContext(authContext)
+  const { setIsSignedIn, setEmailLogin } = useContext(authContext);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
+  const [modalType, setModalType] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleLogin = async () => {
+    setIsLoading(true);
     try {
       const response = await fetch(process.env.EXPO_PUBLIC_API_URL + "/login", {
         method: "POST",
@@ -30,16 +36,26 @@ export default function LoginScreen() {
       if (response.ok) {
         const { access_token, email } = await response.json();
         await SecureStore.setItemAsync("access_token", access_token);
-        console.log(email)
         await SecureStore.setItemAsync("email", JSON.stringify(email));
         setIsSignedIn(true);
         setEmailLogin(email);
       } else {
-        console.error("Invalid credentials");
+        const data = await response.json();
+        setModalType("error");
+        setModalMessage(data.message);
+        setModalVisible(true);
       }
     } catch (error) {
-      console.error("Error logging in", error);
+      setModalType("error");
+      setModalMessage(error.message);
+      setModalVisible(true);
+    } finally {
+      setIsLoading(false);
     }
+  };
+
+  const handleCloseModal = () => {
+    setModalVisible(false);
   };
 
   return (
@@ -62,12 +78,28 @@ export default function LoginScreen() {
         secureTextEntry
         placeholderTextColor="#888"
       />
-      <TouchableOpacity style={styles.button} onPress={handleLogin}>
-        <Text style={styles.buttonText}>Login</Text>
-      </TouchableOpacity>
+      {isLoading ? (
+        <View style={styles.loading}>
+          <ActivityIndicator size="large" color="#4caf50" />
+        </View>
+      ) : (
+        <TouchableOpacity
+          style={styles.button}
+          onPress={handleLogin}
+          disabled={isLoading}
+        >
+          <Text style={styles.buttonText}>Login</Text>
+        </TouchableOpacity>
+      )}
       <TouchableOpacity onPress={() => navigation.navigate("Register")}>
         <Text style={styles.registerText}>Don't have an account? Register</Text>
       </TouchableOpacity>
+      <CustomModal
+        visible={modalVisible}
+        message={modalMessage}
+        type={modalType}
+        onClose={handleCloseModal}
+      />
     </View>
   );
 }
@@ -99,6 +131,12 @@ const styles = StyleSheet.create({
     height: 48,
     backgroundColor: "#4caf50",
     borderRadius: 8,
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: 16,
+  },
+  loading: {
+    height: 48,
     justifyContent: "center",
     alignItems: "center",
     marginBottom: 16,

@@ -4,6 +4,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Ionicons } from "@expo/vector-icons";
+import { Feather } from "@expo/vector-icons";
 
 import MyPlantScreen from "../screens/MyPlantScreen";
 import PlantInfoScreen from "../screens/PlantInfoScreen";
@@ -25,11 +26,15 @@ import ProfileScreen from "../screens/ProfileScreen";
 import EditProfileScreen from "../screens/EditProfileScreen";
 import NotificationSetting from "../screens/NotificationSetting";
 import FaqScreen from "../screens/FaqScreen";
+import OptionBuy from "../screens/OptionBuy";
+import AccountInformation from "../screens/AccountInformation";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
 function TabNavigator() {
+  const { logout } = useContext(authContext);
+
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
@@ -38,8 +43,8 @@ function TabNavigator() {
 
           if (route.name === "MyPlant") {
             iconName = "leaf";
-          } else if (route.name === "AddPlant") {
-            iconName = "add-circle";
+            // } else if (route.name === "AddPlant") {
+            //   iconName = "add-circle";
           } else if (route.name === "Shop") {
             iconName = "cart";
           } else if (route.name === "Profile") {
@@ -71,8 +76,48 @@ function TabNavigator() {
         })}
       />
       {/* <Tab.Screen name="AddPlant" component={AddPlantScreen} /> */}
-      <Tab.Screen name="Shop" component={ShopScreen} />
-      <Tab.Screen name="Profile" component={ProfileScreen} />
+      <Tab.Screen
+        name="Shop"
+        component={ShopScreen}
+        options={({ navigation }) => ({
+          headerRight: () => (
+            <TouchableOpacity
+              onPress={() => navigation.navigate("OptionScreen")}
+              style={{ marginRight: 16 }}
+            >
+              <Ionicons name="document-text" size={30} color="black" />
+            </TouchableOpacity>
+          ),
+        })}
+      />
+      <Tab.Screen
+        name="Profile"
+        component={ProfileScreen}
+        options={({ navigation }) => ({
+          headerRight: () => (
+            <TouchableOpacity
+              onPress={logout}
+              style={{
+                marginRight: 10,
+                flexDirection: "row",
+                alignItems: "center",
+              }}
+            >
+              <Feather name="log-out" size={18} color="#000" />
+              <Text
+                style={{
+                  marginLeft: 5,
+                  fontSize: 14,
+                  color: "#0d0f1b",
+                  fontWeight: "bold",
+                }}
+              >
+                Logout
+              </Text>
+            </TouchableOpacity>
+          ),
+        })}
+      />
     </Tab.Navigator>
   );
 }
@@ -131,6 +176,11 @@ export default function MainStack() {
             <Stack.Screen
               name="OptionScreen"
               component={OptionScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="OptionBuy"
+              component={OptionBuy}
               options={{ headerShown: false }}
             />
             <Stack.Screen
@@ -195,7 +245,7 @@ export default function MainStack() {
                 ),
               })}
             />
-               <Stack.Screen
+            <Stack.Screen
               name="Faq"
               component={FaqScreen}
               options={({ navigation }) => ({
@@ -215,6 +265,19 @@ export default function MainStack() {
                         Profile
                       </Text>
                     </View>
+                  </TouchableOpacity>
+                ),
+              })}
+            />
+            <Stack.Screen
+              name="AccountInformation"
+              component={AccountInformation}
+              options={({ navigation }) => ({
+                headerShown: true,
+                title: "Account Information",
+                headerLeft: () => (
+                  <TouchableOpacity onPress={() => navigation.goBack()}>
+                    <Ionicons name="arrow-back" size={24} color="black" />
                   </TouchableOpacity>
                 ),
               })}

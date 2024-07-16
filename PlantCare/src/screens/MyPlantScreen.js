@@ -28,6 +28,7 @@ const MyPlantScreen = () => {
         },
       });
       const result = await response.json();
+      console.log(result)
       setPlants(result);
     } catch (error) {
       console.error("Error fetching my plants:", error);
@@ -56,7 +57,6 @@ const MyPlantScreen = () => {
   if (loading) {
     return <ActivityIndicator size="large" color="#4CAF50" />;
   }
-
   return (
     <View style={styles.container}>
       <Text style={styles.date}>Wednesday, 10 July 2024</Text>

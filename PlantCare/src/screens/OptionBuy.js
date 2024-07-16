@@ -3,7 +3,7 @@ import React from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
-const OptionScreen = () => {
+export default OptionBuy = () => {
   const navigation = useNavigation();
 
   return (
@@ -14,20 +14,18 @@ const OptionScreen = () => {
       >
         <Text style={styles.backButtonText}>{"<"}</Text>
       </TouchableOpacity>
-      <Text style={styles.header}>
-        Get Started with a New Plant Pack or Add an Existing Plant
-      </Text>
+      <Text style={styles.header}>Buy Plant or Add Existing Plant ?</Text>
       <TouchableOpacity
         style={styles.optionButton}
-        onPress={() => navigation.navigate("OptionBuy")}
+        onPress={() => navigation.navigate("ShopScreen")}
       >
-        <Text style={styles.optionButtonText}>Get Plant Pack</Text>
+        <Text style={styles.optionButtonText}>Buy new plant</Text>
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.optionButton}
         onPress={() => navigation.navigate("AddPlantScreen")}
       >
-        <Text style={styles.optionButtonText}>Add Existing Plant</Text>
+        <Text style={styles.optionButtonText}>Add Exist</Text>
       </TouchableOpacity>
     </View>
   );
@@ -56,7 +54,6 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginBottom: 40,
     color: "#fff",
-    textAlign: "center",
   },
   optionButton: {
     width: "85%",
@@ -77,5 +74,3 @@ const styles = StyleSheet.create({
     color: "#4caf50",
   },
 });
-
-export default OptionScreen;

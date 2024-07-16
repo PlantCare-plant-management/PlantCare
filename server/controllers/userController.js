@@ -1,11 +1,21 @@
 const { comparePass, hashPass } = require("../helpers/bcrypt");
 const { signToken } = require("../helpers/jwt");
+const crypto = require("crypto");
+const ObjectId = require("mongodb").ObjectId;
+
+
+// firebase config
+const storage = require("../config/firebase-config");
+const { ref, uploadBytes, getDownloadURL } = require("firebase/storage");
+const { v4: uuidv4 } = require("uuid");
+
 const {
   getUsers,
   getUserById,
   createUser,
   getUserByUsername,
   getUserByEmail,
+  editUser,
 } = require("../models/userModel");
 const { registerSchema, loginSchema } = require("../schemas/userSchema");
 
@@ -29,6 +39,56 @@ class UserController {
       }
       res.status(200).json(user);
     } catch (error) {
+      next(error);
+    }
+  }
+
+  static async saveAddress(req, res, next) {
+    try {
+      const { address } = req.body;
+      const userId = req.user.id.toString()
+      const user = await saveAddress(userId, address);
+      res.status(200).json(user);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async editUser(req, res, next) {
+    try {
+      const userId = new ObjectId(req.user.id);
+      console.log(userId, "<=== userID");
+      const body = req.body;
+
+      const imgFile = req.file;
+
+      if (!imgFile) {
+        return res.status(400).send("No image file provided");
+      }
+
+      const filename = `${userId} - ${uuidv4()}`;
+
+      const imageRef = ref(storage, filename);
+      const snapshot = await uploadBytes(imageRef, imgFile.buffer);
+
+      const imgUrl = await getDownloadURL(snapshot.ref);
+      console.log(imgUrl, "<==== imgUrl dicontoler");
+      const rawData = {
+        name: body.name,
+        email: body.email,
+        password: hashPass(body.password),
+        address: body.address,
+        dateOfBirth: body.dateOfBirth,
+        imgUrl: imgUrl,
+      };
+
+      console.log(rawData, "<=== raw data");
+
+      const updatedUser = await editUser(userId, rawData);
+
+      res.status(200).json(updatedUser);
+    } catch (error) {
+      console.log("error di edit:", error);
       next(error);
     }
   }
@@ -58,7 +118,7 @@ class UserController {
       });
       res
         .status(201)
-        .json({ message: "Success add user with username " + username });
+        .json({ message: "Success create account" });
     } catch (error) {
       next(error);
     }
