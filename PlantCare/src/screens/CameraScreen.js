@@ -52,12 +52,10 @@ export default function CameraScreen() {
       setLoading(true);
       setLoadingMessage("Processing image...");
 
-      // Update loading messages at intervals
       setTimeout(() => setLoadingMessage("Analyzing image..."), 2000);
       setTimeout(() => setLoadingMessage("Please wait..."), 6000);
       setTimeout(() => setLoadingMessage("Almost there..."), 6000);
 
-      // Call Pl@ntNet API with the taken picture
       const formData = new FormData();
       formData.append("images", {
         uri: photo.uri,
@@ -100,7 +98,7 @@ export default function CameraScreen() {
 
   const findMatchingPlant = (result, plants) => {
     if (result.results && result.results.length > 0) {
-      const plantName = result.results[0].species.scientificNameWithoutAuthor;
+      const plantName = result.results[0].species.genus.scientificNameWithoutAuthor;
       return plants.find(
         (plant) => plant.latin_name.toLowerCase() === plantName.toLowerCase()
       );

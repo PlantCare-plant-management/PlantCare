@@ -167,20 +167,6 @@ const ProfileScreen = () => {
             marginVertical: 20,
           }}
         >
-          <TouchableOpacity onPress={logout}>
-            <View
-              style={{
-                flexDirection: "row",
-                alignItems: "center",
-                gap: 5,
-              }}
-            >
-              <Ionicons name="log-out-outline" size={30} color="#ff0000" />
-              <Text style={{ fontSize: 20, fontWeight: "400", color: "black" }}>
-                Logout
-              </Text>
-            </View>
-          </TouchableOpacity>
         </View>
       </SafeAreaView>
     </ScrollView>
@@ -208,7 +194,7 @@ const styles = StyleSheet.create({
     height: 100,
     borderRadius: 50,
     marginBottom: 10,
-    marginTop: 75,
+    marginTop: 25,
   },
   profileName: {
     fontSize: 20,

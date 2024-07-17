@@ -9,7 +9,7 @@ const OptionScreen = () => {
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      <StatusBar barStyle="dark-content" />
+      {/* <StatusBar barStyle="dark-content" /> */}
       <View style={styles.container}>
         <View style={styles.topBar}>
           <TouchableOpacity
@@ -52,16 +52,15 @@ const OptionScreen = () => {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: "#2e7d32",
+    // backgroundColor: "#2e7d32",
   },
   container: {
     flex: 1,
     backgroundColor: "#f0f4f7",
   },
   topBar: {
-    marginTop: 20,
+    marginTop: 10,
     height: 60,
-    // backgroundColor: "#2e7d32",
     flexDirection: "row",
     alignItems: "center",
     paddingHorizontal: 20,

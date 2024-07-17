@@ -17,6 +17,7 @@ import {
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { Picker } from "@react-native-picker/picker";
 import * as SecureStore from 'expo-secure-store';
+import * as ImagePicker from "expo-image-picker";
 
 const AddPlantFormScreen = () => {
   const route = useRoute();
@@ -250,6 +251,9 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     backgroundColor: "#fff",
     justifyContent: "center",
+    textAlign: "center",
+    fontWeight: "bold", 
+    color: "#333", 
   },
   pickerContainer: {
     height: 200,

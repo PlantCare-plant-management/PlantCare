@@ -6,25 +6,26 @@ import {
   TouchableOpacity,
   StyleSheet,
   ActivityIndicator,
+  Image,
 } from "react-native";
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
-import * as SecureStore from 'expo-secure-store';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import * as SecureStore from "expo-secure-store";
+import Icon from "react-native-vector-icons/FontAwesome";
 
 const MyPlantScreen = () => {
   const navigation = useNavigation();
   const [plants, setPlants] = useState([]);
-  const [loading, setLoading] = useState(true); 
+  const [loading, setLoading] = useState(true);
   const URL = process.env.EXPO_PUBLIC_API_URL;
 
   const fetchMyPlants = async () => {
     try {
-      const token = await SecureStore.getItemAsync('access_token');
+      const token = await SecureStore.getItemAsync("access_token");
       const response = await fetch(`${URL}/myplants`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`
+          Authorization: `Bearer ${token}`,
         },
       });
       const result = await response.json();
@@ -59,17 +60,17 @@ const MyPlantScreen = () => {
 
   const getActionIcon = (actionName) => {
     switch (actionName) {
-      case 'Watering':
-        return 'tint';
-      case 'Lighting':
-        return 'sun-o';
-      case 'Fertilizing':
-        return 'leaf';
-      case 'Pruning dead leaves':
-      case 'Monitor plant health':
-        return 'heartbeat';
+      case "Watering":
+        return "tint";
+      case "Lighting":
+        return "sun-o";
+      case "Fertilizing":
+        return "leaf";
+      case "Pruning dead leaves":
+      case "Monitor plant health":
+        return "heartbeat";
       default:
-        return 'circle';
+        return "circle";
     }
   };
   return (
@@ -110,9 +111,7 @@ const MyPlantScreen = () => {
         renderItem={({ item }) => (
           <TouchableOpacity
             style={styles.plantItem}
-            onPress={() =>
-              navigation.navigate("PlantInfo", { plant : item })
-            }
+            onPress={() => navigation.navigate("PlantInfo", { plant: item })}
           >
             <View style={styles.plantInfo}>
               <Text style={styles.plantName}>{item.name}</Text>
@@ -120,16 +119,22 @@ const MyPlantScreen = () => {
               <View style={styles.actionsContainer}>
                 {item.actions && item.actions.length > 0 ? (
                   item.actions
-                    .filter(action => action.show)
-                    .map(action => (
+                    .filter((action) => action.show)
+                    .map((action) => (
                       <View
                         key={action.id}
                         style={[
                           styles.action,
-                          action.status ? styles.actionDone : styles.actionPending,
+                          action.status
+                            ? styles.actionDone
+                            : styles.actionPending,
                         ]}
                       >
-                        <Icon name={getActionIcon(action.name)} size={20} color="#000" />
+                        <Icon
+                          name={getActionIcon(action.name)}
+                          size={20}
+                          color="#000"
+                        />
                         <Text style={styles.actionText}></Text>
                       </View>
                     ))
@@ -139,7 +144,12 @@ const MyPlantScreen = () => {
               </View>
             </View>
             <View style={styles.plantPhotoContainer}>
-              <Text style={styles.plantPhotoText}>{item.imgUrl}</Text>
+              <Image
+                source={{
+                  uri: item.plants.imgUrl || `https://via.placeholder.com/100`,
+                }}
+                style={styles.plantImage}
+              />
             </View>
           </TouchableOpacity>
         )}
@@ -246,6 +256,12 @@ const styles = StyleSheet.create({
   addButtonText: {
     color: "#fff",
     fontWeight: "bold",
+  },
+  plantImage: {
+    flex: 2,
+    height: "100%",
+    width: "100%",
+    resizeMode: "cover",
   },
 });
 
