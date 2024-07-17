@@ -1,7 +1,7 @@
-// OptionScreen.js
 import React from "react";
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet, Image } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import { Ionicons } from '@expo/vector-icons';
 
 export default OptionBuy = () => {
   const navigation = useNavigation();
@@ -12,20 +12,24 @@ export default OptionBuy = () => {
         style={styles.backButton}
         onPress={() => navigation.goBack()}
       >
-        <Text style={styles.backButtonText}>{"<"}</Text>
+        <Ionicons name="arrow-back" size={28} color="#fff" />
       </TouchableOpacity>
-      <Text style={styles.header}>Buy Plant or Add Existing Plant ?</Text>
+      <Image
+            source={{ uri: "https://res.cloudinary.com/dszhu92hc/image/upload/v1721200320/aset5-01_aubo2p.png" }}
+            style={styles.image}
+          />
+      <Text style={styles.header}>Do you already have a Starter Plant Pack?</Text>
       <TouchableOpacity
         style={styles.optionButton}
-        onPress={() => navigation.navigate("ShopScreen")}
+        onPress={() => navigation.navigate("TutorialScreen")}
       >
-        <Text style={styles.optionButtonText}>Buy new plant</Text>
+        <Text style={styles.optionButtonText}>Yes, I already have a Starter Plant Pack. Click to start planting</Text>
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.optionButton}
-        onPress={() => navigation.navigate("AddPlantScreen")}
+        onPress={() => navigation.navigate("Shop")}
       >
-        <Text style={styles.optionButtonText}>Add Exist</Text>
+        <Text style={styles.optionButtonText}>No, I want to buy one</Text>
       </TouchableOpacity>
     </View>
   );
@@ -34,43 +38,49 @@ export default OptionBuy = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
+    padding: 20,
     backgroundColor: "#4caf50",
     justifyContent: "center",
     alignItems: "center",
   },
   backButton: {
     position: "absolute",
-    top: 20,
+    top: 40,
     left: 20,
     padding: 10,
-  },
-  backButtonText: {
-    fontSize: 28,
-    color: "#fff",
+    zIndex: 10,
   },
   header: {
     fontSize: 24,
     fontWeight: "bold",
     marginBottom: 40,
     color: "#fff",
+    textAlign: "center",
+    paddingHorizontal: 20,
   },
   optionButton: {
-    width: "85%",
+    width: "90%",
     padding: 15,
     marginVertical: 10,
     backgroundColor: "#fff",
-    borderRadius: 8,
+    borderRadius: 12,
     justifyContent: "center",
     alignItems: "center",
     shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
     shadowRadius: 8,
-    elevation: 5,
+    elevation: 6,
   },
   optionButtonText: {
     fontSize: 18,
     color: "#4caf50",
+    textAlign: "center",
+  },
+  image: {
+    width: "90%",
+    height: "30%",
+    borderRadius: 75,
+    marginBottom: 20,
   },
 });

@@ -6,9 +6,6 @@ const getLocation = async (id) => {
   return await db.collection("locations").aggregate([
     {
       $match:
-        /**
-         * query: The query in MQL.
-         */
         {
           userId: id
         }

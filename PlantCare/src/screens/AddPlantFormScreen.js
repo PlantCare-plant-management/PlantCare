@@ -60,7 +60,7 @@ const AddPlantFormScreen = () => {
   const addCare = () => {
     const array = []
     plant.main_care.forEach((element, i) => {
-      element = {id : i+1, name : element, update: new Date().toLocaleString(), status: false, show : true}
+      element = {id : i+1, name : element.task, frequency: element.frequency, update: new Date(), status: false, show : true}
       array.push(element)
      });
     setActions(array)
@@ -138,7 +138,6 @@ const AddPlantFormScreen = () => {
     // After selecting the photo, set the photo URI to the `photo` state
     // setPhoto(selectedPhotoUri);
   };
-  
   return (
     <View style={styles.container}>
       <TouchableOpacity
@@ -190,9 +189,9 @@ const AddPlantFormScreen = () => {
                   style={styles.picker}
                 >
                   <Picker.Item label="Select Location" value="" />
-                  {locations.map((loc, i) => (
+                  {locations.map((loc) => (
                     <Picker.Item
-                      key={i}
+                      
                       label={loc}
                       value={loc}
                     />

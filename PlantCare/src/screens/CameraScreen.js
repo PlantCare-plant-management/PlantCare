@@ -1,27 +1,46 @@
-import React, { useRef } from "react";
-import { View, Button, StyleSheet, Text, TouchableOpacity, Image } from "react-native";
+import React, { useRef, useState } from "react";
+import {
+  View,
+  Button,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  ActivityIndicator,
+  Image,
+} from "react-native";
 import { CameraView, useCameraPermissions } from "expo-camera";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
+import CustomModal from "../components/CustomModal";
 
 export default function CameraScreen() {
+  const route = useRoute();
   const navigation = useNavigation();
   const [permission, requestPermission] = useCameraPermissions();
   const cameraRef = useRef(null);
+  const [loading, setLoading] = useState(false);
+  const [loadingMessage, setLoadingMessage] = useState("");
+  const [capturedImageUri, setCapturedImageUri] = useState(null);
+  const plants = route.params?.plants || [];
+  const [modalVisible, setModalVisible] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
+  const [modalType, setModalType] = useState("");
 
   if (!permission) {
-    // Camera permissions are still loading.
     return <View />;
   }
 
   if (!permission.granted) {
-    // Camera permissions are not granted yet.
     return (
       <View style={styles.container}>
         <Text style={{ textAlign: "center" }}>
           We need your permission to show the camera
         </Text>
-        <Button onPress={requestPermission} title="Grant Permission" style={{backgroundColor: "#4caf50"}}/>
+        <Button
+          onPress={requestPermission}
+          title="Grant Permission"
+          style={{ backgroundColor: "#4caf50" }}
+        />
       </View>
     );
   }
@@ -29,28 +48,97 @@ export default function CameraScreen() {
   const takePicture = async () => {
     if (cameraRef.current) {
       const photo = await cameraRef.current.takePictureAsync();
-      navigation.navigate("ResultScreen", {
-        imageUri: photo.uri,
-        includeRelatedImages,
+      setCapturedImageUri(photo.uri);
+      setLoading(true);
+      setLoadingMessage("Processing image...");
+
+      // Update loading messages at intervals
+      setTimeout(() => setLoadingMessage("Analyzing image..."), 2000);
+      setTimeout(() => setLoadingMessage("Please wait..."), 6000);
+      setTimeout(() => setLoadingMessage("Almost there..."), 6000);
+
+      // Call Pl@ntNet API with the taken picture
+      const formData = new FormData();
+      formData.append("images", {
+        uri: photo.uri,
+        type: "image/jpeg",
+        name: "photo.jpg",
       });
-      // Handle the taken picture, for example, navigate to a result screen or save the photo
+
+      try {
+        const response = await fetch(
+          "https://my-api.plantnet.org/v2/identify/all?api-key=2b10XVXIHqjriKvesfSL12JPpu",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+            body: formData,
+          }
+        );
+
+        const result = await response.json();
+        const matchedPlant = findMatchingPlant(result, plants);
+
+        if (matchedPlant) {
+          navigation.navigate("AddPlantForm", { plant: matchedPlant });
+        } else {
+          setModalType("error");
+          setModalMessage("No matching plant found");
+          setModalVisible(true);
+        }
+      } catch (error) {
+        setModalType("error");
+        setModalMessage("Error identifying plant");
+        setModalVisible(true);
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
     }
+  };
+
+  const findMatchingPlant = (result, plants) => {
+    if (result.results && result.results.length > 0) {
+      const plantName = result.results[0].species.scientificNameWithoutAuthor;
+      return plants.find(
+        (plant) => plant.latin_name.toLowerCase() === plantName.toLowerCase()
+      );
+    }
+    return null;
+  };
+
+  const handleCloseModal = () => {
+    setModalVisible(false);
   };
 
   return (
     <View style={styles.container}>
       <View style={styles.cameraContainer}>
-        <CameraView ref={cameraRef} style={styles.camera} />
-        <Image
-          source={{ uri: 'https://example.com/plant-mockup.png' }} // Ganti dengan URL gambar mockup tanaman
-          style={styles.overlayImage}
-        />
+        {capturedImageUri ? (
+          <Image source={{ uri: capturedImageUri }} style={styles.camera} />
+        ) : (
+          <CameraView ref={cameraRef} style={styles.camera} />
+        )}
       </View>
       <View style={styles.nonCameraContainer}>
-        <TouchableOpacity style={styles.circleButton} onPress={takePicture}>
-          <Ionicons name="camera" size={32} color="white" />
-        </TouchableOpacity>
+        {loading ? (
+          <View style={styles.loading}>
+            <ActivityIndicator size="large" color="#4caf50" />
+            <Text style={styles.loadingText}>{loadingMessage}</Text>
+          </View>
+        ) : (
+          <TouchableOpacity style={styles.circleButton} onPress={takePicture}>
+            <Ionicons name="camera" size={32} color="white" />
+          </TouchableOpacity>
+        )}
       </View>
+      <CustomModal
+        visible={modalVisible}
+        message={modalMessage}
+        type={modalType}
+        onClose={handleCloseModal}
+      />
     </View>
   );
 }
@@ -62,25 +150,16 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   cameraContainer: {
-    width: '80%',
-    height: '70%',
+    width: "80%",
+    height: "70%",
     borderRadius: 20,
-    overflow: 'hidden',
-    position: 'relative',
+    overflow: "hidden",
+    position: "relative",
   },
   camera: {
-    width: '100%',
-    height: '100%',
+    width: "100%",
+    height: "100%",
     backgroundColor: "black",
-  },
-  overlayImage: {
-    position: 'absolute',
-    top: '30%',
-    left: '30%', 
-    width: '40%',
-    height: '40%',
-    resizeMode: 'contain',
-    opacity: 0.5, 
   },
   nonCameraContainer: {
     width: "80%",
@@ -94,5 +173,16 @@ const styles = StyleSheet.create({
     backgroundColor: "#4caf50",
     justifyContent: "center",
     alignItems: "center",
+  },
+  loading: {
+    height: 70,
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: 16,
+  },
+  loadingText: {
+    marginTop: 10,
+    textAlign: "center",
+    color: "#4caf50",
   },
 });

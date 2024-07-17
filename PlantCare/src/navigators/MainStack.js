@@ -5,6 +5,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Ionicons } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
+import { MaterialIcons } from '@expo/vector-icons';
 
 import MyPlantScreen from "../screens/MyPlantScreen";
 import PlantInfoScreen from "../screens/PlantInfoScreen";
@@ -28,6 +29,8 @@ import NotificationSetting from "../screens/NotificationSetting";
 import FaqScreen from "../screens/FaqScreen";
 import OptionBuy from "../screens/OptionBuy";
 import AccountInformation from "../screens/AccountInformation";
+import OrderHistoryScreen from "../screens/OrderHistoryScreen";
+import TutorialScreen from "../screens/TutorialScreen";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -82,10 +85,10 @@ function TabNavigator() {
         options={({ navigation }) => ({
           headerRight: () => (
             <TouchableOpacity
-              onPress={() => navigation.navigate("OptionScreen")}
+              onPress={() => navigation.navigate("Order History")}
               style={{ marginRight: 16 }}
             >
-              <Ionicons name="document-text" size={30} color="black" />
+              <MaterialIcons name="history" size={24} color="black" />
             </TouchableOpacity>
           ),
         })}
@@ -189,6 +192,11 @@ export default function MainStack() {
               options={{ headerShown: false }}
             />
             <Stack.Screen
+              name="TutorialScreen"
+              component={TutorialScreen}
+              options={{ headerShown: true }}
+            />
+            <Stack.Screen
               name="AddPlantScreen"
               component={AddPlantScreen}
               options={{ headerShown: false }}
@@ -207,6 +215,11 @@ export default function MainStack() {
               name="ShopInfoScreen"
               component={ShopInfoScreen}
               options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="Order History"
+              component={OrderHistoryScreen}
+              options={{ headerShown: true }}
             />
             <Stack.Screen
               name="notification"

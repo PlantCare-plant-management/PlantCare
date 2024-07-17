@@ -22,28 +22,29 @@ const addToMyPlant = async (plant) => {
 const getMyPlants = async (id) => {
   const db = getDB();
   const collection = db.collection("myPlants");
-  return await collection
-    .aggregate([
-      {
-        $match: {
-          userId: id,
-        },
-      },
-      {
-        $lookup: {
+  return await collection.aggregate([
+    {
+      $match:
+        {
+          userId: id
+        }
+    },
+    {
+      $lookup:
+        {
           from: "plants",
           localField: "plantId",
           foreignField: "_id",
-          as: "plants",
-        },
-      },
-      {
-        $unwind: {
-          path: "$plants",
-        },
-      },
-    ])
-    .toArray();
+          as: "plants"
+        }
+    },
+    {
+      $unwind:
+        {
+          path: "$plants"
+        }
+    }
+  ]).toArray()
 };
 
 const getMyPlantById = async (id, myPlantId) => {
@@ -74,10 +75,25 @@ const getMyPlantById = async (id, myPlantId) => {
     .toArray();
 };
 
+const updateMyPlant = async(plantId, action) => {
+  const db = getDB()
+  const collection = db.collection("myPlants")
+  const result = await collection.updateOne({_id: new ObjectId(plantId)},
+    {
+      $set: {actions: action}
+    }
+  )
+  if (result.matchedCount === 0) {
+    console.log("No document found with the provided plantId");
+  }
+  return result.modifiedCount
+}
+
 module.exports = {
   getPlants,
   getPlantById,
   addToMyPlant,
   getMyPlants,
   getMyPlantById,
+  updateMyPlant,
 };

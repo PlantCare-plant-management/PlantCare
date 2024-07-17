@@ -5,6 +5,7 @@ import {
   TextInput,
   TouchableOpacity,
   StyleSheet,
+  Image,
   ActivityIndicator,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
@@ -60,6 +61,12 @@ export default function LoginScreen() {
 
   return (
     <View style={styles.container}>
+      <Image
+        source={{
+          uri: "https://res.cloudinary.com/dszhu92hc/image/upload/v1721199974/aset10-01_ftxknv.png",
+        }}
+        style={styles.image}
+      />
       <Text style={styles.title}>Login</Text>
       <TextInput
         style={styles.input}
@@ -150,5 +157,11 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#4caf50",
     textAlign: "center",
+  },
+  image: {
+    width: "100%",
+    height: "50%",
+    borderRadius: 75,
+    marginBottom: 20,
   },
 });

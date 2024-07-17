@@ -16,16 +16,21 @@ import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { authContext } from "../contexts/authContext";
 import * as SecureStore from "expo-secure-store";
 
-const { width } = Dimensions.get("window");
+const defaultUserData = {
+  name: "user",
+  email: "user@mail.com",
+  imgUrl:
+    "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
+};
 
 const ProfileScreen = () => {
   const navigation = useNavigation();
   const { logout } = useContext(authContext);
   const [notificationsEnabled, setNotificationsEnabled] = useState(false);
   const [userData, setUserData] = useState(null);
-  const [profileImage, setProfileImage] = useState(
-    "https://your-default-image-url.com/default-profile.png"
-  );
+  const [profileImage, setProfileImage] = useState(defaultUserData.imgUrl);
+  const [isFetch, setisFetch] = useState(true);
+  // console.log(isFetch, "<=== fetch?");
 
   const fetchUserData = async () => {
     try {
@@ -46,16 +51,17 @@ const ProfileScreen = () => {
         if (response.ok) {
           const data = await response.json();
           setUserData(data);
-          setProfileImage(
-            data.imgUrl ||
-              "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
-          );
+          setProfileImage(data.imgUrl || defaultUserData.imgUrl);
+          setisFetch(false);
         } else {
           console.error("Failed to fetch user data");
+          setUserData(defaultUserData);
+          setisFetch(true);
         }
       }
     } catch (error) {
       console.error("Error fetching user data", error);
+      setUserData(defaultUserData);
     }
   };
 
@@ -82,41 +88,18 @@ const ProfileScreen = () => {
     <ScrollView contentContainerStyle={styles.container}>
       <SafeAreaView>
         <View style={styles.header}>
-          <View style={styles.coverContainer}>
-            <Image
-              source={{
-                uri: "https://static.vecteezy.com/system/resources/thumbnails/006/224/670/small/go-green-concept-banner-with-lush-green-foliage-illustration-vector.jpg",
-              }}
-              style={styles.coverImage}
-            />
-            <Image
-              source={{
-                uri: profileImage,
-              }}
-              style={styles.imageProfile}
-              onError={() =>
-                setProfileImage(
-                  "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
-                )
-              }
-            />
-          </View>
+          <Image
+            source={{
+              uri: profileImage,
+            }}
+            style={styles.imageProfile}
+            onError={() => setProfileImage(defaultUserData.imgUrl)}
+          />
           <Text style={styles.profileName}>{userData.name}</Text>
           <Text style={styles.profileSubText}>{userData.email}</Text>
         </View>
 
         <View style={styles.WrapMenu}>
-          <View style={styles.userInfo}>
-            <View style={styles.userItem}>
-              <Text style={styles.itemLabel}>Level</Text>
-              <Text style={styles.itemValue}>Beginner</Text>
-            </View>
-
-            <View style={styles.userItem}>
-              <Text style={styles.itemLabel}>Plant</Text>
-              <Text style={styles.itemValue}>10</Text>
-            </View>
-          </View>
           <TouchableOpacity
             onPress={() => navigation.navigate("AccountInformation")}
           >
@@ -132,11 +115,23 @@ const ProfileScreen = () => {
               <Ionicons name="chevron-forward-outline" size={20} color="#333" />
             </View>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => navigation.navigate("EditProfile")}>
+          <TouchableOpacity
+            onPress={() => navigation.navigate("EditProfile")}
+            disabled={isFetch}
+          >
             <View style={styles.menuItem}>
               <View style={styles.wrapText}>
                 <Ionicons name="create-outline" size={20} color="#333" />
-                <Text style={styles.menuItemText}>Edit Profile</Text>
+                <Text
+                  style={[
+                    styles.menuItemText,
+                    {
+                      textDecorationLine: setisFetch ? "none" : "line-through",
+                    },
+                  ]}
+                >
+                  Edit Profile
+                </Text>
               </View>
               <Ionicons name="chevron-forward-outline" size={20} color="#333" />
             </View>
@@ -208,17 +203,6 @@ const styles = StyleSheet.create({
     marginVertical: 20,
     marginTop: 10,
   },
-  coverContainer: {
-    alignItems: "center",
-    position: "relative",
-  },
-  coverImage: {
-    width: width,
-    height: 150,
-    position: "absolute",
-    top: 0,
-    zIndex: -1,
-  },
   imageProfile: {
     width: 100,
     height: 100,
@@ -234,25 +218,6 @@ const styles = StyleSheet.create({
   profileSubText: {
     fontSize: 14,
     color: "#666",
-  },
-  userInfo: {
-    flexDirection: "row",
-  },
-  userItem: {
-    marginBottom: 10,
-    borderRadius: 10,
-    width: "45%",
-    margin: "auto",
-    backgroundColor: "white",
-    padding: 20,
-    shadowColor: "#171717",
-    shadowOffset: { width: -1, height: 4 },
-    shadowOpacity: 0.2,
-    shadowRadius: 3,
-  },
-  itemLabel: {
-    fontSize: 20,
-    fontWeight: "bold",
   },
   WrapMenu: {
     flex: 1,

@@ -72,7 +72,6 @@ const MyPlantScreen = () => {
         return 'circle';
     }
   };
-
   return (
     <View style={styles.container}>
       <Text style={styles.date}>Wednesday, 10 July 2024</Text>
@@ -110,33 +109,37 @@ const MyPlantScreen = () => {
         keyExtractor={(item) => item._id}
         renderItem={({ item }) => (
           <TouchableOpacity
-          style={styles.plantItem}
-          onPress={() =>
-            navigation.navigate("PlantInfo", { myPlantId: item._id })
-          }
+            style={styles.plantItem}
+            onPress={() =>
+              navigation.navigate("PlantInfo", { plant : item })
+            }
           >
             <View style={styles.plantInfo}>
               <Text style={styles.plantName}>{item.name}</Text>
               <Text style={styles.plantDate}>Date planted: {item.date}</Text>
               <View style={styles.actionsContainer}>
-                {item.actions
-                  .filter(action => action.show)
-                  .map(action => (
-                    <View
-                      key={action.id}
-                      style={[
-                        styles.action,
-                        action.status ? styles.actionDone : styles.actionPending,
-                      ]}
-                    >
-                      <Icon name={getActionIcon(action.name)} size={20} color="#000" />
-                      <Text style={styles.actionText}></Text>
-                    </View>
-                  ))}
+                {item.actions && item.actions.length > 0 ? (
+                  item.actions
+                    .filter(action => action.show)
+                    .map(action => (
+                      <View
+                        key={action.id}
+                        style={[
+                          styles.action,
+                          action.status ? styles.actionDone : styles.actionPending,
+                        ]}
+                      >
+                        <Icon name={getActionIcon(action.name)} size={20} color="#000" />
+                        <Text style={styles.actionText}></Text>
+                      </View>
+                    ))
+                ) : (
+                  <Text style={styles.noActionsText}>No actions available</Text>
+                )}
               </View>
             </View>
             <View style={styles.plantPhotoContainer}>
-              <Text style={styles.plantPhotoText}>Foto Tanaman</Text>
+              <Text style={styles.plantPhotoText}>{item.imgUrl}</Text>
             </View>
           </TouchableOpacity>
         )}
@@ -213,6 +216,10 @@ const styles = StyleSheet.create({
   actionText: {
     marginLeft: 4,
     fontSize: 14,
+  },
+  noActionsText: {
+    fontSize: 14,
+    color: "#666",
   },
   plantPhotoContainer: {
     width: 80,

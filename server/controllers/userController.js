@@ -57,7 +57,6 @@ class UserController {
   static async editUser(req, res, next) {
     try {
       const userId = new ObjectId(req.user.id);
-      console.log(userId, "<=== userID");
       const body = req.body;
 
       const imgFile = req.file;
@@ -72,23 +71,18 @@ class UserController {
       const snapshot = await uploadBytes(imageRef, imgFile.buffer);
 
       const imgUrl = await getDownloadURL(snapshot.ref);
-      console.log(imgUrl, "<==== imgUrl dicontoler");
       const rawData = {
         name: body.name,
-        email: body.email,
-        password: hashPass(body.password),
+        username: body.username,
         address: body.address,
-        dateOfBirth: body.dateOfBirth,
         imgUrl: imgUrl,
       };
 
-      console.log(rawData, "<=== raw data");
 
       const updatedUser = await editUser(userId, rawData);
 
       res.status(200).json(updatedUser);
     } catch (error) {
-      console.log("error di edit:", error);
       next(error);
     }
   }

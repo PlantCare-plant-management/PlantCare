@@ -42,7 +42,6 @@ class LocationController {
 
       res.status(200).json(updatedLocation);
     } catch (error) {
-      console.log(error, " ini error");
       next(error);
     }
   }

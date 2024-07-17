@@ -42,10 +42,17 @@ class PlantController {
       };
 
       const result = await addToMyPlant(addMyPlant);
-      console.log(result, "ini result addToMyPlant");
       res.status(201).json(result);
     } catch (error) {
       next(error);
+    }
+  }
+  static async seed(req, res, next) {
+    try {
+      const data = req.body
+      const add = await seed(data)
+    } catch (error) {
+      next(error)
     }
   }
 }

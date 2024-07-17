@@ -1,69 +1,126 @@
 import {
-  Button,
   Dimensions,
   Image,
-  Platform,
   Text,
   TextInput,
-  Pressable,
   TouchableOpacity,
   View,
+  ScrollView,
+  StyleSheet,
+  ActivityIndicator,
 } from "react-native";
-import { ScrollView, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Ionicons from "react-native-vector-icons/Ionicons";
+import * as ImagePicker from "expo-image-picker";
+import * as SecureStore from "expo-secure-store";
+import { useNavigation } from "@react-navigation/native";
+import { fetchUserData } from "../function/fetchUserData";
+import CustomModal from "../components/CustomModal";
 
-// date time picker
-import DateTimePicker from "@react-native-community/datetimepicker";
-
-// mengambil lebar layar
 const { width } = Dimensions.get("window");
 
 export default function EditProfileScreen() {
+  const navigation = useNavigation();
   const inputAccessoryViewID = "uniqueID";
-  const initialText = "";
-  const [text, setText] = useState(initialText);
+  const [name, setName] = useState("");
+  const [username, setUsername] = useState("");
+  const [address, setAddress] = useState("");
+  const [image, setImage] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
+  const [modalType, setModalType] = useState("");
 
-  // *  set tanggal
-  const [dateOfBirth, setDateOfBirth] = useState("");
-  const [date, setDate] = useState(new Date());
-  const [showPicker, setShowPicer] = useState(false);
+  const [userData, setUserData] = useState(null);
 
-  const toggleDatePicker = () => {
-    setShowPicer(!showPicker);
-  };
-
-  //   format date
-  const formatDate = (rawDate) => {
-    let date = new Date(rawDate);
-
-    let year = date.getFullYear();
-    let month = date.getMonth() + 1;
-    let day = date.getDate();
-
-    month = month < 10 ? `0${month}` : month;
-
-    return `${day} - ${month} -  ${year}`;
-  };
-
-  //   confirm ios platform
-  const confirmIosDate = () => {
-    setDateOfBirth(formatDate(date));
-    toggleDatePicker();
-  };
-
-  const onChange = ({ type }, selectDate) => {
-    if (type == "set") {
-      const currendDate = selectDate;
-      setDate(currendDate);
-      if (Platform.OS === "android") {
-        toggleDatePicker();
-        setDateOfBirth(formatDate(currendDate));
+  const fetchUser = async () => {
+    try {
+      const result = await fetchUserData();
+      if (result) {
+        setUserData(result);
+        setName(result.name);
+        setUsername(result.username);
+        setAddress(result.address);
+        setImage(result.imgUrl);
       }
-    } else {
-      toggleDatePicker();
+    } catch (error) {
+      console.log("Error fetching user data:", error);
     }
+  };
+
+  useEffect(() => {
+    fetchUser();
+  }, []);
+
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      setImage(result.assets[0].uri);
+    }
+  };
+
+  const handleSubmit = async () => {
+    setIsLoading(true);
+    try {
+      const formData = new FormData();
+      formData.append("name", name);
+      formData.append("username", username);
+      formData.append("address", address);
+
+      if (image) {
+        const response = await fetch(image);
+        const blob = await response.blob();
+        formData.append("imgUrl", {
+          uri: image,
+          type: blob.type,
+          name: "profile.jpg",
+        });
+      }
+
+      const token = await SecureStore.getItemAsync("access_token");
+
+      const response = await fetch(
+        process.env.EXPO_PUBLIC_API_URL + `/user/edit`,
+        {
+          method: "PUT",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          body: formData,
+        }
+      );
+
+      const text = await response.text();
+
+      if (response.ok) {
+        const result = JSON.parse(text);
+        console.log(result);
+        navigation.goBack();
+      } else {
+        const data = await response.json();
+        setModalType("error");
+        setModalMessage(data.message);
+        setModalVisible(true);
+      }
+    } catch (error) {
+      console.error("Error submitting form:", error);
+      setModalType("error");
+      setModalMessage(error.message);
+      setModalVisible(true);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleCloseModal = () => {
+    setModalVisible(false);
   };
 
   return (
@@ -73,163 +130,96 @@ export default function EditProfileScreen() {
           <Image
             style={styles.imageProfile}
             source={{
-              uri: "https://cdn.idntimes.com/content-images/post/20240226/remu19971203-423414763-1419413852325257-8160633298947598858-n-a83f7868577039e47e2344a96107eea1.jpg",
+              uri:
+                image ||
+                "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
             }}
           />
-          <TouchableOpacity>
-            <Text style={{ fontSize: 20 }}>Change Photo</Text>
+          <TouchableOpacity
+            onPress={pickImage}
+            style={styles.changePhotoButton}
+          >
+            <Ionicons
+              name="create-outline"
+              size={20}
+              color="#4caf50"
+              style={styles.iconChangePhoto}
+            />
+            <Text style={styles.changePhotoText}>Change Photo</Text>
           </TouchableOpacity>
         </View>
 
-        {/* input */}
-        <ScrollView keyboardDismissMode="interactive">
+        <View style={styles.form}>
           <View style={styles.wrapInput}>
             <Ionicons
-              style={styles.searchIcon}
               name="person-outline"
               size={20}
-              color="#333"
+              color="#4caf50"
+              style={styles.icon}
             />
             <TextInput
               style={styles.input}
               inputAccessoryViewID={inputAccessoryViewID}
-              onChangeText={setText}
-              value={text}
-              placeholder={"Name"}
+              onChangeText={setName}
+              value={name}
+              placeholder="Name"
+              placeholderTextColor="#888"
             />
           </View>
 
-          {/* Email */}
           <View style={styles.wrapInput}>
             <Ionicons
-              style={styles.searchIcon}
-              name="mail-outline"
+              name="person-outline"
               size={20}
-              color="#333"
+              color="#4caf50"
+              style={styles.icon}
             />
             <TextInput
               style={styles.input}
               inputAccessoryViewID={inputAccessoryViewID}
-              onChangeText={setText}
-              value={text}
-              placeholder={"Email"}
+              onChangeText={setUsername}
+              value={username}
+              placeholder="Username"
+              placeholderTextColor="#888"
             />
           </View>
 
-          {/* Password */}
           <View style={styles.wrapInput}>
             <Ionicons
-              style={styles.searchIcon}
-              name="lock-closed-outline"
-              size={20}
-              color="#333"
-            />
-            <TextInput
-              style={styles.input}
-              inputAccessoryViewID={inputAccessoryViewID}
-              onChangeText={setText}
-              secureTextEntry={true}
-              value={text}
-              placeholder={"Password"}
-            />
-          </View>
-
-          {/* Address */}
-          <View style={styles.wrapInput}>
-            <Ionicons
-              style={styles.searchIcon}
               name="home-outline"
               size={20}
-              color="#333"
+              color="#4caf50"
+              style={styles.icon}
             />
             <TextInput
               style={styles.input}
               inputAccessoryViewID={inputAccessoryViewID}
-              onChangeText={setText}
-              value={text}
-              placeholder={"Address"}
+              onChangeText={setAddress}
+              value={address}
+              placeholder="Address"
+              placeholderTextColor="#888"
             />
           </View>
 
-          {/* Date/tanggal */}
-          <View style={styles.wrapInputDate}>
-            <View
-              style={{
-                flexDirection: "row",
-                justifyContent: "space-between",
-                alignItems: "flex-start",
-              }}
-            >
-              <Ionicons
-                style={[styles.searchIcon]}
-                name="calendar-number-outline"
-                size={25}
-                color="#333"
-              />
-              {!showPicker && (
-                <Pressable onPress={toggleDatePicker}>
-                  <TextInput
-                    style={[styles.input, styles.dateInput]}
-                    inputAccessoryViewID={inputAccessoryViewID}
-                    onChangeText={setDateOfBirth}
-                    value={dateOfBirth}
-                    placeholder={"Select your date of birth"}
-                    editable={false}
-                    onPressIn={toggleDatePicker}
-                  />
-                </Pressable>
-              )}
-            </View>
-
-            {showPicker && (
-              <DateTimePicker
-                mode="date"
-                display="spinner"
-                value={date}
-                onChange={onChange}
-                maximumDate={new Date("2006-1-1")}
-                minimumDate={new Date()}
-              />
-            )}
-
-            {showPicker && Platform.OS === "ios" && (
-              <View
-                style={{
-                  flexDirection: "row",
-                  justifyContent: "space-around",
-                  gap: 20,
-                }}
-              >
-                {/* cancel input */}
-                <TouchableOpacity
-                  style={[styles.button]}
-                  onPress={toggleDatePicker}
-                >
-                  <Text style={styles.buttonText}>Cancel</Text>
-                </TouchableOpacity>
-
-                {/* confirm */}
-
-                <TouchableOpacity
-                  style={[styles.button, { backgroundColor: "green" }]}
-                  onPress={confirmIosDate}
-                >
-                  <Text style={styles.buttonText}>Confirm</Text>
-                </TouchableOpacity>
-              </View>
-            )}
-          </View>
-          <TouchableOpacity
-            style={styles.buttonSubmit}
-            onPress={() => {
-              console.log("hello world");
-            }}
-          >
-            <Text style={{ color: "#494a49", fontWeight: "bold" }}>Submit</Text>
-          </TouchableOpacity>
-        </ScrollView>
+          {isLoading ? (
+            <ActivityIndicator
+              style={styles.loading}
+              size="large"
+              color="#4caf50"
+            />
+          ) : (
+            <TouchableOpacity style={styles.button} onPress={handleSubmit}>
+              <Text style={styles.buttonText}>Submit</Text>
+            </TouchableOpacity>
+          )}
+        </View>
+        <CustomModal
+        visible={modalVisible}
+        message={modalMessage}
+        type={modalType}
+        onClose={handleCloseModal}
+      />
       </SafeAreaView>
-      {/* end input */}
     </ScrollView>
   );
 }
@@ -237,98 +227,84 @@ export default function EditProfileScreen() {
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
-    // backgroundColor: "green",
+    paddingHorizontal: 16,
+    backgroundColor: "#f9f9f9",
+    justifyContent: "center",
     alignItems: "center",
-    paddingHorizontal: 10,
   },
   wrapPhoto: {
     alignItems: "center",
-    marginTop: -10,
+    marginVertical: 20,
   },
   imageProfile: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
+    width: 120,
+    height: 120,
+    borderRadius: 60,
     marginBottom: 10,
+    borderWidth: 2,
+    borderColor: "#4caf50",
+  },
+  changePhotoButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginTop: 10,
+  },
+  changePhotoText: {
+    fontSize: 18,
+    color: "#4caf50",
+    paddingLeft: 5,
+  },
+  iconChangePhoto: {
+    paddingRight: 5,
+  },
+  form: {
+    flex: 1,
+    width: "100%",
+    alignItems: "center",
   },
   wrapInput: {
-    flex: 1,
-    width: width - 20,
     flexDirection: "row",
-    justifyContent: "center",
-    marginTop: 20,
     alignItems: "center",
+    width: "100%",
     backgroundColor: "#fff",
     borderRadius: 10,
-    paddingHorizontal: 10,
-    paddingVertical: 5,
-    shadowColor: "#ccc",
-    shadowOffset: {
-      width: 0,
-      height: 0,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-  },
-  wrapInputDate: {
-    flex: 1,
-    width: width - 20,
-    justifyContent: "center",
-    marginTop: 20,
-    alignItems: "center",
-    backgroundColor: "#fff",
-    borderRadius: 10,
-    paddingHorizontal: 10,
-    paddingVertical: 5,
-    shadowColor: "#ddd",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
+    marginVertical: 10,
+    paddingHorizontal: 15,
+    paddingVertical: 10,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 5,
     elevation: 5,
   },
   input: {
     flex: 1,
-    paddingTop: 10,
-    paddingRight: 10,
-    paddingBottom: 10,
-    paddingLeft: 10,
-    backgroundColor: "#fff",
-    color: "#424242",
-    borderRadius: 10,
-  },
-  dateInput: {
-    color: "#000",
-    fontSize: 16,
-    fontWeight: "bold",
-    textAlign: "center",
-  },
-  buttonSubmit: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-    borderRadius: 10,
-    width: "100%",
     height: 40,
-    marginTop: 15,
-    backgroundColor: "#42f548",
+    paddingHorizontal: 10,
+    color: "#333",
+  },
+  icon: {
+    paddingRight: 10,
   },
   button: {
-    width: 100,
-    justifyContent: "center",
+    backgroundColor: "#4caf50",
+    borderRadius: 10,
+    width: width - 32,
+    paddingVertical: 12,
     alignItems: "center",
-    marginBottom: 10,
-    height: 30,
-    borderRadius: 7,
-    backgroundColor: "red",
+    marginTop: 20,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 5,
+    elevation: 5,
   },
   buttonText: {
     color: "#fff",
+    fontSize: 16,
+    fontWeight: "bold",
   },
-  searchIcon: {
-    padding: 10,
+  loading: {
+    marginTop: 20,
   },
 });
