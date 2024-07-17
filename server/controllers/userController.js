@@ -13,6 +13,7 @@ const {
   getUsers,
   getUserById,
   createUser,
+  saveAddress,
   getUserByUsername,
   getUserByEmail,
   editUser,
@@ -58,7 +59,6 @@ class UserController {
     try {
       const userId = new ObjectId(req.user.id);
       const body = req.body;
-
       const imgFile = req.file;
 
       if (!imgFile) {
@@ -66,10 +66,8 @@ class UserController {
       }
 
       const filename = `${userId} - ${uuidv4()}`;
-
       const imageRef = ref(storage, filename);
       const snapshot = await uploadBytes(imageRef, imgFile.buffer);
-
       const imgUrl = await getDownloadURL(snapshot.ref);
       const rawData = {
         name: body.name,

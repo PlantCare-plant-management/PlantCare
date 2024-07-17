@@ -22,7 +22,10 @@ import ShopScreen from "../screens/ShopScreen";
 import OptionScreen from "../screens/OptionScreen";
 import CameraScreen from "../screens/CameraScreen";
 import ShopInfoScreen from "../screens/ShopInfoScreen";
-import ShippingAddressScreen from "../screens/ShippingAddress";
+import ShippingAddressScreen from "../screens/ShippingAddressScreen";
+import PaymentScreen from "../screens/PaymentScreen";
+import PaymentSuccessScreen from "../screens/PaymentSuccessScreen";
+import PaymentFailedScreen from "../screens/PaymentFailedScreen";
 import ProfileScreen from "../screens/ProfileScreen";
 import EditProfileScreen from "../screens/EditProfileScreen";
 import NotificationSetting from "../screens/NotificationSetting";
@@ -209,6 +212,21 @@ export default function MainStack() {
             <Stack.Screen
               name="ShippingAddress"
               component={ShippingAddressScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="PaymentScreen"
+              component={PaymentScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="PaymentSuccess"
+              component={PaymentSuccessScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="PaymentFailed"
+              component={PaymentFailedScreen}
               options={{ headerShown: false }}
             />
             <Stack.Screen

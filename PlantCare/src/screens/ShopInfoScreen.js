@@ -1,28 +1,45 @@
 // ShopInfoScreen.js
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, Image, TouchableOpacity, SafeAreaView } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
-
-const starterPackDescriptions = {
-  '1': 'Starter Pack 1 includes:\n- Pot\n- Soil\n- Seeds\n- Watering Can\n- Gardening Tools',
-  '2': 'Starter Pack 2 includes:\n- Pot\n- Soil\n- Seeds\n- Fertilizer\n- Gardening Tools',
-  '3': 'Starter Pack 3 includes:\n- Pot\n- Soil\n- Seeds\n- Gloves\n- Gardening Tools',
-  '4': 'Starter Pack 4 includes:\n- Pot\n- Soil\n- Seeds\n- Spray Bottle\n- Gardening Tools',
-  '5': 'Starter Pack 5 includes:\n- Pot\n- Soil\n- Seeds\n- Plant Markers\n- Gardening Tools',
-  '6': 'Starter Pack 6 includes:\n- Pot\n- Soil\n- Seeds\n- Mini Greenhouse\n- Gardening Tools',
-  '7': 'Starter Pack 7 includes:\n- Pot\n- Soil\n- Seeds\n- Plant Food\n- Gardening Tools',
-  '8': 'Starter Pack 8 includes:\n- Pot\n- Soil\n- Seeds\n- Pest Control Spray\n- Gardening Tools',
-  '9': 'Starter Pack 9 includes:\n- Pot\n- Soil\n- Seeds\n- Mulch\n- Gardening Tools',
-  '10': 'Starter Pack 10 includes:\n- Pot\n- Soil\n- Seeds\n- Pruning Shears\n- Gardening Tools',
-  '11': 'Starter Pack 11 includes:\n- Pot\n- Soil\n- Seeds\n- Plant Stand\n- Gardening Tools',
-  '12': 'Starter Pack 12 includes:\n- Pot\n- Soil\n- Seeds\n- Gardening Book\n- Gardening Tools',
-};
+import * as SecureStore from 'expo-secure-store';
+import { FormatRupiah } from '../helper/FormatRupiah';
 
 const ShopInfoScreen = () => {
   const [quantity, setQuantity] = useState(1);
+  const [plant, setPlant] = useState(null);
+  const [loading, setLoading] = useState(true);
   const navigation = useNavigation();
   const route = useRoute();
   const { product } = route.params;
+  const URL = process.env.EXPO_PUBLIC_API_URL;
+
+  const fetchPlant = async () => {
+    try {
+      const token = await SecureStore.getItemAsync('access_token');
+      const response = await fetch(`${URL}/plantMarket/${product._id}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+      });
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      const result = await response.json();
+      setPlant(result);
+    } catch (error) {
+      console.error('Error fetching plant:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchPlant();
+  }, []);
 
   const increaseQuantity = () => {
     setQuantity(quantity + 1);
@@ -34,10 +51,18 @@ const ShopInfoScreen = () => {
     }
   };
 
+  if (loading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <Text>Loading...</Text>
+      </View>
+    );
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-        <Text style={styles.backButtonText}>{"<"}</Text>
+        <Text style={styles.backButtonText}>{'<'}</Text>
       </TouchableOpacity>
       <Text style={styles.detailText}>Detail Item</Text>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
@@ -54,16 +79,16 @@ const ShopInfoScreen = () => {
           </TouchableOpacity>
         </View>
         <View style={styles.descriptionContainer}>
-          <Text style={styles.priceText}>Rp{product.price}</Text>
+          <Text style={styles.priceText}>{FormatRupiah(product.price * quantity)}</Text>
           <Text style={styles.descriptionTitle}>{product.name}</Text>
-          <Text style={styles.descriptionText}>{starterPackDescriptions[product.id]}</Text>
+          <Text style={styles.descriptionText}>{product.description}</Text>
         </View>
       </ScrollView>
-      <TouchableOpacity style={styles.buyButton} onPress={() => navigation.navigate('ShippingAddress')}>
+      <TouchableOpacity
+        style={styles.buyButton}
+        onPress={() => navigation.navigate('ShippingAddress', { product, quantity })} // Kirim product dan quantity
+      >
         <Text style={styles.buyButtonText}>Checkout</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-        <Text style={styles.backButtonText}>{"<"}</Text>
       </TouchableOpacity>
     </SafeAreaView>
   );
@@ -77,34 +102,34 @@ const styles = StyleSheet.create({
   },
   backButton: {
     position: 'absolute',
-    top: 50, // Menggeser tombol back ke bawah agar lebih proporsional
+    top: 50,
     left: 16,
     zIndex: 1,
-    padding: 10, // Menambahkan padding
-    borderRadius: 10, // Menambahkan border radius
+    padding: 10,
+    borderRadius: 10,
   },
   backButtonText: {
     fontSize: 30,
     marginLeft: 10,
-    color: '#000000', // Mengubah warna teks menjadi putih
+    color: '#000000',
   },
   detailText: {
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 10,
-    marginTop: 40, // Menggeser posisi teks Detail Item
-    alignSelf: 'center', // Menempatkan di tengah bagian atas layar
+    marginTop: 40,
+    alignSelf: 'center',
   },
   scrollContainer: {
     flexGrow: 1,
-    justifyContent: 'flex-start', // Mengubah justifyContent menjadi flex-start
+    justifyContent: 'flex-start',
     alignItems: 'center',
     paddingVertical: 20,
     paddingHorizontal: 10,
   },
   imageContainer: {
-    width: '90%', // Memperbesar lebar gambar agar lebih proporsional
-    height: 400, // Memperbesar tinggi gambar agar lebih proporsional
+    width: '90%',
+    height: 400,
     backgroundColor: '#e0e0e0',
     justifyContent: 'center',
     alignItems: 'center',
@@ -155,8 +180,8 @@ const styles = StyleSheet.create({
   descriptionText: {
     fontSize: 20,
     color: '#555',
-    textAlign: 'center',
-    paddingVertical: 15,
+    textAlign: 'left',
+    paddingVertical: 10,
   },
   buyButton: {
     width: '75%',
@@ -165,32 +190,17 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 20,
     marginVertical: 30,
-    alignSelf: 'center', // Menempatkan tombol di tengah bawah layar
+    alignSelf: 'center',
   },
   buyButtonText: {
     fontSize: 20,
     color: '#fff',
     fontWeight: 'bold',
   },
-  navBar: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    height: 60,
-    flexDirection: 'row',
-    justifyContent: 'space-around',
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#f8f8f8',
-    borderTopWidth: 1,
-    borderTopColor: '#e0e0e0',
-  },
-  navButton: {
-    padding: 10,
-  },
-  navButtonText: {
-    fontSize: 14,
-    color: '#333',
   },
 });
 
