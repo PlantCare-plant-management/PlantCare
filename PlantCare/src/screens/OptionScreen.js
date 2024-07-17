@@ -1,6 +1,14 @@
 // OptionScreen.js
 import React from "react";
-import { View, Text, TouchableOpacity, StyleSheet, Image, SafeAreaView, StatusBar } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  Image,
+  SafeAreaView,
+  StatusBar,
+} from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 
@@ -11,19 +19,11 @@ const OptionScreen = () => {
     <SafeAreaView style={styles.safeArea}>
       {/* <StatusBar barStyle="dark-content" /> */}
       <View style={styles.container}>
-        <View style={styles.topBar}>
-          <TouchableOpacity
-            style={styles.backButton}
-            onPress={() => navigation.goBack()}
-          >
-            <Ionicons name="arrow-back" size={28} color="#2e7d32" />
-          </TouchableOpacity>
-          {/* <Text style={styles.topBarTitle}>Welcome</Text> */}
-        </View>
-
         <View style={styles.content}>
           <Image
-            source={{ uri: "https://res.cloudinary.com/dszhu92hc/image/upload/v1721199975/aset7-01_mop5ey.png" }}
+            source={{
+              uri: "https://res.cloudinary.com/dszhu92hc/image/upload/v1721199975/aset7-01_mop5ey.png",
+            }}
             style={styles.image}
           />
           <Text style={styles.header}>

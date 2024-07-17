@@ -5,7 +5,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Ionicons } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
-import { MaterialIcons } from '@expo/vector-icons';
+import { MaterialIcons } from "@expo/vector-icons";
 
 import MyPlantScreen from "../screens/MyPlantScreen";
 import PlantInfoScreen from "../screens/PlantInfoScreen";
@@ -164,12 +164,28 @@ export default function MainStack() {
             <Stack.Screen
               name="PlantInfo"
               component={PlantInfoScreen}
-              options={{ headerShown: true }}
+              options={({ navigation }) => ({
+                headerShown: true,
+                title: "Plant Info",
+                headerLeft: () => (
+                  <TouchableOpacity onPress={() => navigation.goBack()}>
+                    <Ionicons name="arrow-back" size={24} color="black" />
+                  </TouchableOpacity>
+                ),
+              })}
             />
             <Stack.Screen
               name="AddPlantForm"
               component={AddPlantFormScreen}
-              options={{ headerShown: true }}
+              options={({ navigation }) => ({
+                headerShown: true,
+                title: "Add Plant",
+                headerLeft: () => (
+                  <TouchableOpacity onPress={() => navigation.goBack()}>
+                    <Ionicons name="arrow-back" size={24} color="black" />
+                  </TouchableOpacity>
+                ),
+              })}
             />
             <Stack.Screen
               name="AddRoomPlant"
@@ -179,7 +195,17 @@ export default function MainStack() {
             <Stack.Screen
               name="OptionScreen"
               component={OptionScreen}
-              options={{ headerShown: false }}
+              options={({ navigation }) => ({
+                headerShown: true,
+                title: "",
+                headerLeft: () => (
+                  <View>
+                    <TouchableOpacity onPress={() => navigation.goBack()}>
+                      <Ionicons name="arrow-back" size={24} color="black" />
+                    </TouchableOpacity>
+                  </View>
+                ),
+              })}
             />
             <Stack.Screen
               name="OptionBuy"

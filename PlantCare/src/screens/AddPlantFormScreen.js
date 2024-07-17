@@ -8,6 +8,7 @@ import {
   TextInput,
   Modal,
   ActivityIndicator,
+  Alert,
 } from "react-native";
 import {
   useRoute,
@@ -24,16 +25,16 @@ const AddPlantFormScreen = () => {
   const navigation = useNavigation();
   const plant = route.params?.plant || {};
 
-  const [photo, setPhoto] = useState(plant.photo || "");
+  const [photo, setPhoto] = useState(plant.photo || plant.imgUrl);
   const [name, setName] = useState(plant.name || "");
   const [location, setLocation] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
   const [locations, setLocations] = useState([]);
   const [actions, setActions] = useState([]);
   const [loading, setLoading] = useState(true);
-  const URL = process.env.EXPO_PUBLIC_API_URL;
+  const [isAdding, setIsAdding] = useState(false);
 
-  // Hardcoded userId
+  const URL = process.env.EXPO_PUBLIC_API_URL;
 
   const fetchLocations = async () => {
     try {
@@ -84,44 +85,76 @@ const AddPlantFormScreen = () => {
     }, [])
   );
 
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      setPhoto(result.assets[0].uri);
+    }
+  };
+
   const handleAddPlant = async () => {
     const token = await SecureStore.getItemAsync("access_token");
-    const plantId = plant._id;
 
     if (!location) {
-      alert("Please select a location for the plant.");
+      Alert.alert("Error", "Please select a location for the plant.");
       return;
     }
 
-    setLoading(true);
+    setIsAdding(true);
     try {
+      const formData = new FormData();
+      formData.append("imgUrl", {
+        uri: photo,
+        name: "plant_photo.jpg",
+        type: "image/jpeg",
+      });
+      formData.append("name", name);
+      formData.append("location", location);
+      formData.append("plantId", plant._id);
+      formData.append("actions", JSON.stringify(actions));
+
       const response = await fetch(`${URL}/plants`, {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({
-          name,
-          location,
-          photo,
-          plantId,
-          actions,
-        }),
+        body: formData,
       });
 
-      const result = await response.json();
+      const responseBody = await response.text();
+      console.log("Response Status:", response.status);
+      console.log("Response Headers:", response.headers);
+      console.log("Response Body:", responseBody);
+
+      let result;
+      try {
+        result = JSON.parse(responseBody);
+      } catch (jsonError) {
+        console.error("Error parsing JSON response:", jsonError);
+        Alert.alert(
+          "Error",
+          "Unexpected response from server. Please try again."
+        );
+        return;
+      }
+
       if (response.ok) {
         navigation.navigate("MyPlant");
       } else {
-        console.error("Failed to add plant:", result);
-        // Handle error (show message to user, etc.)
+        console.error("Failed to add plant:", result.message);
+        Alert.alert("Error", result.message || "Failed to add plant.");
       }
     } catch (error) {
       console.error("Error adding plant:", error);
-      // Handle error (show message to user, etc.)
+      Alert.alert("Error", "Something went wrong. Please try again.");
     } finally {
-      setLoading(false);
+      setIsAdding(false);
     }
   };
 
@@ -135,24 +168,12 @@ const AddPlantFormScreen = () => {
     }
   };
 
-  const handlePhotoUpload = () => {
-    // Implement photo upload logic here
-    // For example, use ImagePicker to allow users to select a photo from their device
-    // After selecting the photo, set the photo URI to the `photo` state
-    // setPhoto(selectedPhotoUri);
-  };
   return (
     <View style={styles.container}>
-      <TouchableOpacity
-        style={styles.imageContainer}
-        onPress={handlePhotoUpload}
-      >
-        <Image
-          source={{ uri: photo || "https://via.placeholder.com/300" }}
-          style={styles.image}
-        />
+      <TouchableOpacity style={styles.imageContainer} onPress={pickImage}>
+        <Image source={{ uri: photo }} style={styles.image} />
         <View style={styles.uploadIconContainer}>
-          <Icon name="camera" size={24} color="#fff" />
+          <Icon name="image-outline" size={24} color="#fff" />
         </View>
       </TouchableOpacity>
 
@@ -170,7 +191,7 @@ const AddPlantFormScreen = () => {
           placeholder="Plant Name"
           value={name}
           onChangeText={setName}
-          editable={!name} // Allow editing only if name is empty
+          editable={!name}
         />
         <TouchableOpacity
           style={styles.input}
@@ -193,11 +214,7 @@ const AddPlantFormScreen = () => {
                 >
                   <Picker.Item label="Select Location" value="" />
                   {locations.map((loc, index) => (
-                    <Picker.Item
-                      key={index}
-                      label={loc}
-                      value={loc}
-                    />
+                    <Picker.Item key={index} label={loc} value={loc} />
                   ))}
                   <Picker.Item label="Add Room ..." value="addRoom" />
                 </Picker>
@@ -211,9 +228,25 @@ const AddPlantFormScreen = () => {
             </TouchableOpacity>
           </View>
         </Modal>
-        <TouchableOpacity style={styles.addButton} onPress={handleAddPlant}>
-          <Text style={styles.addButtonText}>Add Plant</Text>
-        </TouchableOpacity>
+        {isAdding ? (
+          <View
+            style={{
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+              gap: 10,
+            }}
+          >
+            <ActivityIndicator size="large" color="#4CAF50" />
+            <Text style={{ fontWeight: "bold", color: "green" }}>
+              Mohon tunggu sebentar....
+            </Text>
+          </View>
+        ) : (
+          <TouchableOpacity style={styles.addButton} onPress={handleAddPlant}>
+            <Text style={styles.addButtonText}>Add Plant</Text>
+          </TouchableOpacity>
+        )}
       </View>
     </View>
   );
@@ -290,7 +323,7 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
     borderRadius: 8,
     alignItems: "center",
-    marginTop: 24,
+    marginTop: 16,
   },
   addButtonText: {
     color: "#fff",
