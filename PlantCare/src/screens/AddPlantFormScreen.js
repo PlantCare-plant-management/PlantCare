@@ -16,7 +16,7 @@ import {
 } from "@react-navigation/native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { Picker } from "@react-native-picker/picker";
-import * as SecureStore from 'expo-secure-store';
+import * as SecureStore from "expo-secure-store";
 import * as ImagePicker from "expo-image-picker";
 
 const AddPlantFormScreen = () => {
@@ -29,28 +29,26 @@ const AddPlantFormScreen = () => {
   const [location, setLocation] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
   const [locations, setLocations] = useState([]);
-  const [actions, setActions] = useState([])
+  const [actions, setActions] = useState([]);
   const [loading, setLoading] = useState(true);
-  const URL = process.env.EXPO_PUBLIC_API_URL
+  const URL = process.env.EXPO_PUBLIC_API_URL;
 
   // Hardcoded userId
-  
 
   const fetchLocations = async () => {
     try {
-      const token = await SecureStore.getItemAsync('access_token'); 
+      const token = await SecureStore.getItemAsync("access_token");
       const response = await fetch(`${URL}/locations`, {
-        headers : {
-          Authorization : `Bearer ${token}`
-        }
-      }
-      );
-      const data = await response.json();
-      const list = ["Living Room", "Bedroom", "Kitchen", "Garden"]
-      data.forEach(element => {
-        list.push(element.name)
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       });
-      setLocations(list)
+      const data = await response.json();
+      const list = ["Living Room", "Bedroom", "Kitchen", "Garden"];
+      data.forEach((element) => {
+        list.push(element.name);
+      });
+      setLocations(list);
       setLoading(false);
     } catch (error) {
       console.error(error);
@@ -59,18 +57,24 @@ const AddPlantFormScreen = () => {
   };
 
   const addCare = () => {
-    const array = []
+    const array = [];
     plant.main_care.forEach((element, i) => {
-      element = {id : i+1, name : element.task, frequency: element.frequency, update: new Date(), status: false, show : true}
-      array.push(element)
-     });
-    setActions(array)
-  }
+      element = {
+        id: i + 1,
+        name: element.task,
+        frequency: element.frequency,
+        update: new Date(),
+        status: false,
+        show: true,
+      };
+      array.push(element);
+    });
+    setActions(array);
+  };
 
   useEffect(() => {
     fetchLocations();
-    addCare()
-    
+    addCare();
   }, []);
 
   useFocusEffect(
@@ -79,32 +83,30 @@ const AddPlantFormScreen = () => {
       addCare();
     }, [])
   );
-  
+
   const handleAddPlant = async () => {
-    const token = await SecureStore.getItemAsync('access_token');
-    const plantId = plant._id
-    
+    const token = await SecureStore.getItemAsync("access_token");
+    const plantId = plant._id;
+
     if (!location) {
       alert("Please select a location for the plant.");
       return;
     }
 
-
     setLoading(true);
     try {
-      
       const response = await fetch(`${URL}/plants`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
           name,
           location,
           photo,
           plantId,
-          actions
+          actions,
         }),
       });
 
@@ -190,9 +192,9 @@ const AddPlantFormScreen = () => {
                   style={styles.picker}
                 >
                   <Picker.Item label="Select Location" value="" />
-                  {locations.map((loc) => (
+                  {locations.map((loc, index) => (
                     <Picker.Item
-                      
+                      key={index}
                       label={loc}
                       value={loc}
                     />
@@ -252,8 +254,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     justifyContent: "center",
     textAlign: "center",
-    fontWeight: "bold", 
-    color: "#333", 
+    fontWeight: "bold",
+    color: "#333",
   },
   pickerContainer: {
     height: 200,

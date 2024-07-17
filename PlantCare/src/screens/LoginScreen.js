@@ -136,7 +136,7 @@ const styles = StyleSheet.create({
   },
   button: {
     height: 48,
-    backgroundColor: "#4caf50",
+    backgroundColor: "tomato",
     borderRadius: 8,
     justifyContent: "center",
     alignItems: "center",
@@ -155,7 +155,7 @@ const styles = StyleSheet.create({
   },
   registerText: {
     fontSize: 16,
-    color: "#4caf50",
+    color: "tomato",
     textAlign: "center",
   },
   image: {
