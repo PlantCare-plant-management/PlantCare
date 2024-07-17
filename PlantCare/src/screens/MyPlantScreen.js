@@ -1,3 +1,4 @@
+//
 import React, { useState, useEffect } from "react";
 import {
   View,
@@ -23,6 +24,7 @@ const MyPlantScreen = () => {
       const token = await SecureStore.getItemAsync("access_token");
       const response = await fetch(`${URL}/myplants`, {
         method: "GET",
+        cache: "no-cache",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
@@ -105,6 +107,21 @@ const MyPlantScreen = () => {
           <Text style={styles.filterText}>Kitchen</Text>
         </TouchableOpacity>
       </View>
+
+      {/* jika tidak ada plant */}
+      {filteredPlants.length === 0 && (
+        <View style={styles.emptyContainer}>
+          <Text style={styles.emptyText}>You don't have any plants yet.</Text>
+          <TouchableOpacity
+            style={styles.addButton}
+            onPress={() => navigation.navigate("OptionScreen")}
+          >
+            <Text style={styles.addButtonText}>Add Plant</Text>
+          </TouchableOpacity>
+        </View>
+      )}
+
+      {/* end jika tidak ada plant */}
       <FlatList
         data={filteredPlants}
         keyExtractor={(item) => item._id}
@@ -146,7 +163,7 @@ const MyPlantScreen = () => {
             <View style={styles.plantPhotoContainer}>
               <Image
                 source={{
-                  uri: item.plants.imgUrl || `https://via.placeholder.com/100`,
+                  uri: item.photo || `https://via.placeholder.com/100`,
                 }}
                 style={styles.plantImage}
               />
@@ -185,6 +202,16 @@ const styles = StyleSheet.create({
   filterText: {
     fontSize: 16,
     color: "#333",
+  },
+  emptyContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  emptyText: {
+    fontSize: 18,
+    marginBottom: 16,
+    color: "#666",
   },
   plantItem: {
     flexDirection: "row",
@@ -244,9 +271,6 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   addButton: {
-    position: "absolute",
-    bottom: 16,
-    right: 16,
     padding: 16,
     backgroundColor: "#4caf50",
     borderRadius: 50,
@@ -258,6 +282,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   plantImage: {
+    borderRadius: 10,
     flex: 2,
     height: "100%",
     width: "100%",
