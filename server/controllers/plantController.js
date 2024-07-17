@@ -4,6 +4,7 @@ const {
   getPlantById,
   addToMyPlant,
   getMyPlants,
+  seed,
 } = require("../models/plantModel");
 
 class PlantController {
@@ -39,6 +40,15 @@ class PlantController {
       res.status(201).json(result);
     } catch (error) {
       next(error);
+    }
+  }
+
+  static async seed(req, res, next) {
+    try {
+      const data = req.body
+      const add = await seed(data)
+    } catch (error) {
+      next(error)
     }
   }
 }

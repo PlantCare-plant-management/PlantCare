@@ -12,7 +12,7 @@ const PlantInfoScreen = () => {
   const toggleTask = async(taskId) =>{
     try {
       const updatedActions = actions.map((action) =>
-        action.id === taskId ? { ...action, status: !action.status, update:new Date().toLocaleString() } : action
+        action.id === taskId ? { ...action, status: !action.status, update:new Date() } : action
       );
       setActions(updatedActions);
 

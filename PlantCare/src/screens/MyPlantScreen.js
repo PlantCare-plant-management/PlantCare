@@ -72,7 +72,7 @@ const MyPlantScreen = () => {
         return 'circle';
     }
   };
-
+  console.log(plants)
   return (
     <View style={styles.container}>
       <Text style={styles.date}>Wednesday, 10 July 2024</Text>

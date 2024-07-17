@@ -63,7 +63,7 @@ const AddPlantScreen = () => {
     "Deadheading spent flowers": "flower-outline",
     "Staking tall plants": "tree-outline",
   };
-  
+  console.log(plants)
   return (
     <View style={styles.container}>
       {/* Header Section */}
@@ -104,7 +104,7 @@ const AddPlantScreen = () => {
                   {item.main_care.map((care, index) => (
                     <Icon
                       key={`${item._id}-${care}-${index}`}
-                      name={careIcons[care] || "leaf"}
+                      name={careIcons[care.task] || "leaf"}
                       size={24}
                       color="#8BC34A"
                       style={styles.careIcon}

@@ -4,7 +4,7 @@ const ObjectId = require("mongodb").ObjectId;
 
 const getPlants = async () => {
   const db = getDB();
-  return await db.collection("plants").find().toArray();
+  return await db.collection("testPlant").find().toArray();
 };
 
 const getPlantById = async (id) => {
@@ -80,4 +80,11 @@ const updateMyPlant = async(plantId, action) => {
   return result.modifiedCount
 }
 
-module.exports = { getPlants, getPlantById, addToMyPlant, getMyPlants, updateMyPlant };
+const seed = async(data) => {
+  const db = getDB()
+  const collection = db.collection("testPlant")
+  const result = await collection.insertMany(data)
+  return result
+}
+
+module.exports = { getPlants, getPlantById, addToMyPlant, getMyPlants, updateMyPlant, seed };
