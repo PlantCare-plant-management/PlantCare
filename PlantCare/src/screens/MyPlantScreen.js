@@ -11,6 +11,7 @@ import {
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import * as SecureStore from "expo-secure-store";
 import Icon from "react-native-vector-icons/FontAwesome";
+import { formatDate } from "../helper/FormatRupiah";
 
 const MyPlantScreen = () => {
   const navigation = useNavigation();
@@ -75,7 +76,7 @@ const MyPlantScreen = () => {
   };
   return (
     <View style={styles.container}>
-      <Text style={styles.date}>Wednesday, 10 July 2024</Text>
+      <Text style={styles.date}>{formatDate(new Date())}</Text>
       <View style={styles.filterContainer}>
         <TouchableOpacity
           style={[
@@ -115,7 +116,9 @@ const MyPlantScreen = () => {
           >
             <View style={styles.plantInfo}>
               <Text style={styles.plantName}>{item.name}</Text>
-              <Text style={styles.plantDate}>Date planted: {item.date}</Text>
+              <Text style={styles.plantDate}>
+                Date planted: {formatDate(item.createdAt)}
+              </Text>
               <View style={styles.actionsContainer}>
                 {item.actions && item.actions.length > 0 ? (
                   item.actions
@@ -133,9 +136,8 @@ const MyPlantScreen = () => {
                         <Icon
                           name={getActionIcon(action.name)}
                           size={20}
-                          color="#000"
+                          color="#fff"
                         />
-                        <Text style={styles.actionText}></Text>
                       </View>
                     ))
                 ) : (
@@ -190,7 +192,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    padding: 16,
+    paddingLeft: 16,
+    paddingRight: 16,
+    height: 130,
     marginBottom: 16,
     backgroundColor: "#f9f9f9",
     borderRadius: 8,
@@ -213,35 +217,30 @@ const styles = StyleSheet.create({
   action: {
     flexDirection: "row",
     alignItems: "center",
+    width: 37,
     padding: 8,
     marginRight: 4,
-    borderRadius: 4,
+    borderRadius: 8,
   },
   actionDone: {
-    backgroundColor: "#a0e0a0",
+    backgroundColor: "#e0e0e0",
+    alignItems: "center",
+    justifyContent: "center",
   },
   actionPending: {
-    backgroundColor: "#e0e0e0",
-  },
-  actionText: {
-    marginLeft: 4,
-    fontSize: 14,
+    backgroundColor: "tomato",
+    alignItems: "center",
+    justifyContent: "center",
   },
   noActionsText: {
     fontSize: 14,
     color: "#666",
   },
   plantPhotoContainer: {
-    width: 80,
-    height: 80,
-    backgroundColor: "#d0d0d0",
+    width: 100,
+    height: 130,
     justifyContent: "center",
     alignItems: "center",
-    borderRadius: 8,
-  },
-  plantPhotoText: {
-    color: "#fff",
-    fontWeight: "bold",
   },
   addButton: {
     position: "absolute",
@@ -258,10 +257,9 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   plantImage: {
-    flex: 2,
+    flex: 1,
     height: "100%",
     width: "100%",
-    resizeMode: "cover",
   },
 });
 

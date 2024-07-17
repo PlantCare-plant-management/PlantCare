@@ -39,6 +39,7 @@ class PlantController {
         photo,
         plantId: new ObjectId(plantId),
         actions,
+        createdAt: new Date()
       };
 
       const result = await addToMyPlant(addMyPlant);
