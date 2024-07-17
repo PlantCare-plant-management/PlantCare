@@ -16,24 +16,22 @@ import {
 } from "@react-navigation/native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { Picker } from "@react-native-picker/picker";
-import * as SecureStore from 'expo-secure-store';
+import * as SecureStore from "expo-secure-store";
 
 const AddPlantFormScreen = () => {
   const route = useRoute();
   const navigation = useNavigation();
   const plant = route.params?.plant || {};
 
-  const [photo, setPhoto] = useState(plant.photo || "");
+  const [photo, setPhoto] = useState(
+    plant.imgUrl || "https://via.placeholder.com/300"
+  );
   const [name, setName] = useState(plant.name || "");
   const [location, setLocation] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
   const [locations, setLocations] = useState([]);
   const [loading, setLoading] = useState(true);
-  const URL = process.env.EXPO_PUBLIC_API_URL
-
-  // Hardcoded userId
-  
-  const plantId = plant._id
+  const URL = process.env.EXPO_PUBLIC_API_URL;
 
   const fetchLocations = async () => {
     try {
@@ -56,11 +54,10 @@ const AddPlantFormScreen = () => {
       fetchLocations();
     }, [])
   );
-  
+
   const handleAddPlant = async () => {
-    const token = await SecureStore.getItemAsync('access_token');
-    const plantId = plant._id
-    
+    const token = await SecureStore.getItemAsync("access_token");
+
     if (!location) {
       alert("Please select a location for the plant.");
       return;
@@ -72,13 +69,13 @@ const AddPlantFormScreen = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
           name,
           location,
           photo,
-          plantId
+          plantId: plant._id,
         }),
       });
 
@@ -87,11 +84,9 @@ const AddPlantFormScreen = () => {
         navigation.navigate("MyPlant");
       } else {
         console.error("Failed to add plant:", result);
-        // Handle error (show message to user, etc.)
       }
     } catch (error) {
       console.error("Error adding plant:", error);
-      // Handle error (show message to user, etc.)
     } finally {
       setLoading(false);
     }
@@ -107,27 +102,11 @@ const AddPlantFormScreen = () => {
     }
   };
 
-  const handlePhotoUpload = () => {
-    // Implement photo upload logic here
-    // For example, use ImagePicker to allow users to select a photo from their device
-    // After selecting the photo, set the photo URI to the `photo` state
-    // setPhoto(selectedPhotoUri);
-  };
-  console.log(plant)
   return (
     <View style={styles.container}>
-      <TouchableOpacity
-        style={styles.imageContainer}
-        onPress={handlePhotoUpload}
-      >
-        <Image
-          source={{ uri: photo || "https://via.placeholder.com/300" }}
-          style={styles.image}
-        />
-        <View style={styles.uploadIconContainer}>
-          <Icon name="camera" size={24} color="#fff" />
-        </View>
-      </TouchableOpacity>
+      <View style={styles.imageContainer}>
+        <Image source={{ uri: photo }} style={styles.image} />
+      </View>
 
       <View
         style={{
@@ -143,7 +122,7 @@ const AddPlantFormScreen = () => {
           placeholder="Plant Name"
           value={name}
           onChangeText={setName}
-          editable={!name} // Allow editing only if name is empty
+          editable={!name}
         />
         <TouchableOpacity
           style={styles.input}
@@ -203,19 +182,12 @@ const styles = StyleSheet.create({
     marginBottom: 24,
     borderRadius: 50,
     overflow: "hidden",
-    position: "relative",
-  },
-  image: {
     width: 200,
     height: 200,
   },
-  uploadIconContainer: {
-    position: "absolute",
-    bottom: 10,
-    right: 10,
-    backgroundColor: "rgba(0,0,0,0.6)",
-    borderRadius: 50,
-    padding: 8,
+  image: {
+    width: "100%",
+    height: "100%",
   },
   input: {
     height: 50,

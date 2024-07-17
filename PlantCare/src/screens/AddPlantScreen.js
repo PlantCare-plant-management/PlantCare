@@ -19,14 +19,13 @@ const AddPlantScreen = () => {
   const [plants, setPlants] = useState([]);
   const [error, setError] = useState("");
 
-
   async function fetchData() {
-    const token = await SecureStore.getItemAsync('access_token');
+    const token = await SecureStore.getItemAsync("access_token");
     try {
       const res = await fetch(process.env.EXPO_PUBLIC_API_URL + "/plants", {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`
+          Authorization: `Bearer ${token}`,
         },
       });
       if (!res.ok) {
@@ -64,19 +63,23 @@ const AddPlantScreen = () => {
     "Staking tall plants": "tree-outline",
   };
 
+  console.log(plants, "in plants");
+
   return (
     <View style={styles.container}>
       {/* Header Section */}
       <View style={styles.header}>
         <Text style={styles.title}>Scan Your Plant</Text>
-        <TouchableOpacity style={styles.addButton} onPress={() => navigation.navigate("CameraScreen")}>
+        <TouchableOpacity
+          style={styles.addButton}
+          onPress={() => navigation.navigate("CameraScreen")}
+        >
           {/* <TouchableOpacity style={styles.circleButton} onPress={takePicture}> */}
           <Ionicons name="camera" size={32} color="white" />
         </TouchableOpacity>
       </View>
-
-     {/* Search Section */}
-     <View style={styles.searchContainer}>
+      {/* Search Section */}
+      <View style={styles.searchContainer}>
         <TextInput
           style={styles.searchInput}
           placeholder="Search plant..."
@@ -87,7 +90,6 @@ const AddPlantScreen = () => {
           <Icon name="magnify" size={24} color="#fff" />
         </TouchableOpacity>
       </View>
-
       {/* Plant List */}
       <FlatList
         data={filteredPlants}

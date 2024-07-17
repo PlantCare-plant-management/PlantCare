@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
+
 import {
   View,
   Text,
@@ -8,23 +9,27 @@ import {
   ActivityIndicator,
 } from "react-native";
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
-import * as SecureStore from 'expo-secure-store';
+import { authContext } from "../contexts/authContext";
+import * as SecureStore from "expo-secure-store";
+import Ionicons from "react-native-vector-icons/Ionicons";
 
 const MyPlantScreen = () => {
   const navigation = useNavigation();
+
   const [plants, setPlants] = useState([]);
   const [loading, setLoading] = useState(true);
-  const URL = process.env.EXPO_PUBLIC_API_URL
+  const { logout } = useContext(authContext);
 
+  const URL = process.env.EXPO_PUBLIC_API_URL;
 
   const fetchMyPlants = async () => {
     try {
-      const token = await SecureStore.getItemAsync('access_token');
+      const token = await SecureStore.getItemAsync("access_token");
       const response = await fetch(`${URL}/myplants`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          Authorization : `Bearer ${token}`
+          Authorization: `Bearer ${token}`,
         },
       });
       const result = await response.json();
@@ -40,12 +45,6 @@ const MyPlantScreen = () => {
     fetchMyPlants();
   }, []);
 
-  useFocusEffect(
-    React.useCallback(() => {
-      fetchMyPlants();
-    }, [])
-  );
-
   const [filter, setFilter] = useState("All plants");
 
   const filteredPlants =
@@ -60,6 +59,20 @@ const MyPlantScreen = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.date}>Wednesday, 10 July 2024</Text>
+      <TouchableOpacity onPress={logout}>
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            gap: 5,
+          }}
+        >
+          <Ionicons name="log-out-outline" size={30} color="#ff0000" />
+          <Text style={{ fontSize: 20, fontWeight: "400", color: "black" }}>
+            Logout
+          </Text>
+        </View>
+      </TouchableOpacity>
       <View style={styles.filterContainer}>
         <TouchableOpacity
           style={[
@@ -95,21 +108,19 @@ const MyPlantScreen = () => {
         renderItem={({ item }) => (
           <TouchableOpacity
             style={styles.plantItem}
-            onPress={() =>
-              navigation.navigate("PlantInfo", { plantId: item._id })
-            }
+            onPress={() => navigation.navigate("PlantInfo", { plant: item })}
           >
             <View style={styles.plantInfo}>
               <Text style={styles.plantName}>{item.name}</Text>
               <Text style={styles.plantDate}>Date planted: {item.date}</Text>
             </View>
+            <Text>console.log({item.imgUrl});</Text>
             <View style={styles.plantPhotoContainer}>
-              <Text style={styles.plantPhotoText}>Foto Tanaman</Text>
+              <Text style={styles.plantPhotoText}>{item.imgUrl}</Text>
             </View>
           </TouchableOpacity>
         )}
       />
-      
     </View>
   );
 };

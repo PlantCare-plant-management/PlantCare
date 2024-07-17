@@ -1,18 +1,22 @@
-import React, { useState } from 'react';
-import { View, Text, Image, StyleSheet, ScrollView } from 'react-native';
-import { useRoute } from '@react-navigation/native';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { CheckBox } from 'react-native-elements';
+import React, { useState } from "react";
+import { View, Text, Image, StyleSheet, ScrollView } from "react-native";
+import { useRoute } from "@react-navigation/native";
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import { CheckBox } from "react-native-elements";
 
 const PlantInfoScreen = () => {
   const route = useRoute();
   const { plant } = route.params;
+  const recommendations = plant.plants.recommendation || [];
+  const mainCareTasks = plant.plants.main_care || [];
+  console.log(recommendations, " ini recom");
+  console.log(mainCareTasks, " ini main");
 
   const [tasks, setTasks] = useState([
-    { id: 1, task: 'Watering', icon: 'water', completed: false },
-    { id: 2, task: 'Light', icon: 'weather-sunny', completed: false },
-    { id: 3, task: 'Pruning', icon: 'content-cut', completed: false },
-    { id: 4, task: 'Fertilizing', icon: 'leaf', completed: false },
+    { id: 1, task: "Watering", icon: "water", completed: false },
+    { id: 2, task: "Light", icon: "weather-sunny", completed: false },
+    { id: 3, task: "Pruning", icon: "content-cut", completed: false },
+    { id: 4, task: "Fertilizing", icon: "leaf", completed: false },
   ]);
 
   const toggleTask = (taskId) => {
@@ -23,67 +27,105 @@ const PlantInfoScreen = () => {
     );
   };
 
+  const careIcons = {
+    Watering: "watering-can",
+    Light: "weather-sunny",
+    Lighting: "weather-sunny",
+    Soil: "spa",
+    Fertilizing: "leaf",
+    Pruning: "content-cut",
+    Repotting: "flower-tulip",
+    "Monitor plant health": "monitor",
+  };
+
+  const careColors = {
+    Watering: "#AED581",
+    Light: "#FFD54F",
+    Lighting: "#FFD54F",
+    Soil: "#8D6E63",
+    Fertilizing: "#8BC34A",
+    Pruning: "#FFC107",
+    Repotting: "#F48FB1",
+    "Monitor plant health": "#2196F3",
+  };
+
   return (
-    <ScrollView contentContainerStyle={styles.scrollViewContainer}>
-      <View style={styles.container}>
-        <View style={styles.header}>
-          <View style={styles.textContainer}>
-            <Text style={styles.title}>Oregano</Text>
-            <Text style={styles.description}>
-              Oregano is a familiar herb that many people know from dishes such as pizza and...
-              <Text style={styles.readMore}> Read more</Text>
+    <ScrollView style={styles.mainContainer}>
+      <View style={styles.contentContainer}>
+        <View style={styles.titleContainer}>
+          {/* Plant Title */}
+          <Text style={styles.namaTanaman}>{plant.plants.name}</Text>
+          {/* Plant Image */}
+          <Image
+            source={{
+              uri: plant.plants.imgUrl || "https://via.placeholder.com/100",
+            }}
+            style={styles.gambarTanaman}
+          />
+        </View>
+        {/* Plant Description */}
+        <Text style={styles.deskripsiTanaman}>{plant.plants.description}</Text>
+        {/* Difficulty and Harvest */}
+        <View style={styles.difficulty}>
+          <View style={styles.setelahDifficulty}>
+            <Text style={styles.textDifficulty}>Difficulty</Text>
+            <Text style={styles.levelDifficulty}>
+              {plant.plants.difficulty}
             </Text>
           </View>
-          <Image source={{ uri: "https://via.placeholder.com/100" }} style={styles.image} />
-        </View>
-        <View style={styles.infoContainer}>
-          <View style={styles.infoBox}>
-            <Text style={styles.infoLabel}>Difficulty</Text>
-            <Text style={styles.infoValue}>Easy</Text>
-          </View>
-          <View style={styles.infoBox}>
-            <Text style={styles.infoLabel}>Ready to harvest</Text>
-            <Text style={styles.infoValue}>In 60 - 90 days</Text>
+
+          <View>
+            <Text style={styles.readyToHarvest}>Ready To Harvest</Text>
+            <Text style={styles.waktuHarvest}>{plant.plants.harvest}</Text>
           </View>
         </View>
-        <Text style={styles.sectionTitle}>Recommendations</Text>
-        <View style={styles.recommendationsContainer}>
-          <View style={styles.recommendationBox}>
-            <Icon name="water" size={40} color="#AED581" style={styles.recommendationIcon} />
-            <Text style={styles.recommendationText}>Watering</Text>
-            <Text style={styles.recommendationSubText}>Once per day</Text>
-          </View>
-          <View style={styles.recommendationBox}>
-            <Icon name="weather-sunny" size={40} color="#FFEE58" style={styles.recommendationIcon} />
-            <Text style={styles.recommendationText}>Light</Text>
-            <Text style={styles.recommendationSubText}>4h per day</Text>
-          </View>
-          <View style={styles.recommendationBox}>
-            <Icon name="sprout" size={40} color="#8D6E63" style={styles.recommendationIcon} />
-            <Text style={styles.recommendationText}>Soil</Text>
-            <Text style={styles.recommendationSubText}>Draining</Text>
-          </View>
+        {/* Awal Recommendations */}
+        <View style={styles.reccomendation}>
+          <Text style={styles.textRecommendation}>Recommendations</Text>
+
+          <ScrollView horizontal={true} style={styles.scrollViewCardRecom}>
+            {recommendations.map((rec, index) => {
+              const [task, description] = rec.split(": ");
+              return (
+                <View key={index} style={styles.cardRecommendation}>
+                  <View style={styles.iconContainer}>
+                    <Icon
+                      name={careIcons[task]}
+                      size={30}
+                      color={careColors[task]}
+                    />
+                  </View>
+                  <View style={styles.recom}>
+                    <Text style={styles.textTaskRecom}>{task}</Text>
+                    <Text style={styles.descriptionTask}>{description}</Text>
+                  </View>
+                </View>
+              );
+            })}
+          </ScrollView>
         </View>
-        <Text style={styles.sectionTitle}>Main care</Text>
-        <View style={styles.careContainer}>
-          <View style={styles.careBox}>
-            <Icon name="watering-can" size={40} color="#AED581" style={styles.careIcon} />
-            <Text style={styles.careText}>Watering</Text>
-          </View>
-          <View style={styles.careBox}>
-            <Icon name="leaf" size={40} color="#8BC34A" style={styles.careIcon} />
-            <Text style={styles.careText}>Fertilizing</Text>
-          </View>
-          <View style={styles.careBox}>
-            <Icon name="content-cut" size={40} color="#FFC107" style={styles.careIcon} />
-            <Text style={styles.careText}>Pruning</Text>
-          </View>
-          <View style={styles.careBox}>
-            <Icon name="flower-tulip" size={40} color="#F48FB1" style={styles.careIcon} />
-            <Text style={styles.careText}>Repotting</Text>
-          </View>
+        {/* Akhir Recommendations */}
+        {/* Awal Main Care */}
+        <View style={styles.mainCare}>
+          <Text style={styles.textMainCare}>Main Care</Text>
+          <ScrollView horizontal={true} style={styles.scrollViewCardMainCare}>
+            {mainCareTasks.map((task, index) => (
+              <View key={index} style={styles.cardMainCare}>
+                <View style={styles.setelahCardMainCare}>
+                  <Icon
+                    name={careIcons[task]}
+                    size={30}
+                    color={careColors[task]}
+                  />
+                  <Text style={styles.textTask}>{task}</Text>
+                </View>
+              </View>
+            ))}
+          </ScrollView>
         </View>
-        <Text style={styles.sectionTitle}>Task Today</Text>
+        {/* Akhir Main Care */}
+
+        <Text style={styles.sectionTitleTask}>Task Today</Text>
         <View style={styles.taskTodayContainer}>
           {tasks.map((task) => (
             <View key={task.id} style={styles.taskBox}>
@@ -92,7 +134,11 @@ const PlantInfoScreen = () => {
                 onPress={() => toggleTask(task.id)}
                 containerStyle={styles.taskCheckbox}
               />
-              <Icon name={task.icon} size={30} color={task.completed ? '#AED581' : '#333'} />
+              <Icon
+                name={task.icon}
+                size={30}
+                color={task.completed ? "#AED581" : "#333"}
+              />
             </View>
           ))}
         </View>
@@ -102,135 +148,233 @@ const PlantInfoScreen = () => {
 };
 
 const styles = StyleSheet.create({
-  scrollViewContainer: {
-    padding: 16,
-    backgroundColor: '#E8F5E9',
-  },
-  container: {
-    flex: 1,
-  },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 16,
-  },
-  textContainer: {
-    flex: 1,
-    marginRight: 16,
-  },
-  image: {
-    width: 100,
-    height: 100,
-    borderRadius: 16,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 8,
-  },
-  description: {
-    fontSize: 16,
-    color: '#555',
-  },
-  readMore: {
-    color: '#4CAF50',
-  },
-  infoContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 16,
-  },
-  infoBox: {
-    flex: 1,
-    padding: 16,
-    borderRadius: 8,
-    backgroundColor: '#fff',
-    marginHorizontal: 4,
-    alignItems: 'center',
-  },
-  infoLabel: {
-    fontSize: 14,
-    color: '#888',
-    marginBottom: 4,
-  },
-  infoValue: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#333',
-  },
   sectionTitle: {
+    marginLeft: 30,
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 8,
-    color: '#333',
+    color: "#333",
+  },
+  sectionTitleTask: {
+    marginTop: 15,
+    marginLeft: 30,
+    fontSize: 14,
+    fontWeight: "bold",
+    marginBottom: 8,
+    color: "#333",
   },
   recommendationsContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
     marginBottom: 16,
   },
   recommendationBox: {
     flex: 1,
     padding: 16,
     borderRadius: 8,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     marginHorizontal: 4,
-    alignItems: 'center',
+    alignItems: "center",
   },
   recommendationIcon: {
     marginBottom: 8,
   },
   recommendationText: {
     fontSize: 14,
-    fontWeight: 'bold',
-    color: '#333',
+    fontWeight: "bold",
+    color: "#333",
   },
   recommendationSubText: {
     fontSize: 12,
-    color: '#888',
+    color: "#888",
   },
   careContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
     marginBottom: 16,
   },
   careBox: {
     flex: 1,
     padding: 16,
     borderRadius: 8,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     marginHorizontal: 4,
-    alignItems: 'center',
+    alignItems: "center",
   },
   careIcon: {
     marginBottom: 8,
   },
   careText: {
     fontSize: 14,
-    fontWeight: 'bold',
-    color: '#333',
+    fontWeight: "bold",
+    color: "#333",
   },
   taskTodayContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
+    flexDirection: "row",
+    flexWrap: "wrap",
     marginTop: 16,
   },
   taskBox: {
-    width: '30%',
-    margin: '1.66%',
+    width: "30%",
+    margin: "1.66%",
     padding: 16,
     borderRadius: 8,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    flexDirection: 'row',
-    justifyContent: 'center',
+    backgroundColor: "#fff",
+    alignItems: "center",
+    flexDirection: "row",
+    justifyContent: "center",
   },
   taskCheckbox: {
     marginRight: 8,
     padding: 0,
-    backgroundColor: 'transparent',
+    backgroundColor: "transparent",
     borderWidth: 0,
+  },
+  mainContainer: {
+    flex: 1,
+    backgroundColor: "green",
+  },
+  contentContainer: {
+    backgroundColor: "white",
+    flex: 3,
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
+    marginTop: 150,
+    minHeight: "100%",
+  },
+  titleContainer: {
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+  },
+  namaTanaman: {
+    fontWeight: "bold",
+    marginTop: 30,
+    fontSize: 25,
+    marginLeft: 30,
+    marginRight: 30,
+  },
+  gambarTanaman: {
+    marginRight: 30,
+    marginTop: 20,
+    height: 100,
+    width: 100,
+  },
+  deskripsiTanaman: {
+    marginLeft: 30,
+    marginTop: 10,
+    marginRight: 30,
+  },
+  difficulty: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginRight: 30,
+    marginLeft: 30,
+  },
+  setelahDifficulty: {
+    marginTop: 30,
+  },
+  textDifficulty: {
+    fontWeight: "bold",
+    fontSize: 20,
+  },
+  levelDifficulty: {
+    marginTop: 5,
+  },
+  readyToHarvest: {
+    marginTop: 30,
+    fontWeight: "bold",
+    fontSize: 20,
+  },
+  waktuHarvest: {
+    marginTop: 5,
+  },
+  reccomendation: {
+    marginLeft: 30,
+    marginTop: 20,
+  },
+  textRecommendation: {
+    fontWeight: "bold",
+  },
+  scrollViewCardRecom: {
+    flexDirection: "row",
+  },
+  mainCare: {
+    marginLeft: 30,
+    marginTop: 20,
+    height: 200,
+  },
+  textMainCare: {
+    fontWeight: "bold",
+    marginBottom: 5,
+  },
+  scrollViewCardMainCare: {
+    flexDirection: "row",
+  },
+  cardMainCare: {
+    backgroundColor: "#fff",
+    borderColor: "#ddd",
+    borderWidth: 1,
+    height: 150,
+    width: 120,
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 10,
+    marginRight: 10,
+    marginTop: 5,
+    padding: 10,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
+    elevation: 2,
+  },
+  setelahCardMainCare: {
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  textTask: {
+    marginTop: 10,
+    textAlign: "center",
+    fontWeight: "bold",
+  },
+  cardRecommendation: {
+    backgroundColor: "white",
+    borderColor: "#ddd",
+    borderWidth: 1,
+    height: 180,
+    width: 180,
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 10,
+    marginRight: 10,
+    marginTop: 5,
+    padding: 10,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
+    elevation: 2,
+  },
+  iconContainer: {
+    backgroundColor: "#f2f2f2",
+    borderRadius: 20,
+    padding: 10,
+    marginBottom: 5,
+  },
+  recom: {
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  textTaskRecom: {
+    textAlign: "center",
+    fontWeight: "bold",
+    fontSize: 14,
+    color: "#333",
+  },
+  descriptionTask: {
+    textAlign: "center",
+    fontSize: 12,
+    color: "#777",
   },
 });
 
