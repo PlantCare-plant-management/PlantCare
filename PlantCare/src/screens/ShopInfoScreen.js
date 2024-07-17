@@ -12,31 +12,29 @@ const ShopInfoScreen = () => {
   const navigation = useNavigation();
   const route = useRoute();
   const { product } = route.params;
-  // console.log(product, "<<<< product");
   const URL = process.env.EXPO_PUBLIC_API_URL;
-  
+
   const fetchPlant = async () => {
     try {
-        const token = await SecureStore.getItemAsync('access_token');
-        const response = await fetch(`${URL}/plantMarket/${product._id}`, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${token}`
-            },
-        });
-        // console.log(response, "<<<< response");
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
+      const token = await SecureStore.getItemAsync('access_token');
+      const response = await fetch(`${URL}/plantMarket/${product._id}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+      });
 
-        const result = await response.json();
-        console.log(result, "<<<< ");
-        setPlant(result);
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      const result = await response.json();
+      setPlant(result);
     } catch (error) {
-        console.error("Error fetching plant:", error);
+      console.error('Error fetching plant:', error);
     } finally {
-        setLoading(false);
+      setLoading(false);
     }
   };
 
@@ -65,7 +63,7 @@ const ShopInfoScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-        <Text style={styles.backButtonText}>{"<"}</Text>
+        <Text style={styles.backButtonText}>{'<'}</Text>
       </TouchableOpacity>
       <Text style={styles.detailText}>Detail Item</Text>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
@@ -82,16 +80,16 @@ const ShopInfoScreen = () => {
           </TouchableOpacity>
         </View>
         <View style={styles.descriptionContainer}>
-          <Text style={styles.priceText}>{FormatRupiah(product.price)}</Text>
+          <Text style={styles.priceText}>{FormatRupiah(product.price * quantity)}</Text>
           <Text style={styles.descriptionTitle}>{product.name}</Text>
           <Text style={styles.descriptionText}>{product.description}</Text>
         </View>
       </ScrollView>
-      <TouchableOpacity style={styles.buyButton} onPress={() => navigation.navigate('ShippingAddress')}>
+      <TouchableOpacity
+        style={styles.buyButton}
+        onPress={() => navigation.navigate('ShippingAddress', { product, quantity })} // Kirim product dan quantity
+      >
         <Text style={styles.buyButtonText}>Checkout</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-        <Text style={styles.backButtonText}>{"<"}</Text>
       </TouchableOpacity>
     </SafeAreaView>
   );
@@ -183,7 +181,7 @@ const styles = StyleSheet.create({
   descriptionText: {
     fontSize: 20,
     color: '#555',
-    textAlign: 'left', // Mengubah style menjadi rata kiri
+    textAlign: 'left',
     paddingVertical: 10,
   },
   buyButton: {

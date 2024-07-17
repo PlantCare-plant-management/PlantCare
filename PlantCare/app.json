@@ -38,6 +38,10 @@
           "recordAudioAndroid": true
         }
       ]
-    ]
+    ],
+    "extra": {
+      "apiUrl": "process.env.EXPO_PUBLIC_API_URL",
+      "midtransPaymentUrl": "process.env.EXPO_PUBLIC_MIDTRANS_PAYMENT_URL"
+    }
   }
 }

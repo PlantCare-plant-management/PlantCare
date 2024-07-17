@@ -9,6 +9,14 @@ const {
   saveAddress
 } = require("../models/userModel");
 const { registerSchema, loginSchema } = require("../schemas/userSchema");
+const { createOrder, getOrderById } = require("../models/orderModel");
+const midtransClient = require('midtrans-client');
+const PlantController = require("./plantController");
+const { getPlantsFromMarketById } = require("../models/plantModel");
+const { ObjectId } = require("mongodb");
+
+
+
 
 class UserController {
   static async getUsers(req, res, next) {
@@ -95,6 +103,91 @@ class UserController {
       res.status(200).json({ access_token, username: user.username, email });
     } catch (error) {
       next(error);
+    }
+  }
+
+  static async initiateMidtransTrx(req, res, next) {
+    try {
+      const snap = new midtransClient.Snap({
+        isProduction: false,
+        serverKey: process.env.MIDTRANS_SERVER_KEY,
+        clientKey: process.env.MIDTRANS_CLIENT_KEY
+      });
+
+      const _id = req.body.plantMarketId;
+
+      // const orderId = Math.random().toString();
+      const orderId = new ObjectId();
+      const plantMarket = await getPlantsFromMarketById(_id); 
+      console.log(plantMarket, "<<<<<");
+      const amount = plantMarket.price;
+      const userId = req.user.id;
+      const user = await getUserById(userId);
+
+      let parameter = {
+        transaction_details: {
+          order_id: orderId,
+          gross_amount: amount
+        },
+        credit_card: {
+          secure: true
+        },
+        customer_details: {
+          name: user.name,
+          email: user.email,
+          address: user.address
+        }
+      };
+
+      const transaction = await snap.createTransaction(parameter);
+      let transactionToken = transaction.token;
+
+      const order = {
+        _id: orderId,
+        amount: amount,
+        userId: req.user.id,
+        plantMarketId: _id,
+        status: 'pending',
+        createdAt: new Date(),
+        updatedAt: new Date()
+      };
+
+      await createOrder(order);
+
+      res.json({ msg: "Order Created", transactionToken, orderId });
+    } catch (error) {
+      console.log(error, "<<< error midtrans");
+      next(error);
+    }
+  }
+
+  static async updateOrder(req, res) {
+    try {
+      const { orderId, status } = req.body;
+      console.log(`Received notification for order_id: ${orderId}, transaction_status: ${status}`);
+      const db = getDb();
+  
+      const transaction = await db.collection('order').findOne({ _id: orderId });
+      if (!transaction) {
+        return res.status(404).send({ message: 'Transaction not found' });
+      }
+  
+      await db.collection('order').updateOne(
+        { _id: transaction._id },
+        { $set: { status: status, updatedAt: new Date() } }
+      );
+  
+      if (status === 'settlement') {
+        await db.collection('order').updateOne(
+          { _id: transaction._id },
+          { $push: { player: { _id: transaction.userId, username: req.user.username } } }
+        );
+      }
+  
+      res.status(200).send({ message: 'Transaction status updated' });
+    } catch (error) {
+      console.log(error);
+      res.status(400).send(error);
     }
   }
 }

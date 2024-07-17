@@ -22,7 +22,7 @@ async function authentication(req, res, next) {
 
     req.user = {
       id: user._id,
-      email: user.email
+      email: user.email,
     };
 
     next();

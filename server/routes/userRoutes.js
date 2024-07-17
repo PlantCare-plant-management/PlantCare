@@ -14,4 +14,10 @@ router.get('/user', authentication, UserController.getUserById)
 // untuk alamat pengiriman
 router.post('/user/address', authentication, UserController.saveAddress)
 
+// untuk riwayat pembelian
+router.get('/user/payment', authentication, UserController.initiateMidtransTrx)
+
+// untuk update status pembelian
+router.post('/user/update_order', UserController.updateOrder)
+
 module.exports = router;

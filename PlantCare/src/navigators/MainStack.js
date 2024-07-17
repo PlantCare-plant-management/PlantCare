@@ -4,6 +4,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Ionicons } from "@expo/vector-icons";
+import { Feather } from "@expo/vector-icons";
 
 import MyPlantScreen from "../screens/MyPlantScreen";
 import PlantInfoScreen from "../screens/PlantInfoScreen";
@@ -17,10 +18,11 @@ import SplashScreen from "../screens/SplashScreen";
 import { authContext } from "../contexts/authContext";
 import AddRoomPlantsScreen from "../screens/AddRoomPlantsScreen";
 import ShopScreen from "../screens/ShopScreen";
+import ShippingAddressScreen from "../screens/ShippingAddressScreen";
+import PaymentScreen from "../screens/PaymentScreen";
 import OptionScreen from "../screens/OptionScreen";
 import CameraScreen from "../screens/CameraScreen";
 import ShopInfoScreen from "../screens/ShopInfoScreen";
-import ShippingAddressScreen from "../screens/ShippingAddress";
 import ProfileScreen from "../screens/ProfileScreen";
 import EditProfileScreen from "../screens/EditProfileScreen";
 import NotificationSetting from "../screens/NotificationSetting";
@@ -30,6 +32,7 @@ const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
 function TabNavigator() {
+  const { logout } = useContext(authContext);
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
@@ -68,12 +71,37 @@ function TabNavigator() {
               <Ionicons name="add-circle" size={30} color="black" />
             </TouchableOpacity>
           ),
-          
         })}
       />
-      {/* <Tab.Screen name="AddPlant" component={AddPlantScreen} /> */}
       <Tab.Screen name="Shop" component={ShopScreen} options={{ headerShown: false }} />
-      <Tab.Screen name="Profile" component={ProfileScreen} options={{ headerShown: false }} />
+      <Tab.Screen
+        name="Profile"
+        component={ProfileScreen}
+        options={({ navigation }) => ({
+          headerRight: () => (
+            <TouchableOpacity
+              onPress={logout}
+              style={{
+                marginRight: 10,
+                flexDirection: "row",
+                alignItems: "center",
+              }}
+            >
+              <Feather name="log-out" size={20} color="#000" />
+              <Text
+                style={{
+                  marginLeft: 5,
+                  fontSize: 14,
+                  color: "#0d0f1b",
+                  fontWeight: "bold",
+                }}
+              >
+                Logout
+              </Text>
+            </TouchableOpacity>
+          ),
+        })}
+      />
     </Tab.Navigator>
   );
 }
@@ -160,6 +188,11 @@ export default function MainStack() {
               options={{ headerShown: false }}
             />
             <Stack.Screen
+              name="PaymentScreen"
+              component={PaymentScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
               name="notification"
               component={NotificationSetting}
               options={({ navigation }) => ({
@@ -196,7 +229,7 @@ export default function MainStack() {
                 ),
               })}
             />
-               <Stack.Screen
+            <Stack.Screen
               name="Faq"
               component={FaqScreen}
               options={({ navigation }) => ({
