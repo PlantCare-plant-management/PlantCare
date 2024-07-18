@@ -64,14 +64,7 @@ class PlantController {
     }
   }
 
-  static async seed(req, res, next) {
-    try {
-      const data = req.body;
-      const add = await seed(data);
-    } catch (error) {
-      next(error);
-    }
-  }
+  
 }
 
 module.exports = PlantController;

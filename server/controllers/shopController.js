@@ -33,7 +33,6 @@ class ShopController {
       const orders = await getOrderHistory(userId);
       res.json(orders);
     } catch (error) {
-      console.error('Error fetching orders:', error);
       res.status(500).json({ message: 'Failed to fetch orders' });
     }
   };
@@ -41,6 +40,7 @@ class ShopController {
   static async updateOrderStatus(req, res, next) {
     try {
       const { orderId } = req.params;
+      console.log(orderId)
       const updatedOrder = await updateOrderStatus(orderId);
       res.status(200).json(updatedOrder);
     } catch (error) {

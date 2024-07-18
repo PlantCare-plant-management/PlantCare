@@ -31,10 +31,9 @@ async function errorHandler(error, req, res, next) {
         message: "Access denied: Please log in first",
       });
       break;
-    case "FORBIDDEN":
-      res.status(403).json({
-        message:
-          "Access denied: You do not have permission to access this resource",
+      case "ITEM_NOT_FOUND" :
+        res.status(404).json({
+          message: "Item not found"
       });
       break;
     default:

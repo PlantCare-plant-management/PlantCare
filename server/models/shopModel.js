@@ -41,6 +41,7 @@ const getOrderHistory = async (userId) => {
 
 const updateOrderStatus = async (id) => {
   const db = getDB();
+  console.log(id, "ID")
   const result = await db.collection("order").findOneAndUpdate(
     { _id: new ObjectId(id) },
     { $set: { status: "Success" } },

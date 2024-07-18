@@ -31,8 +31,11 @@ class TransactionController {
         serverKey: process.env.MIDTRANS_SERVER_KEY,
         clientKey: process.env.MIDTRANS_CLIENT_KEY,
       });
+      console.log(process.env.MIDTRANS_SERVER_KEY)
+      console.log(process.env.MIDTRANS_CLIENT_KEY)
       const _id = req.body.plantMarketId;
       const quantity = req.body.quantity;
+      console.log(quantity, "quantity")
       if (!quantity || quantity <= 0) {
         return res
           .status(400)
@@ -101,35 +104,3 @@ class TransactionController {
 
 module.exports = { TransactionController };
 
-exports.handleNotification = async (req, res, next) => {
-  try {
-    const { order_id, transaction_status, fraud_status } = req.body;
-
-    // Logika untuk menentukan status pesanan berdasarkan notifikasi Midtrans
-    let status;
-    if (transaction_status === "capture") {
-      if (fraud_status === "challenge") {
-        status = "challenge";
-      } else if (fraud_status === "accept") {
-        status = "success";
-      }
-    } else if (transaction_status === "settlement") {
-      status = "success";
-    } else if (
-      transaction_status === "deny" ||
-      transaction_status === "cancel" ||
-      transaction_status === "expire"
-    ) {
-      status = "failure";
-    } else if (transaction_status === "pending") {
-      status = "pending";
-    }
-
-    await updateOrderStatus(order_id, status);
-
-    res.status(200).json({ message: "Order status updated successfully" });
-  } catch (error) {
-    console.error("Error updating order status:", error);
-    res.status(500).json({ message: "Failed to update order status" });
-  }
-};

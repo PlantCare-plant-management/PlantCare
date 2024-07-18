@@ -15,6 +15,6 @@ router.post(
   PlantController.addToMyPlant
 );
 router.get("/:id", authentication, PlantController.getPlantById);
-router.post("/seed", PlantController.seed);
+
 
 module.exports = router;

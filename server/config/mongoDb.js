@@ -6,9 +6,9 @@ let db;
 
 const connectDB = async () => {
   try {
-    const client = new MongoClient(url);
+    const client = new MongoClient("mongodb+srv://plant:ueeB3UBYBkopNVcZ@plant.nvdpzyd.mongodb.net");
     await client.connect();
-    db = client.db("PlantCare");
+    db = client.db("testPlantCare");
     console.log("Connected to MongoDB");
   } catch (err) {
     console.error(err);
