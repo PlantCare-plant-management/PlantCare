@@ -1,7 +1,8 @@
 const {
   getPlantsFromMarketById,
   getPlantsFromMarket,
-  getOrderHistory
+  getOrderHistory,
+  updateOrderStatus
 } = require("../models/shopModel");
 
 class ShopController {
@@ -36,6 +37,16 @@ class ShopController {
       res.status(500).json({ message: 'Failed to fetch orders' });
     }
   };
+
+  static async updateOrderStatus(req, res, next) {
+    try {
+      const { orderId } = req.params;
+      const updatedOrder = await updateOrderStatus(orderId);
+      res.status(200).json(updatedOrder);
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 
 

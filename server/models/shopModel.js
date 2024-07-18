@@ -39,8 +39,19 @@ const getOrderHistory = async (userId) => {
   return await orderCollection.aggregate(pipeline).toArray();
 };
 
+const updateOrderStatus = async (id) => {
+  const db = getDB();
+  const result = await db.collection("order").findOneAndUpdate(
+    { _id: new ObjectId(id) },
+    { $set: { status: "Success" } },
+    { returnDocument: 'after' }
+  );
+  return result.value;
+};
+
 module.exports = {
   getPlantsFromMarket,
   getPlantsFromMarketById,
   getOrderHistory,
+  updateOrderStatus
 };

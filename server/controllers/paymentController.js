@@ -79,7 +79,8 @@ class TransactionController {
         quantity: quantity,
         userId: new ObjectId(req.user.id),
         plantMarketId: new ObjectId(_id),
-        payment: "Success",
+        payment: "Paid",
+        status: "Process",
         createdAt: new Date(),
         updatedAt: new Date(),
       };
