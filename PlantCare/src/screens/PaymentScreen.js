@@ -1,20 +1,19 @@
 import React, { useState } from 'react';
-import { View, ActivityIndicator, SafeAreaView } from 'react-native';
+import { View, ActivityIndicator, SafeAreaView, StyleSheet } from 'react-native';
 import { WebView } from 'react-native-webview';
 
 const PaymentScreen = ({ route, navigation }) => {
   const { transactionToken } = route.params;
   const [loading, setLoading] = useState(true);
+  const [showWebView, setShowWebView] = useState(true);
 
-  const handleWebViewNavigationStateChange = (newNavState) => {
-    const { url } = newNavState;
+  const handleWebViewNavigationStateChange = (navState) => {
+    const { url } = navState;
     if (!url) return;
 
-    // Cek apakah URL mengandung parameter yang menunjukkan pembayaran berhasil
-    if (url.includes('payment/success')) {
-      navigation.navigate('PaymentSuccess'); // Navigasi ke layar sukses pembayaran
-    } else if (url.includes('payment/failed')) {
-      navigation.navigate('PaymentFailed'); // Navigasi ke layar gagal pembayaran
+    if (url.includes('status_code=200')) {
+      setShowWebView(false);
+      navigation.navigate('PaymentSuccess'); 
     }
   };
 
@@ -25,17 +24,33 @@ const PaymentScreen = ({ route, navigation }) => {
           <ActivityIndicator
             size="large"
             color="#0000ff"
-            style={{ position: 'absolute', top: '50%', left: '50%' }}
+            style={{ position: 'absolute', top: '50%', left: '50%', transform: [{ translateX: -50 }, { translateY: -50 }] }}
           />
         )}
-        <WebView
-          source={{ uri: `https://app.sandbox.midtrans.com/snap/v2/vtweb/${transactionToken}` }}
-          onLoadEnd={() => setLoading(false)}
-          onNavigationStateChange={handleWebViewNavigationStateChange}
-        />
+        {showWebView && (
+          <WebView
+            source={{ uri: `https://app.sandbox.midtrans.com/snap/v2/vtweb/${transactionToken}` }}
+            onLoadEnd={() => setLoading(false)}
+            onNavigationStateChange={handleWebViewNavigationStateChange}
+            startInLoadingState={true}
+            renderLoading={() => (
+              <ActivityIndicator size="large" color="rgb(249 115 22)" style={styles.loadingOverlay} />
+            )}
+          />
+        )}
       </View>
     </SafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({
+  loadingOverlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 1,
+  },
+});
 
 export default PaymentScreen;

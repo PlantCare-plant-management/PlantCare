@@ -278,14 +278,14 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     overflow: "hidden",
     position: "relative",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 10,
-    },
-    shadowOpacity: 0.20,
-    shadowRadius: 3.5,
-    elevation: 5,
+    // shadowColor: "#000",
+    // shadowOffset: {
+    //   width: 0,
+    //   height: 10,
+    // },
+    // shadowOpacity: 0.20,
+    // shadowRadius: 3.5,
+    // elevation: 5,
   },
   image: {
     width: 300,

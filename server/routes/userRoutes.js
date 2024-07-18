@@ -1,9 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const UserController = require("../controllers/userController");
-const PaymentController = require("../controllers/paymentController");
 const authentication = require("../middleware/authentication");
 const multer = require("multer");
+const { TransactionController } = require("../controllers/paymentController");
 
 const upload = multer({ storage: multer.memoryStorage() });
 
@@ -18,8 +18,8 @@ router.get('/user', authentication, UserController.getUserById)
 router.post('/user/address', authentication, UserController.saveAddress)
 
 // untuk payment
-router.post('/user/payment', authentication, PaymentController.createTransaction)
-router.post('/user/notification', PaymentController.handleNotification)
+router.post('/user/payment', authentication, TransactionController.createTransaction)
+// router.post('/user/notification', PaymentController.handleNotification)
 
 
 // untuk edit

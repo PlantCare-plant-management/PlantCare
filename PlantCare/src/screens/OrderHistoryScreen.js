@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, StyleSheet, ActivityIndicator } from 'react-native';
+import { View, Text, FlatList, StyleSheet, ActivityIndicator, Image } from 'react-native';
 import * as SecureStore from 'expo-secure-store';
 
 const OrderHistoryScreen = () => {
@@ -17,11 +17,10 @@ const OrderHistoryScreen = () => {
             'Authorization': `Bearer ${token}`,
           },
         });
-        console.log(response, "<<<<< response");
+
         if (response.ok) {
           const data = await response.json();
-          console.log(data, "<<< data");
-          setOrders(data.order);
+          setOrders(data);
         } else {
           console.error('Failed to fetch orders');
         }
@@ -37,9 +36,13 @@ const OrderHistoryScreen = () => {
 
   const renderItem = ({ item }) => (
     <View style={styles.item}>
-      <Text style={styles.date}>{item.date}</Text>
-      <Text style={styles.total}>{item.total}</Text>
-      <Text style={styles.status}>{item.status}</Text>
+      <Image source={{ uri: item.plant.image }} style={styles.image} />
+      <View style={styles.info}>
+        <Text style={styles.name}>{item.plant.name}</Text>
+        <Text style={styles.date}>{new Date(item.createdAt).toLocaleDateString()}</Text>
+        <Text style={styles.amount}>Rp {item.amount.toLocaleString()}</Text>
+        <Text style={styles.status}>{item.status}</Text>
+      </View>
     </View>
   );
 
@@ -51,7 +54,7 @@ const OrderHistoryScreen = () => {
         <FlatList
           data={orders}
           renderItem={renderItem}
-          keyExtractor={(item) => item.id.toString()}
+          keyExtractor={(item) => item._id}
         />
       )}
     </View>
@@ -65,21 +68,38 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   item: {
+    flexDirection: 'row',
     padding: 16,
     marginVertical: 8,
     backgroundColor: '#f8f8f8',
-    borderRadius: 8,
+    borderRadius: 10,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 2,
+    marginHorizontal: 10,
   },
-  date: {
+  image: {
+    width: 100,
+    height: 100,
+    borderRadius: 8,
+  },
+  info: {
+    marginLeft: 16,
+    flex: 1,
+    justifyContent: 'center',
+  },
+  name: {
     fontSize: 16,
     fontWeight: 'bold',
   },
-  total: {
+  date: {
+    fontSize: 14,
+    color: '#666',
+    marginTop: 4,
+  },
+  amount: {
     fontSize: 16,
     color: '#666',
     marginTop: 4,

@@ -4,7 +4,7 @@ const authentication = require("../middleware/authentication");
 const ShopController = require("../controllers/shopController");
 
 router.get("/", authentication ,ShopController.getPlantsFromMarket);
-router.get("/:id", authentication ,ShopController.getPlantFromMarketById);
 router.get("/history-order", authentication ,ShopController.getHistoryOrder);
+router.get("/:id", authentication ,ShopController.getPlantFromMarketById);
 
 module.exports = router

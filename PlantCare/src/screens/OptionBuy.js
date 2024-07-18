@@ -21,7 +21,7 @@ export default OptionBuy = () => {
       <Text style={styles.header}>Do you already have a Starter Plant Pack?</Text>
       <TouchableOpacity
         style={styles.optionButton}
-        onPress={() => navigation.navigate("TutorialScreen")}
+        onPress={() => navigation.navigate("Order History")}
       >
         <Text style={styles.optionButtonText}>Yes, I already have a Starter Plant Pack. Click to start planting</Text>
       </TouchableOpacity>

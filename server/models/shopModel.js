@@ -14,4 +14,33 @@ const getPlantsFromMarketById = async (id) => {
   return await collection.findOne({ _id: new ObjectId(id) });
 };
 
-module.exports = { getPlantsFromMarket, getPlantsFromMarketById };
+const getOrderHistory = async (userId) => {
+  const db = getDB();
+  const orderCollection = db.collection("order");
+  const plantMarketCollection = db.collection("plantMarket");
+
+  const pipeline = [
+    {
+      $match: { userId: new ObjectId(userId) }
+    },
+    {
+      $lookup: {
+        from: 'plantMarket',
+        localField: 'plantMarketId',
+        foreignField: '_id',
+        as: 'plant'
+      }
+    },
+    {
+      $unwind: '$plant'
+    }
+  ];
+
+  return await orderCollection.aggregate(pipeline).toArray();
+};
+
+module.exports = {
+  getPlantsFromMarket,
+  getPlantsFromMarketById,
+  getOrderHistory,
+};
