@@ -87,7 +87,7 @@ export default function LoginScreen() {
       />
       {isLoading ? (
         <View style={styles.loading}>
-          <ActivityIndicator size="large" color="#4caf50" />
+          <ActivityIndicator size="large" color="tomato" />
         </View>
       ) : (
         <TouchableOpacity

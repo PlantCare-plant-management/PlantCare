@@ -10,7 +10,7 @@ export default CustomModal = ({ visible, message, type, onClose }) => {
           <Feather
             name={type === "success" ? "check-circle" : "alert-circle"}
             size={24}
-            color={type === "success" ? "#4caf50" : "#4caf50"}
+            color={type === "success" ? "tomato" : "tomato"}
           />
           <Text style={styles.modalText}>{message}</Text>
           <TouchableOpacity style={styles.closeButton} onPress={onClose}>
@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
   },
   closeButton: {
     marginTop: 10,
-    backgroundColor: "#4caf50",
+    backgroundColor: "tomato",
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 5,

@@ -164,15 +164,17 @@ export default function MainStack() {
             <Stack.Screen
               name="PlantInfo"
               component={PlantInfoScreen}
-              options={({ navigation }) => ({
-                headerShown: true,
-                title: "Plant Info",
-                headerLeft: () => (
-                  <TouchableOpacity onPress={() => navigation.goBack()}>
-                    <Ionicons name="arrow-back" size={24} color="black" />
-                  </TouchableOpacity>
-                ),
-              })}
+              options={{ headerShown: false }}
+              
+              // options={({ navigation }) => ({
+              //   headerShown: true,
+              //   title: "Plant Info",
+              //   headerLeft: () => (
+              //     <TouchableOpacity onPress={() => navigation.goBack()}>
+              //       <Ionicons name="arrow-back" size={24} color="black" />
+              //     </TouchableOpacity>
+              //   ),
+              // })}
             />
             <Stack.Screen
               name="AddPlantForm"

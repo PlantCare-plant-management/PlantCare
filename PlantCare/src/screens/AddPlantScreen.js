@@ -19,14 +19,13 @@ const AddPlantScreen = () => {
   const [plants, setPlants] = useState([]);
   const [error, setError] = useState("");
 
-
   async function fetchData() {
-    const token = await SecureStore.getItemAsync('access_token');
+    const token = await SecureStore.getItemAsync("access_token");
     try {
       const res = await fetch(process.env.EXPO_PUBLIC_API_URL + "/plants", {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`
+          Authorization: `Bearer ${token}`,
         },
       });
       if (!res.ok) {
@@ -77,8 +76,8 @@ const AddPlantScreen = () => {
         </TouchableOpacity>
       </View>
 
-     {/* Search Section */}
-     <View style={styles.searchContainer}>
+      {/* Search Section */}
+      <View style={styles.searchContainer}>
         <TextInput
           style={styles.searchInput}
           placeholder="Search plant..."
@@ -106,7 +105,7 @@ const AddPlantScreen = () => {
                   {item.main_care.map((care, index) => (
                     <Icon
                       key={`${item._id}-${care}-${index}`}
-                      name={careIcons[care] || "leaf"}
+                      name={careIcons[care.task] || "leaf"}
                       size={24}
                       color="#8BC34A"
                       style={styles.careIcon}
@@ -180,15 +179,16 @@ const styles = StyleSheet.create({
   searchButton: {
     height: 40,
     width: 40,
-    backgroundColor: "#388E3C",
+    backgroundColor: "#4caf50",
     borderTopRightRadius: 10,
     borderBottomRightRadius: 10,
     justifyContent: "center",
     alignItems: "center",
   },
   plantItem: {
-    padding: 16,
-    marginBottom: 8,
+    padding: 2,
+    marginBottom: 6,
+    marginTop: 4,
     backgroundColor: "#FFF",
     borderRadius: 12,
     shadowColor: "#000",
@@ -229,9 +229,7 @@ const styles = StyleSheet.create({
   },
   plantImage: {
     flex: 2,
-    height: "100%",
-    width: "100%",
-    resizeMode: "cover",
+    resizeMode: "contain",
   },
 });
 

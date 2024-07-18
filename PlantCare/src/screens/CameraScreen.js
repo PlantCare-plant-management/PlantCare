@@ -36,11 +36,9 @@ export default function CameraScreen() {
         <Text style={{ textAlign: "center" }}>
           We need your permission to show the camera
         </Text>
-        <Button
-          onPress={requestPermission}
-          title="Grant Permission"
-          style={{ backgroundColor: "#4caf50" }}
-        />
+        <TouchableOpacity onPress={requestPermission} style={styles.button}>
+          <Text style={styles.buttonText}>Grant Permission</Text>
+        </TouchableOpacity>
       </View>
     );
   }
@@ -98,7 +96,8 @@ export default function CameraScreen() {
 
   const findMatchingPlant = (result, plants) => {
     if (result.results && result.results.length > 0) {
-      const plantName = result.results[0].species.genus.scientificNameWithoutAuthor;
+      const plantName =
+        result.results[0].species.genus.scientificNameWithoutAuthor;
       return plants.find(
         (plant) => plant.latin_name.toLowerCase() === plantName.toLowerCase()
       );
@@ -182,5 +181,20 @@ const styles = StyleSheet.create({
     marginTop: 10,
     textAlign: "center",
     color: "#4caf50",
+  },
+  button: {
+    marginTop: 20,
+    width: "60%",
+    height: 48,
+    backgroundColor: "#9acd32",
+    borderRadius: 8,
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: 16,
+  },
+  buttonText: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "#fff",
   },
 });

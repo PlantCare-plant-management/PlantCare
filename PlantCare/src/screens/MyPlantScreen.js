@@ -12,6 +12,7 @@ import {
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import * as SecureStore from "expo-secure-store";
 import Icon from "react-native-vector-icons/FontAwesome";
+import { formatDate } from "../helper/FormatRupiah";
 
 const MyPlantScreen = () => {
   const navigation = useNavigation();
@@ -57,7 +58,7 @@ const MyPlantScreen = () => {
       : plants.filter((plant) => plant.location === filter);
 
   if (loading) {
-    return <ActivityIndicator size="large" color="#4CAF50" />;
+    return <ActivityIndicator size="large" color="#ff6347" />;
   }
 
   const getActionIcon = (actionName) => {
@@ -77,7 +78,7 @@ const MyPlantScreen = () => {
   };
   return (
     <View style={styles.container}>
-      <Text style={styles.date}>Wednesday, 10 July 2024</Text>
+      <Text style={styles.date}>{formatDate(new Date())}</Text>
       <View style={styles.filterContainer}>
         <TouchableOpacity
           style={[
@@ -132,7 +133,7 @@ const MyPlantScreen = () => {
           >
             <View style={styles.plantInfo}>
               <Text style={styles.plantName}>{item.name}</Text>
-              <Text style={styles.plantDate}>Date planted: {item.date}</Text>
+              <Text style={styles.plantDate}>Date planted: {formatDate(item.createdAt)}</Text>
               <View style={styles.actionsContainer}>
                 {item.actions && item.actions.length > 0 ? (
                   item.actions
@@ -150,9 +151,8 @@ const MyPlantScreen = () => {
                         <Icon
                           name={getActionIcon(action.name)}
                           size={20}
-                          color="#000"
+                          color="#fff"
                         />
-                        <Text style={styles.actionText}></Text>
                       </View>
                     ))
                 ) : (
@@ -163,7 +163,7 @@ const MyPlantScreen = () => {
             <View style={styles.plantPhotoContainer}>
               <Image
                 source={{
-                  uri: item.photo || `https://via.placeholder.com/100`,
+                  uri: item.photo || item.plants.imgUrl || `https://via.placeholder.com/100`,
                 }}
                 style={styles.plantImage}
               />
@@ -193,15 +193,15 @@ const styles = StyleSheet.create({
   filterButton: {
     padding: 8,
     marginRight: 8,
-    backgroundColor: "#e0e0e0",
+    backgroundColor: "#c0c0c0",
     borderRadius: 8,
   },
   selectedFilter: {
-    backgroundColor: "#a0e0a0",
+    backgroundColor: "#696969",
   },
   filterText: {
     fontSize: 16,
-    color: "#333",
+    color: "#fff",
   },
   emptyContainer: {
     flex: 1,
@@ -242,40 +242,37 @@ const styles = StyleSheet.create({
     alignItems: "center",
     padding: 8,
     marginRight: 4,
-    borderRadius: 4,
+    borderRadius: 8,
   },
   actionDone: {
-    backgroundColor: "#a0e0a0",
+    backgroundColor: "#d3d3d3",
   },
   actionPending: {
-    backgroundColor: "#e0e0e0",
-  },
-  actionText: {
-    marginLeft: 4,
-    fontSize: 14,
+    backgroundColor: "#8BC34A",
   },
   noActionsText: {
     fontSize: 14,
     color: "#666",
   },
   plantPhotoContainer: {
-    width: 80,
-    height: 80,
-    backgroundColor: "#d0d0d0",
+    width: 100,
+    height: 130,
     justifyContent: "center",
     alignItems: "center",
-    borderRadius: 8,
   },
-  plantPhotoText: {
-    color: "#fff",
-    fontWeight: "bold",
+  plantImage: {
+    flex: 1,
+    height: "100%",
+    width: "100%",
   },
   addButton: {
-    padding: 16,
-    backgroundColor: "#4caf50",
-    borderRadius: 50,
+    height: 48,
+    width: "60%",
+    backgroundColor: "tomato",
+    borderRadius: 8,
     justifyContent: "center",
     alignItems: "center",
+    marginBottom: 16,
   },
   addButtonText: {
     color: "#fff",
