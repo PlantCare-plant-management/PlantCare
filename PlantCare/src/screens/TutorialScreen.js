@@ -1,5 +1,5 @@
-import { useNavigation } from "@react-navigation/native";
-import React from "react";
+import { useNavigation, useRoute } from "@react-navigation/native";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -8,9 +8,42 @@ import {
   Image,
   TouchableOpacity,
 } from "react-native";
+import * as SecureStore from "expo-secure-store";
+
 
 const TutorialScreen = () => {
   const navigation = useNavigation();
+  const route = useRoute();
+  const { plantId } = route.params;
+  const [plant, setPlant] = useState(null);
+
+  useEffect(() => {
+    const fetchPlantData = async () => {
+      const token = await SecureStore.getItemAsync("access_token");
+      try {
+        const response = await fetch(
+          `${process.env.EXPO_PUBLIC_API_URL}/plants/${plantId}`,
+          {
+            method: "GET",
+            cache: "no-store",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        if (!response.ok) {
+          throw new Error("Gagal fetch")
+        }
+        const data = await response.json();
+        setPlant(data);
+      } catch (error) {
+        console.error("Error fetching plant data:", error);
+      }
+    };
+
+    fetchPlantData();
+  }, [plantId]);
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -98,7 +131,7 @@ const TutorialScreen = () => {
       </View>
       <TouchableOpacity
         style={styles.optionButton}
-        onPress={() => navigation.navigate("AddPlantForm")}
+        onPress={() => navigation.navigate("AddPlantForm", { plant })}
       >
         <Text style={styles.optionButtonText}>
           I have done it! click here to add the plant to my list

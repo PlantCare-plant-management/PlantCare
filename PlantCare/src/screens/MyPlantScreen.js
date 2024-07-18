@@ -65,7 +65,11 @@ const MyPlantScreen = () => {
       : plants.filter((plant) => plant.location === filter);
 
   if (loading) {
-    return <ActivityIndicator size="large" color="#4CAF50" />;
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#8BC34A" />
+      </View>
+    );
   }
 
   const getActionIcon = (actionName) => {
@@ -135,7 +139,9 @@ const MyPlantScreen = () => {
           >
             <View style={styles.plantInfo}>
               <Text style={styles.plantName}>{item.name}</Text>
-              <Text style={styles.plantDate}>Date planted: {formatDate(item.createdAt)}</Text>
+              <Text style={styles.plantDate}>
+                Date planted: {formatDate(item.createdAt)}
+              </Text>
               <View style={styles.actionsContainer}>
                 {item.actions && item.actions.length > 0 ? (
                   item.actions
@@ -165,7 +171,10 @@ const MyPlantScreen = () => {
             <View style={styles.plantPhotoContainer}>
               <Image
                 source={{
-                  uri: item.photo || item.plants.imgUrl || `https://via.placeholder.com/100`,
+                  uri:
+                    item.photo ||
+                    item.plants.imgUrl ||
+                    `https://via.placeholder.com/100`,
                 }}
                 style={styles.plantImage}
               />
@@ -178,6 +187,11 @@ const MyPlantScreen = () => {
 };
 
 const styles = StyleSheet.create({
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
   container: {
     flex: 1,
     padding: 16,
@@ -258,7 +272,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#8BC34A",
     alignItems: "center",
     justifyContent: "center",
-    
   },
   noActionsText: {
     fontSize: 14,
@@ -278,15 +291,15 @@ const styles = StyleSheet.create({
     resizeMode: "cover",
   },
   addButton: {
-    height: 100, 
+    height: 100,
     width: 100,
-    borderWidth: 2, 
-    borderColor: "#d3d3d3", 
-    borderRadius: 50, 
+    borderWidth: 2,
+    borderColor: "#d3d3d3",
+    borderRadius: 50,
     justifyContent: "center",
     alignItems: "center",
     marginBottom: 16,
-    backgroundColor: "transparent", 
+    backgroundColor: "transparent",
   },
   addButtonText: {
     color: "#d3d3d3",

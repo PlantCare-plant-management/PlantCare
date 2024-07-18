@@ -78,8 +78,7 @@ const ProfileScreen = () => {
   if (!userData) {
     return (
       <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#0000ff" />
-        <Text>Loading...</Text>
+        <ActivityIndicator size="large" color="#8BC34A" />
       </View>
     );
   }
@@ -176,7 +175,7 @@ const ProfileScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
-    backgroundColor: "#FFF5F5",
+    // backgroundColor: "#FFF5F5",
     alignItems: "center",
   },
   loadingContainer: {
