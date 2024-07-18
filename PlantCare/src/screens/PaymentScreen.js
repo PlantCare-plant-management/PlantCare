@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, ActivityIndicator } from 'react-native';
+import { View, ActivityIndicator, SafeAreaView } from 'react-native';
 import { WebView } from 'react-native-webview';
 
 const PaymentScreen = ({ route, navigation }) => {
@@ -19,20 +19,22 @@ const PaymentScreen = ({ route, navigation }) => {
   };
 
   return (
-    <View style={{ flex: 1 }}>
-      {loading && (
-        <ActivityIndicator
-          size="large"
-          color="#0000ff"
-          style={{ position: 'absolute', top: '50%', left: '50%' }}
+    <SafeAreaView style={{ flex: 1 }}>
+      <View style={{ flex: 1, marginTop: 20 }}>
+        {loading && (
+          <ActivityIndicator
+            size="large"
+            color="#0000ff"
+            style={{ position: 'absolute', top: '50%', left: '50%' }}
+          />
+        )}
+        <WebView
+          source={{ uri: `https://app.sandbox.midtrans.com/snap/v2/vtweb/${transactionToken}` }}
+          onLoadEnd={() => setLoading(false)}
+          onNavigationStateChange={handleWebViewNavigationStateChange}
         />
-      )}
-      <WebView
-        source={{ uri: `https://app.sandbox.midtrans.com/snap/v2/vtweb/${transactionToken}` }}
-        onLoadEnd={() => setLoading(false)}
-        onNavigationStateChange={handleWebViewNavigationStateChange}
-      />
-    </View>
+      </View>
+    </SafeAreaView>
   );
 };
 

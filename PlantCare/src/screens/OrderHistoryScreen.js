@@ -1,11 +1,40 @@
-import React from 'react';
-import { View, Text, FlatList, StyleSheet } from 'react-native';
-
-const orders = [
-  { id: '1', date: '2024-07-14', total: 'Rp119.000', status: 'Completed' },
-];
+import React, { useState, useEffect } from 'react';
+import { View, Text, FlatList, StyleSheet, ActivityIndicator } from 'react-native';
+import * as SecureStore from 'expo-secure-store';
 
 const OrderHistoryScreen = () => {
+  const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchOrders = async () => {
+      try {
+        const token = await SecureStore.getItemAsync('access_token');
+        const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/plantMarket/history-order`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+          },
+        });
+        console.log(response, "<<<<< response");
+        if (response.ok) {
+          const data = await response.json();
+          console.log(data, "<<< data");
+          setOrders(data.order);
+        } else {
+          console.error('Failed to fetch orders');
+        }
+      } catch (error) {
+        console.error('Error fetching orders', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchOrders();
+  }, []);
+
   const renderItem = ({ item }) => (
     <View style={styles.item}>
       <Text style={styles.date}>{item.date}</Text>
@@ -16,11 +45,15 @@ const OrderHistoryScreen = () => {
 
   return (
     <View style={styles.container}>
-      <FlatList
-        data={orders}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.id}
-      />
+      {loading ? (
+        <ActivityIndicator size="large" color="#0000ff" />
+      ) : (
+        <FlatList
+          data={orders}
+          renderItem={renderItem}
+          keyExtractor={(item) => item.id.toString()}
+        />
+      )}
     </View>
   );
 };

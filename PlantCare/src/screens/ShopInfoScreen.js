@@ -86,7 +86,7 @@ const ShopInfoScreen = () => {
       </ScrollView>
       <TouchableOpacity
         style={styles.buyButton}
-        onPress={() => navigation.navigate('ShippingAddress', { product, quantity })} // Kirim product dan quantity
+        onPress={() => navigation.navigate('ShippingAddress', { product, quantity })}
       >
         <Text style={styles.buyButtonText}>Checkout</Text>
       </TouchableOpacity>
@@ -164,24 +164,27 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   descriptionContainer: {
-    alignItems: 'center',
-    padding: 5,
+    width: '65%',
+    padding: 10,
   },
   priceText: {
     fontSize: 35,
     fontWeight: 'bold',
     paddingVertical: 10,
+    textAlign: 'center',
   },
   descriptionTitle: {
     fontSize: 30,
     fontWeight: 'bold',
     marginBottom: 10,
+    textAlign: 'center',
   },
   descriptionText: {
-    fontSize: 20,
+    fontSize: 25,
     color: '#555',
     textAlign: 'left',
     paddingVertical: 10,
+    paddingHorizontal: 20,
   },
   buyButton: {
     width: '75%',

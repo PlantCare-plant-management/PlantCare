@@ -19,6 +19,7 @@ router.post('/user/address', authentication, UserController.saveAddress)
 
 // untuk payment
 router.post('/user/payment', authentication, PaymentController.createTransaction)
+router.post('/user/notification', PaymentController.handleNotification)
 
 // untuk edit
 router.put(

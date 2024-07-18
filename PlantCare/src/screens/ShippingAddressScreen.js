@@ -218,7 +218,7 @@ const ShippingAddressScreen = ({ route }) => {
               onLongPress={() => handleEditAddress(index)} // Use long press to edit address
             >
               <Text style={styles.addressText}>
-                {address.address}, {address.city}, {address.postalCode}, {address.country}
+                 {address.address}, {address.city}, {address.postalCode}, {address.country}
               </Text>
             </TouchableOpacity>
           ))
@@ -383,6 +383,7 @@ const styles = StyleSheet.create({
   addressText: {
     fontSize: 16,
     color: '#388E3C',
+    
   },
   loadingContainer: {
     flex: 1,
