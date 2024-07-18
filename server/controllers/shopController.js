@@ -1,6 +1,6 @@
 const {
   getPlantsFromMarketById,
-  getPlantsFromMarket,
+  getPlantsFromMarket
 } = require("../models/shopModel");
 
 class ShopController {
@@ -24,6 +24,20 @@ class ShopController {
       next(error);
     }
   }
+
+  static async getHistoryOrder(req, res) {
+    try {
+      const db = await getDB(process.env.MONGO_URI);
+      const userId = req.user.id; // Asumsi user ID diambil dari token autentikasi
+
+      const orders = await db.collection('order').find({ userId }).toArray();
+      res.json({ orders });
+    } catch (error) {
+      console.error('Error fetching orders:', error);
+      res.status(500).json({ message: 'Failed to fetch orders' });
+    }
+  };
 }
+
 
 module.exports = ShopController;

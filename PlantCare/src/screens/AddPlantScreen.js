@@ -67,13 +67,21 @@ const AddPlantScreen = () => {
     <View style={styles.container}>
       {/* Header Section */}
       <View style={styles.header}>
-        <Text style={styles.title}>Scan Your Plant</Text>
         <TouchableOpacity
-          style={styles.addButton}
-          onPress={() => navigation.navigate("CameraScreen", { plants })}
+          style={styles.backButton}
+          onPress={() => navigation.goBack()}
         >
-          <Ionicons name="camera" size={32} color="white" />
+          <Ionicons name="arrow-back" size={28} color="#fff" />
         </TouchableOpacity>
+        <View style={styles.scan}>
+          <Text style={styles.title}>Scan Your Plant</Text>
+          <TouchableOpacity
+            style={styles.addButton}
+            onPress={() => navigation.navigate("CameraScreen", { plants })}
+          >
+            <Ionicons name="camera" size={32} color="white" />
+          </TouchableOpacity>
+        </View>
       </View>
 
       {/* Search Section */}
@@ -141,7 +149,12 @@ const styles = StyleSheet.create({
     backgroundColor: "#4CAF50",
     borderBottomLeftRadius: 20,
     borderBottomRightRadius: 20,
-    paddingTop: 30,
+    paddingTop: 45,
+  },
+  scan: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 10,
   },
   title: {
     fontSize: 22,

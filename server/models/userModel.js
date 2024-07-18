@@ -28,6 +28,11 @@ const createUser = async (user) => {
   return await db.collection("user").insertOne(user);
 };
 
+const saveAddress = async (id,address) => {
+  const db = getDB();
+  return await db.collection("user").updateOne({ _id: new ObjectId(id) }, { $set: { address } });
+};
+
 const getUserByUsername = async (username) => {
   const db = getDB();
   return await db.collection("user").findOne({ username });
@@ -38,4 +43,4 @@ const getUserByEmail = async (email) => {
   return await db.collection("user").findOne({ email });
 };
 
-module.exports = { getUsers, getUserById, createUser, getUserByUsername, getUserByEmail, editUser };
+module.exports = { getUsers, getUserById, createUser, getUserByUsername, getUserByEmail, editUser, saveAddress };

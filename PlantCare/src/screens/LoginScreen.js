@@ -7,11 +7,13 @@ import {
   StyleSheet,
   Image,
   ActivityIndicator,
+  Platform,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { authContext } from "../contexts/authContext";
 import * as SecureStore from "expo-secure-store";
 import CustomModal from "../components/CustomModal";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 export default function LoginScreen() {
   const navigation = useNavigation();
@@ -60,7 +62,12 @@ export default function LoginScreen() {
   };
 
   return (
-    <View style={styles.container}>
+    <KeyboardAwareScrollView
+      contentContainerStyle={styles.container}
+      enableOnAndroid={false}
+      extraScrollHeight={Platform.OS === "ios" ? 20 : 100}
+      keyboardShouldPersistTaps="handled"
+    >
       <Image
         source={{
           uri: "https://res.cloudinary.com/dszhu92hc/image/upload/v1721199974/aset10-01_ftxknv.png",
@@ -107,7 +114,7 @@ export default function LoginScreen() {
         type={modalType}
         onClose={handleCloseModal}
       />
-    </View>
+    </KeyboardAwareScrollView>
   );
 }
 

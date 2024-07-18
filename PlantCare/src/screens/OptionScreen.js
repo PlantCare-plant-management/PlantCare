@@ -18,6 +18,12 @@ const OptionScreen = () => {
   return (
     <SafeAreaView style={styles.safeArea}>
       {/* <StatusBar barStyle="dark-content" /> */}
+      <TouchableOpacity
+        style={styles.backButton}
+        onPress={() => navigation.goBack()}
+      >
+        <Ionicons name="arrow-back" size={24} color="black" />
+      </TouchableOpacity>
       <View style={styles.container}>
         <View style={styles.content}>
           <Image
@@ -67,8 +73,8 @@ const styles = StyleSheet.create({
   },
   backButton: {
     position: "absolute",
-    top: 20,
-    left: 20,
+    marginTop: "10%",
+    marginLeft: "3%",
     padding: 10,
     zIndex: 10,
   },

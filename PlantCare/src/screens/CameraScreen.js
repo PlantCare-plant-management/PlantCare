@@ -111,6 +111,12 @@ export default function CameraScreen() {
 
   return (
     <View style={styles.container}>
+       <TouchableOpacity
+        style={styles.backButton}
+        onPress={() => navigation.goBack()}
+      >
+        <Ionicons name="arrow-back" size={24} color="black" />
+      </TouchableOpacity>
       <View style={styles.cameraContainer}>
         {capturedImageUri ? (
           <Image source={{ uri: capturedImageUri }} style={styles.camera} />
@@ -141,13 +147,21 @@ export default function CameraScreen() {
 }
 
 const styles = StyleSheet.create({
+  backButton: {
+    position: "absolute",
+    top: "5%",
+    left: "5%",
+    padding: 10,
+    zIndex: 10,
+  },
   container: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
   },
   cameraContainer: {
-    width: "80%",
+    marginTop: "10%",
+    width: "90%",
     height: "70%",
     borderRadius: 20,
     overflow: "hidden",

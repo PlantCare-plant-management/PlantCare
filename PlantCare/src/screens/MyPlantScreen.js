@@ -1,4 +1,3 @@
-//
 import React, { useState, useEffect } from "react";
 import {
   View,
@@ -18,6 +17,7 @@ const MyPlantScreen = () => {
   const navigation = useNavigation();
   const [plants, setPlants] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [uniqueLocations, setUniqueLocations] = useState([]);
   const URL = process.env.EXPO_PUBLIC_API_URL;
 
   const fetchMyPlants = async () => {
@@ -33,11 +33,18 @@ const MyPlantScreen = () => {
       });
       const result = await response.json();
       setPlants(result);
+      extractUniqueLocations(result);
     } catch (error) {
       console.error("Error fetching my plants:", error);
     } finally {
       setLoading(false);
     }
+  };
+
+  const extractUniqueLocations = (plants) => {
+    const locations = plants.map((plant) => plant.location);
+    const uniqueLocations = [...new Set(locations)];
+    setUniqueLocations(uniqueLocations);
   };
 
   useEffect(() => {
@@ -58,7 +65,7 @@ const MyPlantScreen = () => {
       : plants.filter((plant) => plant.location === filter);
 
   if (loading) {
-    return <ActivityIndicator size="large" color="#ff6347" />;
+    return <ActivityIndicator size="large" color="#4CAF50" />;
   }
 
   const getActionIcon = (actionName) => {
@@ -76,6 +83,7 @@ const MyPlantScreen = () => {
         return "circle";
     }
   };
+
   return (
     <View style={styles.container}>
       <Text style={styles.date}>{formatDate(new Date())}</Text>
@@ -89,24 +97,18 @@ const MyPlantScreen = () => {
         >
           <Text style={styles.filterText}>All plants</Text>
         </TouchableOpacity>
-        <TouchableOpacity
-          style={[
-            styles.filterButton,
-            filter === "Bedroom" && styles.selectedFilter,
-          ]}
-          onPress={() => setFilter("Bedroom")}
-        >
-          <Text style={styles.filterText}>Bedroom</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[
-            styles.filterButton,
-            filter === "Kitchen" && styles.selectedFilter,
-          ]}
-          onPress={() => setFilter("Kitchen")}
-        >
-          <Text style={styles.filterText}>Kitchen</Text>
-        </TouchableOpacity>
+        {uniqueLocations.map((location) => (
+          <TouchableOpacity
+            key={location}
+            style={[
+              styles.filterButton,
+              filter === location && styles.selectedFilter,
+            ]}
+            onPress={() => setFilter(location)}
+          >
+            <Text style={styles.filterText}>{location}</Text>
+          </TouchableOpacity>
+        ))}
       </View>
 
       {/* jika tidak ada plant */}
@@ -189,15 +191,17 @@ const styles = StyleSheet.create({
   filterContainer: {
     flexDirection: "row",
     marginBottom: 16,
+    flexWrap: "wrap",
   },
   filterButton: {
     padding: 8,
     marginRight: 8,
+    marginBottom: 8,
     backgroundColor: "#c0c0c0",
     borderRadius: 8,
   },
   selectedFilter: {
-    backgroundColor: "#696969",
+    backgroundColor: "#8BC34A",
   },
   filterText: {
     fontSize: 16,
@@ -240,15 +244,21 @@ const styles = StyleSheet.create({
   action: {
     flexDirection: "row",
     alignItems: "center",
+    width: 37,
     padding: 8,
     marginRight: 4,
     borderRadius: 8,
   },
   actionDone: {
     backgroundColor: "#d3d3d3",
+    alignItems: "center",
+    justifyContent: "center",
   },
   actionPending: {
     backgroundColor: "#8BC34A",
+    alignItems: "center",
+    justifyContent: "center",
+    
   },
   noActionsText: {
     fontSize: 14,
@@ -261,14 +271,16 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   plantImage: {
-    flex: 1,
+    borderRadius: 10,
+    flex: 2,
     height: "100%",
     width: "100%",
+    resizeMode: "cover",
   },
   addButton: {
     height: 48,
     width: "60%",
-    backgroundColor: "tomato",
+    backgroundColor: "#8BC34A",
     borderRadius: 8,
     justifyContent: "center",
     alignItems: "center",
@@ -277,13 +289,6 @@ const styles = StyleSheet.create({
   addButtonText: {
     color: "#fff",
     fontWeight: "bold",
-  },
-  plantImage: {
-    borderRadius: 10,
-    flex: 2,
-    height: "100%",
-    width: "100%",
-    resizeMode: "cover",
   },
 });
 

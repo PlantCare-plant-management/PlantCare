@@ -1,10 +1,19 @@
 import React, { useState } from "react";
-import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  ScrollView,
+  TouchableOpacity,
+  Dimensions,
+} from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { CheckBox } from "react-native-elements";
 import { Ionicons } from "@expo/vector-icons";
 
+const { height, width } = Dimensions.get("window");
 
 const PlantInfoScreen = () => {
   const navigation = useNavigation();
@@ -68,38 +77,47 @@ const PlantInfoScreen = () => {
   };
   return (
     <ScrollView style={styles.mainContainer}>
-      <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+      <TouchableOpacity
+        style={styles.backButton}
+        onPress={() => navigation.goBack()}
+      >
         <Ionicons name="arrow-back" size={24} color="black" />
       </TouchableOpacity>
       <Image
         source={{
-          uri: plant.photo || plant.plants.imgUrl || "https://via.placeholder.com/100",
+          uri:
+            plant.photo ||
+            plant.plants.imgUrl ||
+            "https://via.placeholder.com/100",
         }}
         style={styles.gambarTanaman}
       />
       <View style={styles.contentContainer}>
-        <View style={styles.titleContainer}>
-          <Text style={styles.namaTanaman}>{plant.plants.name}</Text>
+        <View style={styles.infoContainer}>
+          <Text style={styles.plantName}>{plant.plants.name}</Text>
+          <Text style={styles.plantDesc}>{plant.plants.description}</Text>
+        </View>
+        {/* <View style={styles.description}>
+          <Text style={styles.textDescription}>Description</Text>
           <Text style={styles.deskripsiTanaman}>
             {plant.plants.description}
           </Text>
-        </View>
-        <View style={styles.plantInfoContainer}>
-          <View style={styles.plantInfo}>
-            <Text style={styles.titlePlantInfo}>Difficulty</Text>
-            <Text style={styles.descPlantInfo}>
-              {plant.plants.difficulty}
-            </Text>
-          </View>
-          <View style={styles.plantInfo}>
-            <Text style={styles.titlePlantInfo}>Ready To Harvest</Text>
-            <Text style={styles.descPlantInfo}>{plant.plants.harvest}</Text>
-          </View>
-        </View>
+        </View> */}
         {/* Akhir Difficulty and Harvest */}
 
+        <View style={styles.plantInfoContainer}>
+          <View style={styles.plantInfo}>
+            <Text style={styles.titlePlantInfo}>Latin name</Text>
+            <Text style={styles.descPlantInfo}>{plant.plants.latin_name}</Text>
+          </View>
+          <View style={styles.plantInfo}>
+            <Text style={styles.titlePlantInfo}>Difficulty</Text>
+            <Text style={styles.descPlantInfo}>{plant.plants.difficulty}</Text>
+          </View>
+        </View>
+
         {/* Awal Recommendations */}
-        <View style={styles.reccomendation}>
+        <View style={styles.recommendation}>
           <Text style={styles.textRecommendation}>Recommendations</Text>
 
           <ScrollView horizontal={true} style={styles.scrollViewCardRecom}>
@@ -128,20 +146,24 @@ const PlantInfoScreen = () => {
         <View style={styles.taskToday}>
           <Text style={styles.textToday}>Task Today</Text>
           {actions.map((task) => (
-            <View key={task.id} style={styles.textTodayBox}>
+            <TouchableOpacity
+              key={task.id}
+              style={styles.textTodayBox}
+              onPress={() => toggleTask(task.id)}
+            >
               <CheckBox
                 checked={task.status}
-                onPress={() => toggleTask(task.id)}
+                // onPress={() => toggleTask(task.id)}
                 disabled={task.status}
                 containerStyle={styles.textTodayCheckbox}
               />
               <Icon
                 name={getActionIcon(task.name)}
                 size={30}
-                color={task.status ? "#8BC34A" : "#333"}
+                color={task.status ? "#333" : "#8BC34A"}
               />
               <Text style={styles.textTodayText}>{task.name}</Text>
-            </View>
+            </TouchableOpacity>
           ))}
         </View>
 
@@ -190,6 +212,76 @@ const getActionIcon = (actionName) => {
 };
 
 const styles = StyleSheet.create({
+  backButton: {
+    position: "absolute",
+    top: height * 0.05,
+    left: width * 0.05,
+    padding: 10,
+    zIndex: 10,
+  },
+  gambarTanaman: {
+    borderRadius: 30,
+    position: "absolute",
+    right: 0,
+    marginRight: "5%",
+    marginTop: "10%",
+    height: "24%",
+    width: "45%",
+    zIndex: 5,
+  },
+  mainContainer: {
+    backgroundColor: "#d3d3d3",
+  },
+  contentContainer: {
+    backgroundColor: "white",
+    flex: 1,
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
+    marginTop: height * 0.17,
+    minHeight: height * 0.83,
+    paddingHorizontal: width * 0.07,
+    paddingBottom: "30%",
+  },
+  infoContainer: {
+    height: "22%",
+    justifyContent: "center",
+    // backgroundColor: "tomato"
+  },
+  plantName: {
+    fontWeight: "bold",
+    fontSize: 20,
+    maxWidth: "50%",
+  },
+  plantDesc: {
+    color: "#777",
+    width: "40%",
+  },
+  plantInfoContainer: {
+    flexDirection: "row",
+  },
+  plantInfo: {
+    flex: 1,
+  },
+  titlePlantInfo: {
+    fontWeight: "bold",
+  },
+  descPlantInfo: {
+    marginTop: 2,
+    color: "#777",
+  },
+  textDescription: {
+    fontWeight: "bold",
+  },
+  recommendation: {
+    marginTop: 20,
+  },
+  textRecommendation: {
+    fontWeight: "bold",
+  },
+  scrollViewCardRecom: {
+    flexDirection: "row",
+  },
+
   careIcon: {
     marginBottom: 8,
   },
@@ -200,7 +292,6 @@ const styles = StyleSheet.create({
   },
   taskToday: {
     marginTop: 20,
-    paddingHorizontal: 30,
   },
   textToday: {
     fontWeight: "bold",
@@ -247,79 +338,7 @@ const styles = StyleSheet.create({
     backgroundColor: "transparent",
     borderWidth: 0,
   },
-  backButton: {
-    position: "absolute",
-    top: 40,
-    left: 20,
-    padding: 10,
-    zIndex: 10,
-  },
-  mainContainer: {
-    flex: 1,
-    backgroundColor: "#d3d3d3",
-  },
-  contentContainer: {
-    backgroundColor: "white",
-    flex: 3,
-    borderTopLeftRadius: 30,
-    borderTopRightRadius: 30,
-    marginTop: 100,
-    minHeight: "100%",
-  },
-  titleContainer: {
-    width: "60%",
-  },
-  namaTanaman: {
-    fontWeight: "bold",
-    marginTop: 30,
-    fontSize: 25,
-    marginLeft: 30,
-    marginRight: 30,
-  },
-  gambarTanaman: {
-    borderRadius: 30,
-    position: "absolute",
-    right: 0,
-    marginRight: 20,
-    marginTop: 33,
-    height: "22%",
-    width: "44%",
-    zIndex: 5,
-  },
-  deskripsiTanaman: {
-    marginLeft: 30,
-    marginTop: 10,
-  },
-  plantInfoContainer: {
-    flexDirection: "row",
-    // justifyContent: "space-between",
-    marginRight: 30,
-    marginLeft: 30,
-  },
-  plantInfo: {
-    flex: 1,
-    marginTop: 30,
-  },
-  titlePlantInfo: {
-    fontWeight: "bold",
-    fontSize: 15,
-  },
-  descPlantInfo: {
-    marginTop: 5,
-    color: "#333",
-  },
-  reccomendation: {
-    marginLeft: 30,
-    marginTop: 20,
-  },
-  textRecommendation: {
-    fontWeight: "bold",
-  },
-  scrollViewCardRecom: {
-    flexDirection: "row",
-  },
   mainCare: {
-    marginLeft: 30,
     marginTop: 20,
   },
   textMainCare: {

@@ -6,11 +6,13 @@ import {
   TouchableOpacity,
   StyleSheet,
   Modal,
-  ActivityIndicator
+  ActivityIndicator,
+  Platform,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Feather } from "@expo/vector-icons";
 import CustomModal from "../components/CustomModal";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 export default function RegisterScreen() {
   const navigation = useNavigation();
@@ -23,9 +25,8 @@ export default function RegisterScreen() {
   const [modalType, setModalType] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-
   const handleRegister = async () => {
-    setIsLoading(true)
+    setIsLoading(true);
     try {
       const response = await fetch(
         process.env.EXPO_PUBLIC_API_URL + "/register",
@@ -49,7 +50,7 @@ export default function RegisterScreen() {
       setModalMessage(error.message);
       setModalVisible(true);
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
   };
 
@@ -61,7 +62,12 @@ export default function RegisterScreen() {
   };
 
   return (
-    <View style={styles.container}>
+    <KeyboardAwareScrollView
+      contentContainerStyle={styles.container}
+      enableOnAndroid={false}
+      extraScrollHeight={Platform.OS === "ios" ? 20 : 100}
+      keyboardShouldPersistTaps="handled"
+    >
       <Text style={styles.title}>Register</Text>
       <TextInput
         style={styles.input}
@@ -120,7 +126,7 @@ export default function RegisterScreen() {
         type={modalType}
         onClose={handleCloseModal}
       />
-    </View>
+    </KeyboardAwareScrollView>
   );
 }
 

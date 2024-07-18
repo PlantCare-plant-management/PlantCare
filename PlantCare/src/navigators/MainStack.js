@@ -22,7 +22,7 @@ import ShopScreen from "../screens/ShopScreen";
 import OptionScreen from "../screens/OptionScreen";
 import CameraScreen from "../screens/CameraScreen";
 import ShopInfoScreen from "../screens/ShopInfoScreen";
-import ShippingAddressScreen from "../screens/ShippingAddress";
+import ShippingAddressScreen from "../screens/ShippingAddressScreen";
 import ProfileScreen from "../screens/ProfileScreen";
 import EditProfileScreen from "../screens/EditProfileScreen";
 import NotificationSetting from "../screens/NotificationSetting";
@@ -31,6 +31,9 @@ import OptionBuy from "../screens/OptionBuy";
 import AccountInformation from "../screens/AccountInformation";
 import OrderHistoryScreen from "../screens/OrderHistoryScreen";
 import TutorialScreen from "../screens/TutorialScreen";
+import PaymentFailedScreen from "../screens/PaymentFailedScreen";
+import PaymentSuccessScreen from "../screens/PaymentSuccessScreen";
+import PaymentScreen from "../screens/PaymentScreen";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -56,11 +59,12 @@ function TabNavigator() {
 
           return <Ionicons name={iconName} size={size} color={color} />;
         },
-        tabBarActiveTintColor: "tomato",
+        tabBarActiveTintColor: "#8BC34A",
         tabBarInactiveTintColor: "gray",
         tabBarShowLabel: false,
         tabBarStyle: {
           display: "flex",
+          // height: "7%",
         },
       })}
     >
@@ -165,7 +169,7 @@ export default function MainStack() {
               name="PlantInfo"
               component={PlantInfoScreen}
               options={{ headerShown: false }}
-              
+
               // options={({ navigation }) => ({
               //   headerShown: true,
               //   title: "Plant Info",
@@ -179,15 +183,17 @@ export default function MainStack() {
             <Stack.Screen
               name="AddPlantForm"
               component={AddPlantFormScreen}
-              options={({ navigation }) => ({
-                headerShown: true,
-                title: "Add Plant",
-                headerLeft: () => (
-                  <TouchableOpacity onPress={() => navigation.goBack()}>
-                    <Ionicons name="arrow-back" size={24} color="black" />
-                  </TouchableOpacity>
-                ),
-              })}
+              options={{ headerShown: false }}
+
+              // options={({ navigation }) => ({
+              //   headerShown: true,
+              //   title: "Add Plant",
+              //   headerLeft: () => (
+              //     <TouchableOpacity onPress={() => navigation.goBack()}>
+              //       <Ionicons name="arrow-back" size={24} color="black" />
+              //     </TouchableOpacity>
+              //   ),
+              // })}
             />
             <Stack.Screen
               name="AddRoomPlant"
@@ -197,17 +203,19 @@ export default function MainStack() {
             <Stack.Screen
               name="OptionScreen"
               component={OptionScreen}
-              options={({ navigation }) => ({
-                headerShown: true,
-                title: "",
-                headerLeft: () => (
-                  <View>
-                    <TouchableOpacity onPress={() => navigation.goBack()}>
-                      <Ionicons name="arrow-back" size={24} color="black" />
-                    </TouchableOpacity>
-                  </View>
-                ),
-              })}
+              options={{ headerShown: false }}
+
+              // options={({ navigation }) => ({
+              //   headerShown: true,
+              //   title: "",
+              //   headerLeft: () => (
+              //     <View>
+              //       <TouchableOpacity onPress={() => navigation.goBack()}>
+              //         <Ionicons name="arrow-back" size={24} color="black" />
+              //       </TouchableOpacity>
+              //     </View>
+              //   ),
+              // })}
             />
             <Stack.Screen
               name="OptionBuy"
@@ -242,6 +250,21 @@ export default function MainStack() {
             <Stack.Screen
               name="ShopInfoScreen"
               component={ShopInfoScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="PaymentSuccess"
+              component={PaymentSuccessScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="PaymentScreen"
+              component={PaymentScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="PaymentFailed"
+              component={PaymentFailedScreen}
               options={{ headerShown: false }}
             />
             <Stack.Screen

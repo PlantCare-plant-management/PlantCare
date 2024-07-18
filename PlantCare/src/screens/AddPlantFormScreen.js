@@ -16,6 +16,7 @@ import {
   useFocusEffect,
 } from "@react-navigation/native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import { Ionicons } from "@expo/vector-icons";
 import { Picker } from "@react-native-picker/picker";
 import * as SecureStore from "expo-secure-store";
 import * as ImagePicker from "expo-image-picker";
@@ -170,6 +171,12 @@ const AddPlantFormScreen = () => {
 
   return (
     <View style={styles.container}>
+      <TouchableOpacity
+        style={styles.backButton}
+        onPress={() => navigation.goBack()}
+      >
+        <Ionicons name="arrow-back" size={24} color="white" />
+      </TouchableOpacity>
       <TouchableOpacity style={styles.imageContainer} onPress={pickImage}>
         <Image source={{ uri: photo }} style={styles.image} />
         <View style={styles.uploadIconContainer}>
@@ -239,7 +246,7 @@ const AddPlantFormScreen = () => {
           >
             <ActivityIndicator size="large" color="#4CAF50" />
             <Text style={{ fontWeight: "bold", color: "green" }}>
-              Mohon tunggu sebentar....
+              Please wait....
             </Text>
           </View>
         ) : (
@@ -253,21 +260,37 @@ const AddPlantFormScreen = () => {
 };
 
 const styles = StyleSheet.create({
+  backButton: {
+    position: "absolute",
+    top: "5%",
+    left: "5%",
+    padding: 10,
+    zIndex: 10,
+  },
   container: {
     flex: 1,
-    backgroundColor: "#4CAF50",
+    backgroundColor: "#d3d3d3",
   },
   imageContainer: {
-    marginTop: 20,
+    marginTop: "20%",
     alignSelf: "center",
     marginBottom: 24,
     borderRadius: 50,
     overflow: "hidden",
     position: "relative",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 10,
+    },
+    shadowOpacity: 0.20,
+    shadowRadius: 3.5,
+    elevation: 5,
   },
   image: {
-    width: 200,
-    height: 200,
+    width: 300,
+    height: 300,
+    resizeMode: "contain",
   },
   uploadIconContainer: {
     position: "absolute",
@@ -291,14 +314,14 @@ const styles = StyleSheet.create({
     color: "#333",
   },
   pickerContainer: {
-    height: 200,
-    justifyContent: "center",
-    alignItems: "center",
     backgroundColor: "#fff",
     borderRadius: 8,
-    margin: 16,
+    padding: 16,
+    marginHorizontal: 20,
+    elevation: 5,
   },
   picker: {
+    height: 50,
     width: "100%",
   },
   modalContainer: {
@@ -308,26 +331,27 @@ const styles = StyleSheet.create({
   },
   modalCloseButton: {
     backgroundColor: "#4CAF50",
-    padding: 16,
+    padding: 12,
     borderRadius: 8,
-    alignItems: "center",
-    margin: 16,
+    marginHorizontal: 20,
+    marginTop: 10,
+    elevation: 5,
   },
   modalCloseButtonText: {
     color: "#fff",
-    fontSize: 18,
+    textAlign: "center",
     fontWeight: "bold",
   },
   addButton: {
     backgroundColor: "#4CAF50",
-    paddingVertical: 16,
+    padding: 16,
     borderRadius: 8,
-    alignItems: "center",
-    marginTop: 16,
+    marginTop: 10,
+    elevation: 5,
   },
   addButtonText: {
     color: "#fff",
-    fontSize: 18,
+    textAlign: "center",
     fontWeight: "bold",
   },
 });

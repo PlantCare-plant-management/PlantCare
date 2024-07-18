@@ -13,6 +13,7 @@ const {
   getUsers,
   getUserById,
   createUser,
+  saveAddress,
   getUserByUsername,
   getUserByEmail,
   editUser,
