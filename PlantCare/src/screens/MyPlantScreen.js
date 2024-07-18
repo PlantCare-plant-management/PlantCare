@@ -278,16 +278,18 @@ const styles = StyleSheet.create({
     resizeMode: "cover",
   },
   addButton: {
-    height: 48,
-    width: "60%",
-    backgroundColor: "#8BC34A",
-    borderRadius: 8,
+    height: 100, 
+    width: 100,
+    borderWidth: 2, 
+    borderColor: "#d3d3d3", 
+    borderRadius: 50, 
     justifyContent: "center",
     alignItems: "center",
     marginBottom: 16,
+    backgroundColor: "transparent", 
   },
   addButtonText: {
-    color: "#fff",
+    color: "#d3d3d3",
     fontWeight: "bold",
   },
 });

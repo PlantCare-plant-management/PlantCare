@@ -32,28 +32,21 @@ exports.createTransaction = async (req, res, next) => {
             serverKey: process.env.MIDTRANS_SERVER_KEY,
             clientKey: process.env.MIDTRANS_CLIENT_KEY
         });
-        console.log(snap, "snap");
         const _id = req.body.plantMarketId;
         const quantity = req.body.quantity;
-        console.log(_id, "id");
-        console.log(quantity, "quantity");
         if (!quantity || quantity <= 0) {
             return res.status(400).json({ message: 'Quantity must be greater than 0' });
         }
 
         const plantMarket = await getPlantsFromMarketById(_id);
-        console.log(plantMarket, "plantMarket");
         if (!plantMarket) {
             return res.status(404).json({ message: 'Plant market item not found' });
         }
 
         const amount = plantMarket.price * quantity;
         const orderId = new ObjectId();
-        console.log(orderId, "orderId");
         const userId = req.user.id;
-        console.log(userId, "userId");
         const user = await getUserById(userId);
-        console.log(user, "user");
 
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
