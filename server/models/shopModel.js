@@ -49,9 +49,16 @@ const updateOrderStatus = async (id) => {
   return result.value;
 };
 
+const createOrder = async (order) => {
+  const db = await getDB(process.env.MONGO_URI);
+  return db.collection("order").insertOne(order);
+};  
+
+
 module.exports = {
   getPlantsFromMarket,
   getPlantsFromMarketById,
   getOrderHistory,
-  updateOrderStatus
+  updateOrderStatus,
+  createOrder
 };

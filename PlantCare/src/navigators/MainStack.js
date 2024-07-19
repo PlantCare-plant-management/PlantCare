@@ -228,7 +228,7 @@ export default function MainStack() {
               options={{ headerShown: false }}
             />
             <Stack.Screen
-              name="TutorialScreen"
+              name="Planting Guide"
               component={TutorialScreen}
               options={{ headerShown: true }}
             />

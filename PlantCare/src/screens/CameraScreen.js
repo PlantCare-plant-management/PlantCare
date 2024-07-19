@@ -98,6 +98,7 @@ export default function CameraScreen() {
     if (result.results && result.results.length > 0) {
       const plantName =
         result.results[0].species.genus.scientificNameWithoutAuthor;
+        console.log(plantName)
       return plants.find(
         (plant) => plant.latin_name.toLowerCase() === plantName.toLowerCase()
       );

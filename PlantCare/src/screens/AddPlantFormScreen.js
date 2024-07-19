@@ -204,7 +204,7 @@ const AddPlantFormScreen = () => {
           style={styles.input}
           onPress={() => setModalVisible(true)}
         >
-          <Text style={{ color: location ? "#000" : "#aaa" }}>
+          <Text style={{ textAlign: "center", color: location ? "#000" : "#aaa" }}>
             {location || "Select Location"}
           </Text>
         </TouchableOpacity>
@@ -314,14 +314,20 @@ const styles = StyleSheet.create({
     color: "#333",
   },
   pickerContainer: {
+    // backgroundColor: "#fff",
+    // borderRadius: 8,
+    // padding: 16,
+    // marginHorizontal: 20,
+    // elevation: 5,
+    height: 200,
+    justifyContent: "center",
+    alignItems: "center",
     backgroundColor: "#fff",
     borderRadius: 8,
-    padding: 16,
-    marginHorizontal: 20,
-    elevation: 5,
+    margin: 16,
   },
   picker: {
-    height: 50,
+    // height: 50,
     width: "100%",
   },
   modalContainer: {

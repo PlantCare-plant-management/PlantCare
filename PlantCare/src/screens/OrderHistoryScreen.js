@@ -149,7 +149,7 @@ const OrderHistoryScreen = () => {
               <TouchableOpacity
                 style={styles.button}
                 onPress={() =>
-                  navigation.navigate("TutorialScreen", {
+                  navigation.navigate("Planting Guide", {
                     plantId: item.plant.plantId,
                   })
                 }
