@@ -3,18 +3,25 @@ if (process.env.NODE_ENV !== "production") {
 }
 
 const { MongoClient } = require("mongodb");
+const { hashPass } = require("../helpers/bcrypt");
 
 const client = new MongoClient(process.env.MONGO_URI);
-const plant_data = require('./plantsdata.json');
+const user_data = require("../data/userData.json");
 
 async function seedDatabase() {
   try {
     await client.connect();
     console.log("Connected correctly to server");
     const database = client.db("PlantCare");
-    const plantCollection = database.collection("plants");
+    const userCollection = database.collection("user");
 
-    const result = await plantCollection.insertMany(plant_data);
+    // Hash password for each user
+    const hashedUsers = user_data.users.map((user) => ({
+      ...user,
+      password: hashPass(user.password),
+    }));
+
+    const result = await userCollection.insertMany(hashedUsers);
     console.log(`${result.insertedCount} documents were inserted`);
 
     console.log("Database seeded successfully!");
@@ -25,6 +32,6 @@ async function seedDatabase() {
   }
 }
 
-seedDatabase().catch(err => {
+seedDatabase().catch((err) => {
   console.error("Unhandled error:", err);
 });

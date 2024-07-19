@@ -6,14 +6,14 @@ export const authContext = createContext(null);
 export function AuthProvider({ children }) {
   const [isSignedIn, setIsSignedIn] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [usernameLogin, setUsernameLogin] = useState('');
+  const [emailLogin, setEmailLogin] = useState('');
 
   const checkLogin = async () => {
     try {
       const token = await SecureStore.getItemAsync('access_token');
-      const username = await SecureStore.getItemAsync('username');
+      const email = await SecureStore.getItemAsync('email');
       setIsSignedIn(!!token);
-      setUsernameLogin(username || null);
+      setEmailLogin(email || null);
     } catch (error) {
       console.error('Error checking login status', error);
     } finally {
@@ -21,21 +21,9 @@ export function AuthProvider({ children }) {
     }
   };
 
-  const login = async (email, password) => {
-    // Dummy login check
-    if (email === 'user@mail.com' && password === '12345') {
-      await SecureStore.setItemAsync('access_token', 'dummy-token');
-      await SecureStore.setItemAsync('username', 'user@mail.com');
-      setIsSignedIn(true);
-      setUsernameLogin('user@mail.com');
-    } else {
-      console.error('Invalid credentials');
-    }
-  };
-
   const logout = async () => {
     await SecureStore.deleteItemAsync('access_token');
-    await SecureStore.deleteItemAsync('username');
+    await SecureStore.deleteItemAsync('email');
     setIsSignedIn(false);
   };
 
@@ -49,9 +37,8 @@ export function AuthProvider({ children }) {
         isSignedIn,
         setIsSignedIn,
         loading,
-        usernameLogin,
-        setUsernameLogin,
-        login,
+        emailLogin,
+        setEmailLogin,
         logout,
       }}
     >

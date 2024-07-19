@@ -1,23 +1,26 @@
 const { MongoClient } = require("mongodb");
-const uri = process.env.MONGO_URI;
 
-const client = new MongoClient(process.env.MONGO_URI);
+const url = process.env.MONGO_URI;
+let db;
 
-async function connect() {
+const connectDB = async () => {
   try {
+    const client = new MongoClient("mongodb+srv://plant:ueeB3UBYBkopNVcZ@plant.nvdpzyd.mongodb.net");
     await client.connect();
-    console.log("Connected to MongoDB successfully.");
-  } catch (error) {
-    console.error("Failed to connect to MongoDB:", error);
-    await client.close();
+
+    const dbName = process.env.NODE_ENV === 'test' ? 'testPlantCare2' : 'PlantCare2';
+    db = client.db(dbName);
+    console.log(`Connected to MongoDB - Database: ${dbName}`);
+  } catch (err) {
+    console.error(err);
   }
-}
+};
 
-async function getDB() {
-  // if (!client.topology.isConnected()) {
-  //   await connect();
-  // }
-  return client.db("PlantCare");
-}
+const getDB = () => {
+  if (!db) {
+    throw new Error("Database not connected!");
+  }
+  return db;
+};
 
-module.exports = { connect, getDB };
+module.exports = { connectDB, getDB };

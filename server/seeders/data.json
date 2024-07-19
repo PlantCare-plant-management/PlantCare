@@ -1,0 +1,83 @@
+[
+    {
+      "_id": "668fa2ef77ee2dc401f35b87",
+      "name": "Tanaman Anggrek",
+      "latin_name": "Orchidaceae",
+      "description": "Anggrek adalah tanaman hias berbunga yang dikenal karena bunganya yang indah dan beragam.",
+      "difficulty": "Intermediate",
+      "harvest": "False",
+      "recommendation": [
+        "Watering: 2-3 times a week, ensuring the medium is dry before watering again.",
+        "Light: Indirect bright light, avoid direct sunlight.",
+        "Soil: Use a special orchid potting mix.",
+        "Fertilizing: Monthly with a balanced orchid fertilizer."
+      ],
+      "main_care": [
+        { "task": "Watering", "frequency": 3 },
+        { "task": "Lighting", "frequency": 1 },
+        { "task": "Fertilizing", "frequency": 30 },
+        { "task": "Monitor plant health", "frequency": 7 }
+      ],
+      "imgUrl": "https://img.freepik.com/free-photo/pink-orchid-flower_2829-13511.jpg?t=st=1721035337~exp=1721038937~hmac=8dced3492d1f0e539cd4455c1ae619fbf6126e2ed1a6e469457d7167fb9ffda4&w=360"
+    },
+    {
+      "_id": "668fa2ef77ee2dc401f35b88",
+      "name": "Aglonema",
+      "latin_name": "Aglaonema",
+      "description": "Aglonema adalah tanaman hias daun dengan daun yang bercorak indah dan mudah dirawat.",
+      "difficulty": "Beginner",
+      "harvest": "False",
+      "recommendation": [
+        "Watering: Once a week.",
+        "Light: Low to medium indirect light.",
+        "Soil: Well-draining potting mix.",
+        "Fertilizing: Every 2-3 months with a balanced fertilizer."
+      ],
+      "main_care": [
+        { "task": "Watering", "frequency": 7 },
+        { "task": "Lighting", "frequency": 1 },
+        { "task": "Fertilizing", "frequency": 60 },
+        { "task": "Dusting leaves", "frequency": 14 }
+      ]
+    },
+    {
+      "_id": "668fa2ef77ee2dc401f35b89",
+      "name": "Anthurium",
+      "latin_name": "Anthurium andraeanum",
+      "description": "Anthurium dikenal dengan bunganya yang berbentuk hati dan mengkilap.",
+      "difficulty": "Intermediate",
+      "harvest": "False",
+      "recommendation": [
+        "Watering: Keep soil slightly moist, water once the top inch of soil is dry.",
+        "Light: Bright, indirect light.",
+        "Soil: Use a well-draining potting mix.",
+        "Fertilizing: Every 6-8 weeks with a high-phosphorus fertilizer."
+      ],
+      "main_care": [
+        { "task": "Watering", "frequency": 4 },
+        { "task": "Lighting", "frequency": 1 },
+        { "task": "Fertilizing", "frequency": 50 },
+        { "task": "Pruning dead leaves", "frequency": 30 }
+      ]
+    },
+    {
+      "_id": "668fa2ef77ee2dc401f35b8a",
+      "name": "Adenium",
+      "latin_name": "Adenium obesum",
+      "description": "Adenium, juga dikenal sebagai kamboja jepang, adalah tanaman sukulen dengan bunga berwarna cerah.",
+      "difficulty": "Intermediate",
+      "harvest": "False",
+      "recommendation": [
+        "Watering: Allow soil to dry out completely between waterings.",
+        "Light: Full sunlight.",
+        "Soil: Sandy, well-draining soil.",
+        "Fertilizing: Monthly during growing season with a balanced fertilizer."
+      ],
+      "main_care": [
+        { "task": "Watering", "frequency": 10 },
+        { "task": "Lighting", "frequency": 1 },
+        { "task": "Fertilizing", "frequency": 30 },
+        { "task": "Pruning", "frequency": 30 }
+      ]
+    }
+  ]

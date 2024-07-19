@@ -1,0 +1,1410 @@
+[
+  {
+    "name": "Orchid",
+    "latin_name": "Orchidaceae",
+    "description": "Orchids are flowering plants known for their beautiful and diverse blooms.",
+    "difficulty": "Intermediate",
+    "harvest": "False",
+    "recommendation": [
+      "Watering: 2-3 times a week, ensuring the medium is dry before watering again.",
+      "Light: Indirect bright light, avoid direct sunlight.",
+      "Soil: Use a special orchid potting mix.",
+      "Fertilizing: Monthly with a balanced orchid fertilizer."
+    ],
+    "main_care": [
+      {
+        "task": "Watering",
+        "frequency": 3
+      },
+      {
+        "task": "Lighting",
+        "frequency": 1
+      },
+      {
+        "task": "Fertilizing",
+        "frequency": 30
+      },
+      {
+        "task": "Monitor plant health",
+        "frequency": 7
+      }
+    ],
+    "imgUrl": "https://img.freepik.com/free-photo/pink-orchid-flower_2829-13511.jpg"
+  },
+  {
+    "name": "Chinese Evergreen",
+    "latin_name": "Aglaonema",
+    "description": "Chinese Evergreen is a popular houseplant known for its attractive, variegated leaves.",
+    "difficulty": "Beginner",
+    "harvest": "False",
+    "recommendation": [
+      "Watering: Water when the top inch of soil is dry.",
+      "Light: Low to bright indirect light.",
+      "Soil: Well-draining potting mix.",
+      "Fertilizing: Every 2-3 months with a balanced fertilizer."
+    ],
+    "main_care": [
+      {
+        "task": "Watering",
+        "frequency": 7
+      },
+      {
+        "task": "Lighting",
+        "frequency": 1
+      },
+      {
+        "task": "Fertilizing",
+        "frequency": 60
+      },
+      {
+        "task": "Pruning",
+        "frequency": 30
+      }
+    ],
+    "imgUrl": "https://img.freepik.com/free-photo/chinese-evergreen-plant_2829-13511.jpg"
+  },
+  {
+    "name": "Anthurium",
+    "latin_name": "Anthurium",
+    "description": "Anthuriums are known for their bright, heart-shaped flowers and glossy leaves.",
+    "difficulty": "Intermediate",
+    "harvest": "False",
+    "recommendation": [
+      "Watering: Keep soil consistently moist but not waterlogged.",
+      "Light: Bright, indirect light.",
+      "Soil: Well-draining potting mix.",
+      "Fertilizing: Every 6-8 weeks during the growing season."
+    ],
+    "main_care": [
+      {
+        "task": "Watering",
+        "frequency": 7
+      },
+      {
+        "task": "Lighting",
+        "frequency": 1
+      },
+      {
+        "task": "Fertilizing",
+        "frequency": 42
+      },
+      {
+        "task": "Pruning",
+        "frequency": 30
+      }
+    ],
+    "imgUrl": "https://img.freepik.com/free-photo/anthurium-plant_2829-13511.jpg"
+  },
+  {
+    "name": "Desert Rose",
+    "latin_name": "Adenium",
+    "description": "Desert Rose is a succulent plant known for its thick, swollen stem and vibrant flowers.",
+    "difficulty": "Intermediate",
+    "harvest": "False",
+    "recommendation": [
+      "Watering: Water sparingly, allowing the soil to dry out completely between waterings.",
+      "Light: Full sunlight.",
+      "Soil: Well-draining, sandy soil.",
+      "Fertilizing: Rarely needed; can use a diluted cactus fertilizer once a year."
+    ],
+    "main_care": [
+      {
+        "task": "Watering",
+        "frequency": 30
+      },
+      {
+        "task": "Lighting",
+        "frequency": 1
+      },
+      {
+        "task": "Fertilizing",
+        "frequency": 365
+      },
+      {
+        "task": "Monitoring health",
+        "frequency": 30
+      }
+    ],
+    "imgUrl": "https://img.freepik.com/free-photo/desert-rose-plant_2829-10511.jpg"
+  },
+  {
+    "name": "Chrysanthemum",
+    "latin_name": "Chrysanthemum",
+    "description": "Chrysanthemums are flowering plants known for their bright, large blooms.",
+    "difficulty": "Intermediate",
+    "harvest": "False",
+    "recommendation": [
+      "Watering: Keep soil consistently moist but not waterlogged.",
+      "Light: Full sunlight.",
+      "Soil: Well-draining soil rich in organic matter.",
+      "Fertilizing: Every 2-3 weeks during the growing season."
+    ],
+    "main_care": [
+      {
+        "task": "Watering",
+        "frequency": 7
+      },
+      {
+        "task": "Lighting",
+        "frequency": 1
+      },
+      {
+        "task": "Fertilizing",
+        "frequency": 21
+      },
+      {
+        "task": "Pruning",
+        "frequency": 30
+      }
+    ],
+    "imgUrl": "https://img.freepik.com/free-photo/chrysanthemum-flower_2829-14511.jpg"
+  },
+  {
+    "name": "Tuberose",
+    "latin_name": "Polianthes tuberosa",
+    "description": "Tuberose is a perennial plant known for its fragrant, white flowers.",
+    "difficulty": "Intermediate",
+    "harvest": "False",
+    "recommendation": [
+      "Watering: Keep soil consistently moist.",
+      "Light: Full sunlight.",
+      "Soil: Well-draining soil rich in organic matter.",
+      "Fertilizing: Every 4-6 weeks during the growing season."
+    ],
+    "main_care": [
+      {
+        "task": "Watering",
+        "frequency": 7
+      },
+      {
+        "task": "Lighting",
+        "frequency": 1
+      },
+      {
+        "task": "Fertilizing",
+        "frequency": 42
+      },
+      {
+        "task": "Staking",
+        "frequency": 30
+      }
+    ],
+    "imgUrl": "https://img.freepik.com/free-photo/tuberose-flower_2829-15511.jpg"
+  },
+  {
+    "name": "Bromeliad",
+    "latin_name": "Bromeliaceae",
+    "description": "Bromeliads are tropical plants known for their striking foliage and unique flowers.",
+    "difficulty": "Intermediate",
+    "harvest": "False",
+    "recommendation": [
+      "Watering: Water the central cup of the plant, keeping it filled with water. Change the water regularly.",
+      "Light: Bright, indirect light.",
+      "Soil: Well-draining, light potting mix.",
+      "Fertilizing: Every 2-4 weeks during the growing season."
+    ],
+    "main_care": [
+      {
+        "task": "Watering",
+        "frequency": 7
+      },
+      {
+        "task": "Lighting",
+        "frequency": 1
+      },
+      {
+        "task": "Fertilizing",
+        "frequency": 28
+      },
+      {
+        "task": "Pruning",
+        "frequency": 30
+      }
+    ],
+    "imgUrl": "https://img.freepik.com/free-photo/bromeliad-plant_2829-12511.jpg"
+  },
+  {
+    "name": "Euphorbia",
+    "latin_name": "Euphorbia",
+    "description": "Euphorbia is a diverse genus of flowering plants known for their unique shapes and structures.",
+    "difficulty": "Intermediate",
+    "harvest": "False",
+    "recommendation": [
+      "Watering: Water sparingly, allowing the soil to dry out between waterings.",
+      "Light: Full sunlight to partial shade.",
+      "Soil: Well-draining, sandy soil.",
+      "Fertilizing: Rarely needed; can use a diluted fertilizer once a year."
+    ],
+    "main_care": [
+      {
+        "task": "Watering",
+        "frequency": 14
+      },
+      {
+        "task": "Lighting",
+        "frequency": 1
+      },
+      {
+        "task": "Fertilizing",
+        "frequency": 365
+      },
+      {
+        "task": "Monitoring health",
+        "frequency": 30
+      }
+    ],
+    "imgUrl": "https://img.freepik.com/free-photo/euphorbia-plant_2829-13511.jpg"
+  },
+  {
+    "name": "Cactus",
+    "latin_name": "Cactaceae",
+    "description": "Cacti are succulent plants known for their ability to store water and thrive in arid conditions.",
+    "difficulty": "Beginner",
+    "harvest": "False",
+    "recommendation": [
+      "Watering: Water sparingly, allowing the soil to dry out completely between waterings.",
+      "Light: Full sunlight.",
+      "Soil: Well-draining, sandy soil.",
+      "Fertilizing: Rarely needed; can use a diluted cactus fertilizer once a year."
+    ],
+    "main_care": [
+      {
+        "task": "Watering",
+        "frequency": 30
+      },
+      {
+        "task": "Lighting",
+        "frequency": 1
+      },
+      {
+        "task": "Fertilizing",
+        "frequency": 365
+      },
+      {
+        "task": "Monitoring health",
+        "frequency": 30
+      }
+    ],
+    "imgUrl": "https://img.freepik.com/free-photo/cactus-plant_2829-11511.jpg"
+  },
+  {
+    "name": "Gladiolus",
+    "latin_name": "Gladiolus",
+    "description": "Gladiolus is a flowering plant known for its tall spikes of large, colorful blooms.",
+    "difficulty": "Intermediate",
+    "harvest": "False",
+    "recommendation": [
+      "Watering: Keep soil consistently moist but not waterlogged.",
+      "Light: Full sunlight.",
+      "Soil: Well-draining soil rich in organic matter.",
+      "Fertilizing: Every 2-3 weeks during the growing season."
+    ],
+    "main_care": [
+      {
+        "task": "Watering",
+        "frequency": 7
+      },
+      {
+        "task": "Lighting",
+        "frequency": 1
+      },
+      {
+        "task": "Fertilizing",
+        "frequency": 21
+      },
+      {
+        "task": "Staking",
+        "frequency": 30
+      }
+    ],
+    "imgUrl": "https://img.freepik.com/free-photo/gladiolus-flower_2829-14511.jpg"
+  },
+  {
+    "name": "Amaryllis",
+    "latin_name": "Hippeastrum",
+    "description": "Amaryllis is a bulbous plant known for its large, trumpet-shaped flowers.",
+    "difficulty": "Intermediate",
+    "harvest": "False",
+    "recommendation": [
+      "Watering: Keep soil consistently moist but not waterlogged.",
+      "Light: Bright, indirect light.",
+      "Soil: Well-draining soil rich in organic matter.",
+      "Fertilizing: Every 4-6 weeks during the growing season."
+    ],
+    "main_care": [
+      {
+        "task": "Watering",
+        "frequency": 7
+      },
+      {
+        "task": "Lighting",
+        "frequency": 1
+      },
+      {
+        "task": "Fertilizing",
+        "frequency": 42
+      },
+      {
+        "task": "Pruning",
+        "frequency": 30
+      }
+    ],
+    "imgUrl": "https://img.freepik.com/free-photo/amaryllis-flower_2829-11511.jpg"
+  },
+  {
+    "name": "Rose",
+    "latin_name": "Rosa",
+    "description": "Roses are popular flowering plants known for their fragrant, beautiful blooms.",
+    "difficulty": "Intermediate",
+    "harvest": "False",
+    "recommendation": [
+      "Watering: Water deeply but infrequently, allowing the soil to dry out between waterings.",
+      "Light: Full sunlight.",
+      "Soil: Well-draining soil rich in organic matter.",
+      "Fertilizing: Every 4-6 weeks during the growing season."
+    ],
+    "main_care": [
+      {
+        "task": "Watering",
+        "frequency": 14
+      },
+      {
+        "task": "Lighting",
+        "frequency": 1
+      },
+      {
+        "task": "Fertilizing",
+        "frequency": 42
+      },
+      {
+        "task": "Pruning",
+        "frequency": 30
+      }
+    ],
+    "imgUrl": "https://img.freepik.com/free-photo/rose-flower_2829-12511.jpg"
+  },
+  {
+    "name": "Begonia",
+    "latin_name": "Begonia",
+    "description": "Begonias are popular houseplants known for their attractive foliage and colorful flowers.",
+    "difficulty": "Intermediate",
+    "harvest": "False",
+    "recommendation": [
+      "Watering: Water when the top inch of soil is dry.",
+      "Light: Bright, indirect light.",
+      "Soil: Well-draining potting mix.",
+      "Fertilizing: Every 2-3 months with a balanced fertilizer."
+    ],
+    "main_care": [
+      {
+        "task": "Watering",
+        "frequency": 7
+      },
+      {
+        "task": "Lighting",
+        "frequency": 1
+      },
+      {
+        "task": "Fertilizing",
+        "frequency": 60
+      },
+      {
+        "task": "Pruning",
+        "frequency": 30
+      }
+    ],
+    "imgUrl": "https://img.freepik.com/free-photo/begonia-plant_2829-12511.jpg"
+  },
+  {
+    "name": "Bonsai",
+    "latin_name": "Bonsai",
+    "description": "Bonsai is the art of growing miniature trees in containers, known for their aesthetic appeal.",
+    "difficulty": "Advanced",
+    "harvest": "False",
+    "recommendation": [
+      "Watering: Keep soil consistently moist but not waterlogged.",
+      "Light: Bright, indirect light.",
+      "Soil: Well-draining bonsai soil mix.",
+      "Fertilizing: Every 4-6 weeks during the growing season."
+    ],
+    "main_care": [
+      {
+        "task": "Watering",
+        "frequency": 7
+      },
+      {
+        "task": "Lighting",
+        "frequency": 1
+      },
+      {
+        "task": "Fertilizing",
+        "frequency": 42
+      },
+      {
+        "task": "Pruning and shaping",
+        "frequency": 30
+      }
+    ],
+    "imgUrl": "https://img.freepik.com/free-photo/bonsai-tree_2829-13511.jpg"
+  },
+  {
+    "name": "Aster",
+    "latin_name": "Aster",
+    "description": "Asters are flowering plants known for their daisy-like blooms in various colors.",
+    "difficulty": "Intermediate",
+    "harvest": "False",
+    "recommendation": [
+      "Watering: Keep soil consistently moist but not waterlogged.",
+      "Light: Full sunlight.",
+      "Soil: Well-draining soil rich in organic matter.",
+      "Fertilizing: Every 2-3 weeks during the growing season."
+    ],
+    "main_care": [
+      {
+        "task": "Watering",
+        "frequency": 7
+      },
+      {
+        "task": "Lighting",
+        "frequency": 1
+      },
+      {
+        "task": "Fertilizing",
+        "frequency": 21
+      },
+      {
+        "task": "Pruning",
+        "frequency": 30
+      }
+    ],
+    "imgUrl": "https://img.freepik.com/free-photo/aster-flower_2829-14511.jpg"
+  },
+  {
+    "name": "Bayam",
+    "latin_name": "Amaranthus",
+    "description": "Bayam, also known as Amaranth, is a leafy vegetable commonly grown for its nutritious leaves.",
+    "difficulty": "Beginner",
+    "harvest": "True",
+    "recommendation": [
+      "Watering: Keep soil consistently moist but not waterlogged.",
+      "Light: Full sunlight.",
+      "Soil: Well-draining, fertile soil.",
+      "Fertilizing: Every 2-3 weeks with a balanced fertilizer."
+    ],
+    "main_care": [
+      {
+        "task": "Watering",
+        "frequency": 3
+      },
+      {
+        "task": "Lighting",
+        "frequency": 1
+      },
+      {
+        "task": "Fertilizing",
+        "frequency": 21
+      },
+      {
+        "task": "Harvesting",
+        "frequency": 14
+      }
+    ],
+    "imgUrl": "https://img.freepik.com/free-photo/fresh-spinach-leaves_2829-15511.jpg"
+  },
+  {
+    "name": "Jawer Ayam",
+    "latin_name": "Celosia argentea",
+    "description": "Jawer Ayam, also known as Cockscomb, is a striking ornamental plant with bright, plume-like flowers.",
+    "difficulty": "Intermediate",
+    "harvest": "False",
+    "recommendation": [
+      "Watering: Water regularly, keeping the soil moist but not soggy.",
+      "Light: Full sunlight to partial shade.",
+      "Soil: Well-draining, fertile soil.",
+      "Fertilizing: Monthly with a balanced fertilizer."
+    ],
+    "main_care": [
+      {
+        "task": "Watering",
+        "frequency": 3
+      },
+      {
+        "task": "Lighting",
+        "frequency": 1
+      },
+      {
+        "task": "Fertilizing",
+        "frequency": 30
+      },
+      {
+        "task": "Pruning",
+        "frequency": 60
+      }
+    ],
+    "imgUrl": "https://img.freepik.com/free-photo/celosia-flower_2829-12511.jpg"
+  },
+  {
+    "name": "Marginata",
+    "latin_name": "Dracaena marginata",
+    "description": "Marginata, also known as Dragon Tree, is an ornamental houseplant with long, slender leaves.",
+    "difficulty": "Beginner",
+    "harvest": "False",
+    "recommendation": [
+      "Watering: Allow the top inch of soil to dry out between waterings.",
+      "Light: Bright, indirect light.",
+      "Soil: Well-draining potting mix.",
+      "Fertilizing: Every 2-3 months with a balanced fertilizer."
+    ],
+    "main_care": [
+      {
+        "task": "Watering",
+        "frequency": 14
+      },
+      {
+        "task": "Lighting",
+        "frequency": 1
+      },
+      {
+        "task": "Fertilizing",
+        "frequency": 60
+      },
+      {
+        "task": "Pruning",
+        "frequency": 90
+      }
+    ],
+    "imgUrl": "https://img.freepik.com/free-photo/dracaena-marginata-plant_2829-12511.jpg"
+  },
+  {
+    "name": "Krokot",
+    "latin_name": "Portulaca oleracea",
+    "description": "Krokot, also known as Purslane, is a succulent plant with small, vibrant flowers.",
+    "difficulty": "Beginner",
+    "harvest": "True",
+    "recommendation": [
+      "Watering: Water when the soil is dry.",
+      "Light: Full sunlight.",
+      "Soil: Well-draining, sandy soil.",
+      "Fertilizing: Rarely needed; can use a diluted fertilizer once a year."
+    ],
+    "main_care": [
+      {
+        "task": "Watering",
+        "frequency": 7
+      },
+      {
+        "task": "Lighting",
+        "frequency": 1
+      },
+      {
+        "task": "Fertilizing",
+        "frequency": 365
+      },
+      {
+        "task": "Harvesting",
+        "frequency": 30
+      }
+    ],
+    "imgUrl": "https://img.freepik.com/free-photo/portulaca-flower_2829-13511.jpg"
+  },
+  {
+    "name": "Dahlia",
+    "latin_name": "Dahlia",
+    "description": "Dahlias are tuberous plants known for their large, colorful blooms.",
+    "difficulty": "Intermediate",
+    "harvest": "False",
+    "recommendation": [
+      "Watering: Keep soil consistently moist but not waterlogged.",
+      "Light: Full sunlight.",
+      "Soil: Well-draining soil rich in organic matter.",
+      "Fertilizing: Every 2-3 weeks during the growing season."
+    ],
+    "main_care": [
+      {
+        "task": "Watering",
+        "frequency": 7
+      },
+      {
+        "task": "Lighting",
+        "frequency": 1
+      },
+      {
+        "task": "Fertilizing",
+        "frequency": 21
+      },
+      {
+        "task": "Staking",
+        "frequency": 30
+      }
+    ],
+    "imgUrl": "https://img.freepik.com/free-photo/dahlia-flower_2829-14511.jpg"
+  },
+  {
+    "name": "Lili",
+    "latin_name": "Lilium",
+    "description": "Lilies are flowering plants known for their large, trumpet-shaped flowers and pleasant fragrance.",
+    "difficulty": "Intermediate",
+    "harvest": "False",
+    "recommendation": [
+      "Watering: Keep soil consistently moist but not waterlogged.",
+      "Light: Full sunlight to partial shade.",
+      "Soil: Well-draining soil rich in organic matter.",
+      "Fertilizing: Every 4-6 weeks during the growing season."
+    ],
+    "main_care": [
+      {
+        "task": "Watering",
+        "frequency": 7
+      },
+      {
+        "task": "Lighting",
+        "frequency": 1
+      },
+      {
+        "task": "Fertilizing",
+        "frequency": 42
+      },
+      {
+        "task": "Staking",
+        "frequency": 30
+      }
+    ],
+    "imgUrl": "https://img.freepik.com/free-photo/lily-flower_2829-15511.jpg"
+  },
+  {
+    "name": "Anyelir",
+    "latin_name": "Dianthus caryophyllus",
+    "description": "Anyelir, also known as Carnation, is a flowering plant known for its fragrant, ruffled blooms.",
+    "difficulty": "Intermediate",
+    "harvest": "False",
+    "recommendation": [
+      "Watering: Keep soil consistently moist but not waterlogged.",
+      "Light: Full sunlight.",
+      "Soil: Well-draining soil rich in organic matter.",
+      "Fertilizing: Every 4-6 weeks during the growing season."
+    ],
+    "main_care": [
+      {
+        "task": "Watering",
+        "frequency": 7
+      },
+      {
+        "task": "Lighting",
+        "frequency": 1
+      },
+      {
+        "task": "Fertilizing",
+        "frequency": 42
+      },
+      {
+        "task": "Pruning",
+        "frequency": 30
+      }
+    ],
+    "imgUrl": "https://img.freepik.com/free-photo/carnation-flower_2829-16511.jpg"
+  },
+  {
+    "name": "Kenikir",
+    "latin_name": "Cosmos caudatus",
+    "description": "Kenikir, also known as Cosmos, is a flowering plant with delicate, feathery foliage and colorful blooms.",
+    "difficulty": "Beginner",
+    "harvest": "False",
+    "recommendation": [
+      "Watering: Water regularly, allowing the soil to dry out between waterings.",
+      "Light: Full sunlight.",
+      "Soil: Well-draining, sandy soil.",
+      "Fertilizing: Rarely needed; can use a diluted fertilizer once a year."
+    ],
+    "main_care": [
+      {
+        "task": "Watering",
+        "frequency": 7
+      },
+      {
+        "task": "Lighting",
+        "frequency": 1
+      },
+      {
+        "task": "Fertilizing",
+        "frequency": 365
+      },
+      {
+        "task": "Pruning",
+        "frequency": 30
+      }
+    ],
+    "imgUrl": "https://img.freepik.com/free-photo/cosmos-flower_2829-12511.jpg"
+  },
+  {
+    "name": "Keladi Hias",
+    "latin_name": "Caladium",
+    "description": "Keladi Hias, also known as Caladium, is an ornamental plant known for its large, heart-shaped leaves in vibrant colors.",
+    "difficulty": "Intermediate",
+    "harvest": "False",
+    "recommendation": [
+      "Watering: Keep soil consistently moist but not waterlogged.",
+      "Light: Bright, indirect light.",
+      "Soil: Well-draining potting mix.",
+      "Fertilizing: Every 2-3 months with a balanced fertilizer."
+    ],
+    "main_care": [
+      {
+        "task": "Watering",
+        "frequency": 7
+      },
+      {
+        "task": "Lighting",
+        "frequency": 1
+      },
+      {
+        "task": "Fertilizing",
+        "frequency": 60
+      },
+      {
+        "task": "Pruning",
+        "frequency": 30
+      }
+    ],
+    "imgUrl": "https://img.freepik.com/free-photo/caladium-plant_2829-13511.jpg"
+  },
+  {
+    "name": "Sikas",
+    "latin_name": "Cycas revoluta",
+    "description": "Sikas, also known as Sago Palm, is a slow-growing, ornamental plant with feathery, palm-like leaves.",
+    "difficulty": "Advanced",
+    "harvest": "False",
+    "recommendation": [
+      "Watering: Water deeply but infrequently, allowing the soil to dry out between waterings.",
+      "Light: Bright, indirect light.",
+      "Soil: Well-draining, sandy soil.",
+      "Fertilizing: Every 2-3 months with a balanced fertilizer."
+    ],
+    "main_care": [
+      {
+        "task": "Watering",
+        "frequency": 14
+      },
+      {
+        "task": "Lighting",
+        "frequency": 1
+      },
+      {
+        "task": "Fertilizing",
+        "frequency": 60
+      },
+      {
+        "task": "Pruning",
+        "frequency": 90
+      }
+    ],
+    "imgUrl": "https://img.freepik.com/free-photo/sago-palm-plant_2829-14511.jpg"
+  },
+  {
+    "name": "Suplir",
+    "latin_name": "Adiantum",
+    "description": "Suplir, also known as Maidenhair Fern, is a delicate fern with fine, feathery fronds.",
+    "difficulty": "Intermediate",
+    "harvest": "False",
+    "recommendation": [
+      "Watering: Keep soil consistently moist but not waterlogged.",
+      "Light: Bright, indirect light.",
+      "Soil: Well-draining, organic-rich soil.",
+      "Fertilizing: Every 2-3 months with a balanced fertilizer."
+    ],
+    "main_care": [
+      {
+        "task": "Watering",
+        "frequency": 7
+      },
+      {
+        "task": "Lighting",
+        "frequency": 1
+      },
+      {
+        "task": "Fertilizing",
+        "frequency": 60
+      },
+      {
+        "task": "Pruning",
+        "frequency": 30
+      }
+    ],
+    "imgUrl": "https://img.freepik.com/free-photo/maidenhair-fern_2829-13511.jpg"
+  },
+  {
+    "name": "Euphorbia",
+    "latin_name": "Euphorbia",
+    "description": "Euphorbia is a diverse genus of plants known for their unique forms and often colorful bracts.",
+    "difficulty": "Intermediate",
+    "harvest": "False",
+    "recommendation": [
+      "Watering: Allow the soil to dry out between waterings.",
+      "Light: Full sunlight to partial shade.",
+      "Soil: Well-draining, sandy soil.",
+      "Fertilizing: Every 2-3 months with a balanced fertilizer."
+    ],
+    "main_care": [
+      {
+        "task": "Watering",
+        "frequency": 14
+      },
+      {
+        "task": "Lighting",
+        "frequency": 1
+      },
+      {
+        "task": "Fertilizing",
+        "frequency": 60
+      },
+      {
+        "task": "Pruning",
+        "frequency": 90
+      }
+    ],
+    "imgUrl": "https://img.freepik.com/free-photo/euphorbia-plant_2829-15511.jpg"
+  },
+  {
+    "name": "Philodendron",
+    "latin_name": "Philodendron",
+    "description": "Philodendrons are popular houseplants known for their large, attractive leaves and easy care.",
+    "difficulty": "Beginner",
+    "harvest": "False",
+    "recommendation": [
+      "Watering: Allow the top inch of soil to dry out between waterings.",
+      "Light: Bright, indirect light.",
+      "Soil: Well-draining potting mix.",
+      "Fertilizing: Every 2-3 months with a balanced fertilizer."
+    ],
+    "main_care": [
+      {
+        "task": "Watering",
+        "frequency": 14
+      },
+      {
+        "task": "Lighting",
+        "frequency": 1
+      },
+      {
+        "task": "Fertilizing",
+        "frequency": 60
+      },
+      {
+        "task": "Pruning",
+        "frequency": 90
+      }
+    ],
+    "imgUrl": "https://img.freepik.com/free-photo/philodendron-plant_2829-15511.jpg"
+  },
+  {
+    "name": "Dracaena",
+    "latin_name": "Dracaena",
+    "description": "Dracaenas are popular houseplants known for their long, slender leaves and easy care.",
+    "difficulty": "Beginner",
+    "harvest": "False",
+    "recommendation": [
+      "Watering: Allow the top inch of soil to dry out between waterings.",
+      "Light: Bright, indirect light.",
+      "Soil: Well-draining potting mix.",
+      "Fertilizing: Every 2-3 months with a balanced fertilizer."
+    ],
+    "main_care": [
+      {
+        "task": "Watering",
+        "frequency": 14
+      },
+      {
+        "task": "Lighting",
+        "frequency": 1
+      },
+      {
+        "task": "Fertilizing",
+        "frequency": 60
+      },
+      {
+        "task": "Pruning",
+        "frequency": 90
+      }
+    ],
+    "imgUrl": "https://img.freepik.com/free-photo/dracaena-plant_2829-16511.jpg"
+  },
+  {
+    "name": "Kantung Semar",
+    "latin_name": "Nepenthes",
+    "description": "Kantung Semar, also known as Tropical Pitcher Plant, is a carnivorous plant known for its distinctive pitcher-shaped leaves.",
+    "difficulty": "Advanced",
+    "harvest": "False",
+    "recommendation": [
+      "Watering: Keep soil consistently moist with distilled or rainwater.",
+      "Light: Bright, indirect light.",
+      "Soil: Well-draining, acidic soil mix.",
+      "Fertilizing: Rarely needed; can use a diluted fertilizer once a year."
+    ],
+    "main_care": [
+      {
+        "task": "Watering",
+        "frequency": 7
+      },
+      {
+        "task": "Lighting",
+        "frequency": 1
+      },
+      {
+        "task": "Fertilizing",
+        "frequency": 365
+      },
+      {
+        "task": "Monitoring health",
+        "frequency": 30
+      }
+    ],
+    "imgUrl": "https://img.freepik.com/free-photo/nepenthes-plant_2829-14511.jpg"
+  },
+  {
+    "name": "Frangipani",
+    "latin_name": "Plumeria",
+    "description": "Frangipani is a fragrant flowering plant known for its beautiful, waxy flowers.",
+    "difficulty": "Beginner",
+    "harvest": "False",
+    "recommendation": [
+      "Watering: Once a week, allowing the soil to dry out between waterings.",
+      "Light: Full sun, at least 6 hours of direct sunlight.",
+      "Soil: Well-draining soil, preferably sandy.",
+      "Fertilizing: Every 2-4 weeks during the growing season with a balanced fertilizer."
+    ],
+    "main_care": [
+      {
+        "task": "Watering",
+        "frequency": 7
+      },
+      {
+        "task": "Lighting",
+        "frequency": 1
+      },
+      {
+        "task": "Fertilizing",
+        "frequency": 14
+      },
+      {
+        "task": "Monitor plant health",
+        "frequency": 7
+      }
+    ],
+    "imgUrl": "https://example.com/frangipani.jpg"
+  },
+  {
+    "name": "Tulip",
+    "latin_name": "Tulipa",
+    "description": "Tulip is a bulbous flowering plant famous for its vibrant and diverse colors.",
+    "difficulty": "Beginner",
+    "harvest": "False",
+    "recommendation": [
+      "Watering: Keep the soil consistently moist during the growing season.",
+      "Light: Full sun to partial shade.",
+      "Soil: Well-draining soil, rich in organic matter.",
+      "Fertilizing: Once at planting time with a bulb fertilizer."
+    ],
+    "main_care": [
+      {
+        "task": "Watering",
+        "frequency": 3
+      },
+      {
+        "task": "Lighting",
+        "frequency": 1
+      },
+      {
+        "task": "Fertilizing",
+        "frequency": 30
+      },
+      {
+        "task": "Monitor plant health",
+        "frequency": 7
+      }
+    ],
+    "imgUrl": "https://example.com/tulip.jpg"
+  },
+  {
+    "name": "Jasmine",
+    "latin_name": "Jasminum",
+    "description": "Jasmine is a fragrant flowering plant known for its small, white, and aromatic flowers.",
+    "difficulty": "Intermediate",
+    "harvest": "False",
+    "recommendation": [
+      "Watering: Keep the soil consistently moist but not waterlogged.",
+      "Light: Full sun to partial shade.",
+      "Soil: Well-draining, moderately fertile soil.",
+      "Fertilizing: Every 2-4 weeks during the growing season with a balanced fertilizer."
+    ],
+    "main_care": [
+      {
+        "task": "Watering",
+        "frequency": 7
+      },
+      {
+        "task": "Lighting",
+        "frequency": 1
+      },
+      {
+        "task": "Fertilizing",
+        "frequency": 14
+      },
+      {
+        "task": "Monitor plant health",
+        "frequency": 7
+      }
+    ],
+    "imgUrl": "https://example.com/jasmine.jpg"
+  },
+  {
+    "name": "Lavender",
+    "latin_name": "Lavandula",
+    "description": "Lavender is a fragrant herb known for its purple flowers and calming scent.",
+    "difficulty": "Beginner",
+    "harvest": "True",
+    "recommendation": [
+      "Watering: Water sparingly, allowing the soil to dry out between waterings.",
+      "Light: Full sun, at least 6 hours of direct sunlight.",
+      "Soil: Well-draining, sandy or gritty soil.",
+      "Fertilizing: Once a year in the spring with a balanced fertilizer."
+    ],
+    "main_care": [
+      {
+        "task": "Watering",
+        "frequency": 14
+      },
+      {
+        "task": "Lighting",
+        "frequency": 1
+      },
+      {
+        "task": "Fertilizing",
+        "frequency": 365
+      },
+      {
+        "task": "Monitor plant health",
+        "frequency": 7
+      }
+    ],
+    "imgUrl": "https://example.com/lavender.jpg"
+  },
+  {
+    "name": "Calathea",
+    "latin_name": "Calathea",
+    "description": "Calathea is a tropical plant known for its beautifully patterned leaves.",
+    "difficulty": "Intermediate",
+    "harvest": "False",
+    "recommendation": [
+      "Watering: Keep the soil consistently moist but not waterlogged.",
+      "Light: Indirect light, avoid direct sunlight.",
+      "Soil: Well-draining, peat-based potting mix.",
+      "Fertilizing: Every 4 weeks during the growing season with a balanced fertilizer."
+    ],
+    "main_care": [
+      {
+        "task": "Watering",
+        "frequency": 7
+      },
+      {
+        "task": "Lighting",
+        "frequency": 1
+      },
+      {
+        "task": "Fertilizing",
+        "frequency": 30
+      },
+      {
+        "task": "Monitor plant health",
+        "frequency": 7
+      }
+    ],
+    "imgUrl": "https://example.com/calathea.jpg"
+  },
+  {
+    "name": "Red Betel",
+    "latin_name": "Piper crocatum",
+    "description": "Red Betel is a tropical vine known for its heart-shaped, red-veined leaves.",
+    "difficulty": "Intermediate",
+    "harvest": "False",
+    "recommendation": [
+      "Watering: Keep the soil consistently moist but not waterlogged.",
+      "Light: Indirect light, avoid direct sunlight.",
+      "Soil: Well-draining, organic-rich soil.",
+      "Fertilizing: Every 4 weeks during the growing season with a balanced fertilizer."
+    ],
+    "main_care": [
+      {
+        "task": "Watering",
+        "frequency": 7
+      },
+      {
+        "task": "Lighting",
+        "frequency": 1
+      },
+      {
+        "task": "Fertilizing",
+        "frequency": 30
+      },
+      {
+        "task": "Monitor plant health",
+        "frequency": 7
+      }
+    ],
+    "imgUrl": "https://example.com/red-betel.jpg"
+  },
+  {
+    "name": "Cordyline",
+    "latin_name": "Cordyline fruticosa",
+    "description": "Cordyline is a tropical plant known for its colorful, variegated foliage.",
+    "difficulty": "Beginner",
+    "harvest": "False",
+    "recommendation": [
+      "Watering: Keep the soil consistently moist but not waterlogged.",
+      "Light: Bright, indirect light.",
+      "Soil: Well-draining, peat-based potting mix.",
+      "Fertilizing: Every 4 weeks during the growing season with a balanced fertilizer."
+    ],
+    "main_care": [
+      {
+        "task": "Watering",
+        "frequency": 7
+      },
+      {
+        "task": "Lighting",
+        "frequency": 1
+      },
+      {
+        "task": "Fertilizing",
+        "frequency": 30
+      },
+      {
+        "task": "Monitor plant health",
+        "frequency": 7
+      }
+    ],
+    "imgUrl": "https://example.com/cordyline.jpg"
+  },
+  {
+    "name": "Ylang-ylang",
+    "latin_name": "Cananga odorata",
+    "description": "Ylang-ylang is a tropical tree known for its highly fragrant, yellow-green flowers.",
+    "difficulty": "Intermediate",
+    "harvest": "False",
+    "recommendation": [
+      "Watering: Keep the soil consistently moist but not waterlogged.",
+      "Light: Full sun to partial shade.",
+      "Soil: Well-draining, organic-rich soil.",
+      "Fertilizing: Every 4-6 weeks during the growing season with a balanced fertilizer."
+    ],
+    "main_care": [
+      {
+        "task": "Watering",
+        "frequency": 7
+      },
+      {
+        "task": "Lighting",
+        "frequency": 1
+      },
+      {
+        "task": "Fertilizing",
+        "frequency": 45
+      },
+      {
+        "task": "Monitor plant health",
+        "frequency": 7
+      }
+    ],
+    "imgUrl": "https://example.com/ylang-ylang.jpg"
+  },
+  {
+    "name": "Iris",
+    "latin_name": "Iris",
+    "description": "Iris is a flowering plant known for its striking, colorful blooms.",
+    "difficulty": "Beginner",
+    "harvest": "False",
+    "recommendation": [
+      "Watering: Keep the soil consistently moist during the growing season.",
+      "Light: Full sun to partial shade.",
+      "Soil: Well-draining soil, rich in organic matter.",
+      "Fertilizing: Once at planting time with a bulb fertilizer."
+    ],
+    "main_care": [
+      {
+        "task": "Watering",
+        "frequency": 7
+      },
+      {
+        "task": "Lighting",
+        "frequency": 1
+      },
+      {
+        "task": "Fertilizing",
+        "frequency": 180
+      },
+      {
+        "task": "Monitor plant health",
+        "frequency": 7
+      }
+    ],
+    "imgUrl": "https://example.com/iris.jpg"
+  },
+  {
+    "name": "Gardenia",
+    "latin_name": "Gardenia jasminoides",
+    "description": "Gardenia is a fragrant flowering shrub known for its creamy white flowers and glossy green leaves.",
+    "difficulty": "Intermediate",
+    "harvest": "False",
+    "recommendation": [
+      "Watering: Keep the soil consistently moist but not waterlogged.",
+      "Light: Bright, indirect light.",
+      "Soil: Well-draining, acidic soil.",
+      "Fertilizing: Every 4 weeks during the growing season with an acid-loving plant fertilizer."
+    ],
+    "main_care": [
+      {
+        "task": "Watering",
+        "frequency": 7
+      },
+      {
+        "task": "Lighting",
+        "frequency": 1
+      },
+      {
+        "task": "Fertilizing",
+        "frequency": 30
+      },
+      {
+        "task": "Monitor plant health",
+        "frequency": 7
+      }
+    ],
+    "imgUrl": "https://example.com/gardenia.jpg"
+  },
+  {
+    "name": "Foxtail Fern",
+    "latin_name": "Asparagus densiflorus 'Myers'",
+    "description": "Foxtail Fern is a decorative plant known for its feathery, arching plumes.",
+    "difficulty": "Beginner",
+    "harvest": "False",
+    "recommendation": [
+      "Watering: Water regularly, allowing the soil to dry out between waterings.",
+      "Light: Bright, indirect light.",
+      "Soil: Well-draining, sandy soil.",
+      "Fertilizing: Every 4-6 weeks during the growing season with a balanced fertilizer."
+    ],
+    "main_care": [
+      {
+        "task": "Watering",
+        "frequency": 7
+      },
+      {
+        "task": "Lighting",
+        "frequency": 1
+      },
+      {
+        "task": "Fertilizing",
+        "frequency": 45
+      },
+      {
+        "task": "Monitor plant health",
+        "frequency": 7
+      }
+    ],
+    "imgUrl": "https://example.com/foxtail-fern.jpg"
+  },
+  {
+    "name": "Palm",
+    "latin_name": "Arecaceae",
+    "description": "Palm trees are iconic tropical plants known for their tall, slender trunks and large, fan-like leaves.",
+    "difficulty": "Intermediate",
+    "harvest": "False",
+    "recommendation": [
+      "Watering: Water regularly, allowing the soil to dry out between waterings.",
+      "Light: Full sun to partial shade.",
+      "Soil: Well-draining, sandy soil.",
+      "Fertilizing: Every 3-4 months with a palm fertilizer."
+    ],
+    "main_care": [
+      {
+        "task": "Watering",
+        "frequency": 14
+      },
+      {
+        "task": "Lighting",
+        "frequency": 1
+      },
+      {
+        "task": "Fertilizing",
+        "frequency": 90
+      },
+      {
+        "task": "Monitor plant health",
+        "frequency": 7
+      }
+    ],
+    "imgUrl": "https://example.com/palm.jpg"
+  },
+  {
+    "name": "Pandan Bali",
+    "latin_name": "Pandanus amaryllifolius",
+    "description": "Pandan Bali is a tropical plant known for its fragrant leaves, often used in cooking.",
+    "difficulty": "Beginner",
+    "harvest": "True",
+    "recommendation": [
+      "Watering: Water regularly, keeping the soil consistently moist.",
+      "Light: Full sun to partial shade.",
+      "Soil: Well-draining, fertile soil.",
+      "Fertilizing: Every 4-6 weeks during the growing season with a balanced fertilizer."
+    ],
+    "main_care": [
+      {
+        "task": "Watering",
+        "frequency": 7
+      },
+      {
+        "task": "Lighting",
+        "frequency": 1
+      },
+      {
+        "task": "Fertilizing",
+        "frequency": 45
+      },
+      {
+        "task": "Monitor plant health",
+        "frequency": 7
+      }
+    ],
+    "imgUrl": "https://example.com/pandan-bali.jpg"
+  },
+  {
+    "name": "Cypress",
+    "latin_name": "Cupressus",
+    "description": "Cypress trees are coniferous trees known for their tall, slender form and aromatic wood.",
+    "difficulty": "Beginner",
+    "harvest": "False",
+    "recommendation": [
+      "Watering: Water regularly, allowing the soil to dry out between waterings.",
+      "Light: Full sun.",
+      "Soil: Well-draining soil.",
+      "Fertilizing: Once a year in the spring with a balanced fertilizer."
+    ],
+    "main_care": [
+      {
+        "task": "Watering",
+        "frequency": 14
+      },
+      {
+        "task": "Lighting",
+        "frequency": 1
+      },
+      {
+        "task": "Fertilizing",
+        "frequency": 365
+      },
+      {
+        "task": "Monitor plant health",
+        "frequency": 7
+      }
+    ],
+    "imgUrl": "https://example.com/cypress.jpg"
+  }
+]

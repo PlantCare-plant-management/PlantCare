@@ -1,44 +1,173 @@
-import React, { useContext } from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { authContext } from '../contexts/authContext';
+import React, { useContext, useEffect, useState } from "react";
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+  ScrollView,
+  SafeAreaView,
+  Switch,
+  Dimensions,
+  ActivityIndicator,
+} from "react-native";
+import Ionicons from "react-native-vector-icons/Ionicons";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import { authContext } from "../contexts/authContext";
+import * as SecureStore from "expo-secure-store";
+
+const defaultUserData = {
+  name: "user",
+  email: "user@mail.com",
+  imgUrl:
+    "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
+};
 
 const ProfileScreen = () => {
   const navigation = useNavigation();
   const { logout } = useContext(authContext);
+  const [notificationsEnabled, setNotificationsEnabled] = useState(false);
+  const [userData, setUserData] = useState(null);
+  const [profileImage, setProfileImage] = useState(defaultUserData.imgUrl);
+  const [isFetch, setisFetch] = useState(true);
+  // console.log(isFetch, "<=== fetch?");
 
-  const handleLogout = () => {
-    logout();
-    navigation.navigate('Login');
+  const fetchUserData = async () => {
+    try {
+      const token = await SecureStore.getItemAsync("access_token");
+      if (token) {
+        const response = await fetch(
+          process.env.EXPO_PUBLIC_API_URL + `/user`,
+          {
+            method: "GET",
+            cache: "no-store",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        if (response.ok) {
+          const data = await response.json();
+          setUserData(data);
+          setProfileImage(data.imgUrl || defaultUserData.imgUrl);
+          setisFetch(false);
+        } else {
+          console.error("Failed to fetch user data");
+          setUserData(defaultUserData);
+          setisFetch(true);
+        }
+      }
+    } catch (error) {
+      console.error("Error fetching user data", error);
+      setUserData(defaultUserData);
+    }
   };
+
+  useEffect(() => {
+    fetchUserData();
+  }, []);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      fetchUserData();
+    }, [])
+  );
+
+  if (!userData) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#8BC34A" />
+      </View>
+    );
+  }
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Image
-        source={{ uri: 'https://via.placeholder.com/100' }}
-        style={styles.profileImage}
-      />
-      <Text style={styles.name}>User Name</Text>
-      <Text style={styles.email}>user@mail.com</Text>
-      <View style={styles.infoContainer}>
-        <View style={styles.infoBox}>
-          <Text style={styles.label}>Level</Text>
-          <Text style={styles.value}>Beginner</Text>
+      <SafeAreaView>
+        <View style={styles.header}>
+          <Image
+            source={{
+              uri: profileImage,
+            }}
+            style={styles.imageProfile}
+            onError={() => setProfileImage(defaultUserData.imgUrl)}
+          />
+          <Text style={styles.profileName}>{userData.name}</Text>
+          <Text style={styles.profileSubText}>{userData.email}</Text>
         </View>
-        <View style={styles.infoBox}>
-          <Text style={styles.label}>Plants</Text>
-          <Text style={styles.value}>7</Text>
+
+        <View style={styles.WrapMenu}>
+          <TouchableOpacity
+            onPress={() => navigation.navigate("AccountInformation")}
+          >
+            <View style={styles.menuItem}>
+              <View style={styles.wrapText}>
+                <Ionicons
+                  name="information-circle-outline"
+                  size={20}
+                  color="#333"
+                />
+                <Text style={styles.menuItemText}>Account Information</Text>
+              </View>
+              <Ionicons name="chevron-forward-outline" size={20} color="#333" />
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => navigation.navigate("EditProfile")}
+            disabled={isFetch}
+          >
+            <View style={styles.menuItem}>
+              <View style={styles.wrapText}>
+                <Ionicons name="create-outline" size={20} color="#333" />
+                <Text
+                  style={[
+                    styles.menuItemText,
+                    {
+                      textDecorationLine: setisFetch ? "none" : "line-through",
+                    },
+                  ]}
+                >
+                  Edit Profile
+                </Text>
+              </View>
+              <Ionicons name="chevron-forward-outline" size={20} color="#333" />
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate("notification")}>
+            <View style={styles.menuItem}>
+              <View style={styles.wrapText}>
+                <Ionicons name="notifications-outline" size={20} color="#333" />
+                <Text style={styles.menuItemText}>Notifications</Text>
+              </View>
+              <Switch
+                value={notificationsEnabled}
+                onValueChange={setNotificationsEnabled}
+              />
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate("Faq")}>
+            <View style={styles.menuItem}>
+              <View style={styles.wrapText}>
+                <Ionicons name="help-circle-outline" size={20} color="#333" />
+                <Text style={styles.menuItemText}>FAQ</Text>
+              </View>
+              <Ionicons name="chevron-forward-outline" size={20} color="#333" />
+            </View>
+          </TouchableOpacity>
         </View>
-      </View>
-      <TouchableOpacity style={styles.button} onPress={() => {}}>
-        <Text style={styles.buttonText}>Notifications</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.button} onPress={() => {}}>
-        <Text style={styles.buttonText}>FAQ</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
-        <Text style={styles.logoutButtonText}>Logout</Text>
-      </TouchableOpacity>
+        <View
+          style={{
+            flex: 1,
+            flexDirection: "row",
+            justifyContent: "center",
+            alignItems: "center",
+            marginVertical: 20,
+          }}
+        >
+        </View>
+      </SafeAreaView>
     </ScrollView>
   );
 };
@@ -46,99 +175,62 @@ const ProfileScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
-    padding: 16,
-    backgroundColor: '#f8f8f8',
-    alignItems: 'center',
+    // backgroundColor: "#FFF5F5",
+    alignItems: "center",
   },
-  profileImage: {
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  header: {
+    alignItems: "center",
+    marginVertical: 20,
+    marginTop: 10,
+  },
+  imageProfile: {
     width: 100,
     height: 100,
     borderRadius: 50,
-    marginBottom: 16,
+    marginBottom: 10,
+    marginTop: 25,
   },
-  name: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#333',
-    marginBottom: 4,
-  },
-  email: {
-    fontSize: 18,
-    color: '#666',
-    marginBottom: 16,
-  },
-  infoContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    width: '100%',
-    marginBottom: 24,
-  },
-  infoBox: {
-    alignItems: 'center',
-    padding: 16,
-    backgroundColor: '#fff',
-    borderRadius: 8,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 1,
-    },
-    shadowOpacity: 0.2,
-    shadowRadius: 1.41,
-    elevation: 2,
-    width: '45%',
-  },
-  label: {
-    fontSize: 16,
-    color: '#888',
-    marginBottom: 4,
-  },
-  value: {
+  profileName: {
     fontSize: 20,
-    fontWeight: 'bold',
-    color: '#333',
+    fontWeight: "bold",
+    color: "#333",
   },
-  button: {
-    width: '100%',
-    padding: 16,
-    backgroundColor: '#4caf50',
-    borderRadius: 8,
-    alignItems: 'center',
-    marginBottom: 16,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 1,
-    },
-    shadowOpacity: 0.2,
-    shadowRadius: 1.41,
-    elevation: 2,
+  profileSubText: {
+    fontSize: 14,
+    color: "#666",
   },
-  buttonText: {
+  WrapMenu: {
+    flex: 1,
+    gap: 3,
+  },
+  menuItem: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    width: "95%",
+    margin: "auto",
+    padding: 15,
+    marginVertical: 5,
+    backgroundColor: "#fff",
+    borderRadius: 10,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 5,
+    elevation: 3,
+  },
+  menuItemText: {
     fontSize: 16,
-    fontWeight: 'bold',
-    color: '#fff',
+    color: "#333",
   },
-  logoutButton: {
-    width: '100%',
-    padding: 16,
-    backgroundColor: '#F44336',
-    borderRadius: 8,
-    alignItems: 'center',
-    marginBottom: 16,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 1,
-    },
-    shadowOpacity: 0.2,
-    shadowRadius: 1.41,
-    elevation: 2,
-  },
-  logoutButtonText: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#fff',
+  wrapText: {
+    flexDirection: "row",
+    gap: 10,
   },
 });
 

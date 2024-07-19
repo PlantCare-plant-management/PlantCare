@@ -6,15 +6,10 @@ export default function SplashScreen({ navigation }) {
   const { isSignedIn, loading } = useContext(authContext);
 
   useEffect(() => {
-    // Simulate a network request to check auth status
-    setTimeout(() => {
-      if (!loading && isSignedIn) {
-        navigation.replace('Main');
-      } else {
-        navigation.replace('Login');
-      }
-    }, 2000); // Wait for 2 seconds
-  }, [loading, isSignedIn]);
+    if (!loading) {
+      navigation.replace(isSignedIn ? 'Main' : 'LoginScreen');
+    }
+  }, [loading, isSignedIn, navigation]);
 
   return (
     <View style={styles.container}>

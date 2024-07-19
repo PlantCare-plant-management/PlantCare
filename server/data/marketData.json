@@ -1,0 +1,86 @@
+[
+    {
+        "id": "1",
+        "name": "Starter Pack 1",
+        "price": 17000,
+        "image": "https://www.ruparupa.com/blog/wp-content/uploads/2020/09/Screen-Shot-2020-09-01-at-12.40.38.png",
+        "description": "includes:\n- Pot\n- Soil\n- Seeds\n- Watering Can\n- Gardening Tools"
+    },
+    {
+        "id": "2",
+        "name": "Starter Pack 2",
+        "price": 17000,
+        "image": "https://www.ruparupa.com/blog/wp-content/uploads/2020/09/Screen-Shot-2020-09-01-at-13.04.28.png",
+        "description": "includes:\n- Pot\n- Soil\n- Seeds\n- Fertilizer\n- Gardening Tools"
+    },
+    {
+        "id": "3",
+        "name": "Starter Pack 3",
+        "price": 17000,
+        "image": "https://www.ruparupa.com/blog/wp-content/uploads/2020/09/Screen-Shot-2020-09-01-at-13.20.41.png",
+        "description": "includes:\n- Pot\n- Soil\n- Seeds\n- Gloves\n- Gardening Tools"
+    },
+    {
+        "id": "4",
+        "name": "Starter Pack 4",
+        "price": 17000,
+        "image": "https://www.ruparupa.com/blog/wp-content/uploads/2020/09/Screen-Shot-2020-09-01-at-15.43.22.png",
+        "description": "includes:\n- Pot\n- Soil\n- Seeds\n- Spray Bottle\n- Gardening Tools"
+    },
+    {
+        "id": "5",
+        "name": "Starter Pack 5",
+        "price": 17000,
+        "image": "https://www.99.co/id/panduan/wp-content/uploads/2023/09/16200808/Monstera-adansonii.jpg",
+        "description": "includes:\n- Pot\n- Soil\n- Seeds\n- Plant Markers\n- Gardening Tools"
+    },
+    {
+        "id": "6",
+        "name": "Starter Pack 6",
+        "price": 17000,
+        "image": "https://www.ruparupa.com/blog/wp-content/uploads/2020/09/Screen-Shot-2020-09-01-at-15.53.14.png",
+        "description": "includes:\n- Pot\n- Soil\n- Seeds\n- Mini Greenhouse\n- Gardening Tools"
+    },
+    {
+        "id": "7",
+        "name": "Starter Pack 7",
+        "price": 17000,
+        "image": "https://www.ruparupa.com/blog/wp-content/uploads/2020/09/Screen-Shot-2020-09-01-at-16.03.01.png",
+        "description": "includes:\n- Pot\n- Soil\n- Seeds\n- Plant Food\n- Gardening Tools"
+    },
+    {
+        "id": "8",
+        "name": "Starter Pack 8",
+        "price": 17000,
+        "image": "https://www.ruparupa.com/blog/wp-content/uploads/2020/09/Screen-Shot-2020-09-01-at-12.40.38.png",
+        "description": "includes:\n- Pot\n- Soil\n- Seeds\n- Pest Control Spray\n- Gardening Tools"
+    },
+    {
+        "id": "9",
+        "name": "Starter Pack 9",
+        "price": 17000,
+        "image": "https://www.ruparupa.com/blog/wp-content/uploads/2020/09/Screen-Shot-2020-09-01-at-12.40.38.png",
+        "description": "includes:\n- Pot\n- Soil\n- Seeds\n- Mulch\n- Gardening Tools"
+    },
+    {
+        "id": "10",
+        "name": "Starter Pack 10",
+        "price": 17000,
+        "image": "https://www.ruparupa.com/blog/wp-content/uploads/2020/09/Screen-Shot-2020-09-01-at-12.40.38.png",
+        "description": "includes:\n- Pot\n- Soil\n- Seeds\n- Pruning Shears\n- Gardening Tools"
+    },
+    {
+        "id": "11",
+        "name": "Starter Pack 11",
+        "price": 17000,
+        "image": "https://www.ruparupa.com/blog/wp-content/uploads/2020/09/Screen-Shot-2020-09-01-at-12.40.38.png",
+        "description": "includes:\n- Pot\n- Soil\n- Seeds\n- Plant Stand\n- Gardening Tools"
+    },
+    {
+        "id": "12",
+        "name": "Starter Pack 12",
+        "price": 17000,
+        "image": "https://www.ruparupa.com/blog/wp-content/uploads/2020/09/Screen-Shot-2020-09-01-at-12.40.38.png",
+        "description": "includes:\n- Pot\n- Soil\n- Seeds\n- Gardening Book\n- Gardening Tools"
+    }
+]
